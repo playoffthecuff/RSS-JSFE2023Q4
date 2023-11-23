@@ -1,0 +1,112 @@
+:root {
+    --Text-Light: #E1D4C9;
+    --Text-Dark: #403F3D;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-display: swap;
+    src: url(./fonts/Inter[slnt\,wght].ttf) format('otf');
+  }
+
+body {
+    margin: 20px auto;
+    width: 1440px;
+    background-color: var(--Text-Light);
+}
+
+header {
+display: flex;
+padding: 0px 40px;
+//flex-direction: column;
+justify-content: center;
+align-items: center;
+align-self: stretch;
+}
+
+.logo {
+width: 100px;
+height: 60px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+
+    padding: 0px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.coffee-menu {
+display: flex;
+height: 28px;
+justify-content: flex-end;
+align-items: center;
+gap: 8px;
+}
+
+.menu-item {
+display: flex;
+margin: 0px;
+flex-direction: column;
+}
+
+.link {
+color: var(--text-dark, #403F3D);
+font-feature-settings: 'clig' off, 'liga' off;
+/* Desktop/Action/link & button */
+font-family: Inter;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 24px */
+text-decoration: none;
+margin-right: 40px;
+margin-left: 0px;
+transition: all 0.5s ease-out;
+}
+
+
+a.link:hover div.link-underline {
+    width: 100%;
+    transition: all 0.5s ease-out;
+    }
+
+a.link:not(:hover) div.link-underline {
+    width: 0px;
+    transition: all 0.5s ease-out;
+    }
+
+ul {
+    display: flex;
+    padding: 0px;
+}
+
+.link-underline {
+    background-color: var(--Text-Dark);
+    height: 2px;
+    margin: 2px auto 0px auto;
+    width: 0px;
+}
+
+.nomarginright {
+    margin-right: 0px;
+}
+
+#nomargin {
+    margin: 0px;
+}
+
+#nopadding {
+    padding: 0px;
+}
+
+/* * {
+    border: 1px solid black;
+} */
+
+#noborder {
+    border: 5px solid blue;
+}
