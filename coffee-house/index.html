@@ -3,32 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" href="./images/logo.svg" type="image/x-icon">
 </head>
 <body>
   <header>
-    <a class="logo" href="">
-        <img src="./images/logo.svg" alt="logo"/>
-    </a>
-    <nav>
-        <ul>
-            <li class="menu-item"><a class="link" href="">Favorite coffee<div class="link-underline"></div></a></li>
-            <li class="menu-item"><a class="link" href="">About<div class="link-underline"></div></a></li>
-            <li class="menu-item"><a class="link" href="">Mobile app<div class="link-underline"></div></a></li>
-            <li class="menu-item"><a class="link nomarginright" href="">Contact us<div class="link-underline"></div></a></li>
-        </ul>
-    </nav>
-    
-    <div class="coffee-menu menu-item">
-    <a class="link nomarginright" href="">
-            Menu
-            <img src="./images/coffee-cup.svg" alt="coffee-cup"/>
-            <div class="link-underline"></div>
+    <div class="container">
+        <div class="header-menu">
+        <a class="logo" href="">
+            <img src="./images/logo.svg" alt="logo"/>
         </a>
+        <nav>
+            <ul>
+                <li class="menu-item"><a class="link" href="">Favorite coffee<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link" href="">About<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link" href="">Mobile app<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link nomarginright" href="">Contact us<div class="link-underline"></div></a></li>
+            </ul>
+        </nav>
+        
+        <div class="coffee-menu menu-item">
+            <a class="link nomarginright" href="">
+                Menu
+                <img src="./images/coffee-cup.svg" alt="coffee-cup"/>
+                <div class="link-underline"></div>
+            </a>
+        </div>
+        </div>
     </div>
-
+    <div class="hero">
+        <div class="container-hero">
+            <div class="offer">
+                <h1><span class="h1-accent">Enjoy</span> premium coffee at our charming cafe</h1>
+                <div class="text">With its inviting atmosphere and delicious coffee options, the Coffee House Resource is a popular destination for coffee lovers and those seeking a warm and inviting space to enjoy their favorite beverage.</div>
+                <a class="button-primary text-action" href="">Menu<img class="hidden" src="./images/coffee-cup.svg" alt="coffee-cup"/></a>
+            </div>
+        </div>
+    </div>
   </header>
+
+<main class="favorite-coffee">
+    <div class="container-fav-coffee">
+        <div class="choose">Choose your <span class="choose-accent">favorite</span> coffee</div>
+        <div class="block-slider">
+            <div class="slider">
+                <dev class="button-icon-dark">
+                    <img src="./icons/arrow-left-dark.svg"/>
+                </dev>
+                <dev class="row-slider">
+                    <div class="slide">
+                        <div class="content">
+                            <div class="slider-1"></div>
+                            <div class="description">
+                                <div class="align-stretch">
+                                    <h3>S’mores Frappuccino</h3>
+                                </div>
+                                <div class="align-stretch text-medium">
+                                    This new drink takes an espresso and mixes it with brown sugar and cinnamon before being topped with oat milk.
+                                </div>
+                                <div class="align-stretch">
+                                    <h3>$5.50</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </dev>
+                <dev class="button-icon-dark">
+                    <img src="./icons/arrow-right-dark.svg"/>
+                </dev>
+            </div>
+            <div class="controls">
+                <div class="control border-dark-color"></div>
+                <div class="control border-light-color"></div>
+                <div class="control border-light-color"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
 </body>
+
 </html>
