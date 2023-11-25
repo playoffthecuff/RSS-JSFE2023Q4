@@ -16,10 +16,10 @@
         </a>
         <nav>
             <ul>
-                <li class="menu-item"><a class="link" href="">Favorite coffee<div class="link-underline"></div></a></li>
-                <li class="menu-item"><a class="link" href="">About<div class="link-underline"></div></a></li>
-                <li class="menu-item"><a class="link" href="">Mobile app<div class="link-underline"></div></a></li>
-                <li class="menu-item"><a class="link nomarginright" href="">Contact us<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link" href="#favorite-coffee">Favorite coffee<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link" href="#about">About<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link" href="#mobile-app">Mobile app<div class="link-underline"></div></a></li>
+                <li class="menu-item"><a class="link nomarginright" href="#contact-us">Contact us<div class="link-underline"></div></a></li>
             </ul>
         </nav>
         
@@ -37,21 +37,22 @@
             <div class="offer">
                 <h1><span class="h1-accent">Enjoy</span> premium coffee at our charming cafe</h1>
                 <div class="text">With its inviting atmosphere and delicious coffee options, the Coffee House Resource is a popular destination for coffee lovers and those seeking a warm and inviting space to enjoy their favorite beverage.</div>
-                <a class="button-primary text-action" href="">Menu<img class="hidden" src="./images/coffee-cup.svg" alt="coffee-cup"/></a>
+                <a class="button-primary text-action" href="menu.html"><h2>Menu</h2><img class="hidden" src="./images/coffee-cup.svg" alt="coffee-cup"/></a>
             </div>
         </div>
     </div>
   </header>
 
-<main class="favorite-coffee">
+<main id="favorite-coffee">
     <div class="container-fav-coffee">
         <div class="choose">Choose your <span class="choose-accent">favorite</span> coffee</div>
         <div class="block-slider">
             <div class="slider">
-                <dev class="button-icon-dark">
-                    <img src="./icons/arrow-left-dark.svg"/>
-                </dev>
-                <dev class="row-slider">
+                <div class="button-icon-dark">
+                    <img class="visible" src="./icons/arrow-left-dark.svg"/>
+                    <img class="hidden" src="./icons/arrow-left-light.svg"/>
+                </div>
+                <div class="row-slider">
                     <div class="slide">
                         <div class="content">
                             <div class="slider-1"></div>
@@ -68,10 +69,11 @@
                             </div>
                         </div>
                     </div>
-                </dev>
-                <dev class="button-icon-dark">
-                    <img src="./icons/arrow-right-dark.svg"/>
-                </dev>
+                </div>
+                <div class="button-icon-dark">
+                    <img class="visible" src="./icons/arrow-right-dark.svg"/>
+                    <img class="hidden" src="./icons/arrow-right-light.svg"/>
+                </div>
             </div>
             <div class="controls">
                 <div class="control border-dark-color"></div>
@@ -81,7 +83,68 @@
         </div>
     </div>
 </main>
-
+<section id="about">
+    <div class="container-about">
+            <h2>Resource is <span class="h1-accent">the perfect and cozy place</span> where you can enjoy a variety of hot beverages, relax, catch up with friends, or get some work done.</h2>
+            <div class="images">
+                <div class="column">
+                    <div class="box1">
+                        <img src="./images/about-1.jpg" alt="woman drinks coffee"/>
+                    </div>
+                    <div class="box2">
+                        <img src="./images/about-2.jpg" alt="cup of coffee"/>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box2">
+                        <img src="./images/about-3.jpg" alt="a man drinks coffee"/>
+                    </div>
+                    <div class="box1">
+                        <img src="./images/about-4.jpg" alt="couple drinks coffee"/>
+                    </div>
+                </div>
+            </div>
+        
+    </div>
+</section>
+<section id="mobile-app">
+    <div class="container-mob-app">
+        <div class="offer">
+            <div class="align-stretch">
+                <h2><span class="h1-accent">Download</span> our apps to start ordering</h2>
+            </div>
+            <div class="align-stretch text-medium">Download the Resource app today and experience the comfort of ordering your favorite coffee from wherever you are</div>
+            <div class="buttons">
+                <a href="https://www.apple.com/appstore/" class="button nodecoration">
+                    <img class="visible" src="./icons/apple-dark.svg" alt="appstore icon" class="icon">
+                    <img class="hidden" src="./icons/apple-light.svg" alt="appstore icon" class="icon">
+                    <div class="text">
+                        <div class="caption">
+                            Available on the
+                        </div>
+                        <div class="text-medium">
+                            App Store
+                        </div>
+                    </div>
+                </a>
+                <a href="https://play.google.com/" class="button nodecoration">
+                    <img class="visible" src="./icons/gm-dark.svg" alt="googleplay icon" class="icon">
+                    <img class="hidden" src="./icons/gm-light.svg" alt="googleplay icon" class="icon">
+                    <div class="text">
+                        <div class="caption">
+                            Available on the
+                        </div>
+                        <div class="text-medium">
+                            Google Play
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+        </div>
+        <div class="mobile-screen"></div>
+    </div>
+</section>
 </body>
 
 </html>
