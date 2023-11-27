@@ -310,6 +310,17 @@ font-style: italic;
     display: block;
 }
 
+.text-align-center {
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    /* Desktop/Body/medium */
+font-family: Inter;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+}
+
 .button-icon-dark {
     display: flex;
 width: 60px;
@@ -400,7 +411,6 @@ line-height: 125%; /* 30px */
 
 .text-medium {
     color: var(--text-dark, #403F3D);
-text-align: center;
 font-feature-settings: 'clig' off, 'liga' off;
 
 /* Desktop/Body/medium */
