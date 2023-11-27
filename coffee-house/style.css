@@ -181,7 +181,7 @@ line-height: 105%;
 margin: 0;
 }
 
-.h1-accent {
+.h-accent {
     color: var(--text-accent);
     font-style: italic;
 }
