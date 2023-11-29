@@ -17,12 +17,10 @@ html {
     scroll-behavior: smooth;
 }
 
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-display: swap;
-    src: url(./fonts/Inter[slnt\,wght].ttf) format('otf');
-  }
+/* @font-face {
+    font-family: "Inter";
+    src: url("./fonts/Inter-VariableFont_slnt\,wght.ttf") format("truetype");
+  } */
 
 body {
     margin: 0 auto;
