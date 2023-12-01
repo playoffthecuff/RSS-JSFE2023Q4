@@ -1,3 +1,9 @@
+@media (max-width: 452px) {
+.offer .buttons {
+    flex-direction: column;
+}
+}
+
 @media (max-width: 1439px) {
     #about .container {
         max-width: unset;
@@ -13,8 +19,26 @@
         max-width: calc(50vw - 60px);
     }
 
-
+    #mobile-app .container {
+        flex-direction: column;
+    }
     
+    .container .offer {
+        width: 100%;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+
+    .container .contacts-info {
+        width: 100%;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+
+    .contacts .container {
+        flex-direction: column;
+    }
+
 } 
 
 
@@ -32,8 +56,12 @@
         display: none;
     }
     
-    .column2 {
+    .box2 {
         display: none;
+    }
+
+    .images {
+        flex-direction: column;
     }
 
     .box1 {
@@ -45,6 +73,11 @@
     }
 
     }
+
+    .contacts .container {
+        padding: 100px 60px;
+    }
+
 
 
 @media (max-width: 767px) {
@@ -58,8 +91,6 @@
         font-size: 32px;
       }
 
-
-    
       .hero {
         padding: 0 16px;
       }
@@ -84,7 +115,6 @@
         max-width: calc(100vw - 32px);
     }
 
-
     .hero .container {
     padding-left: 16px;
     padding-right: 16px;
@@ -101,6 +131,40 @@
     .button-icon-dark {
         display: none;
     }
+
+#mobile-app {
+    padding: 0 16px;
+}
+
+#mobile-app .container {
+    gap: 40px;
+}
+
+
+    .mobile-screen {
+        width: 100%;
+        
+    }
+
+    .contacts {
+        padding: 0 16px;
+    }
+
+    .contacts .container {
+        padding: 60px 16px;
+    }
+
+    .text-offer {
+        font-size: 32px;
+    }
+
+    .its-coffee {
+        font-size: 32px; 
+    }
+
+    .contacts .container {
+    gap: 40px;
+}
 
 
     }
