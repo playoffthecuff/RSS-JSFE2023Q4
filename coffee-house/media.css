@@ -14,12 +14,14 @@ h1 {
     font-size: 42px;
     line-height: 115%;
   }
-}
+
 
 .hero .container {
     padding-top: 60px;
     padding-bottom: 60px;
   }
+
+}
 
 @media (max-width: 578px) {
 
@@ -79,6 +81,9 @@ h1 {
     .contacts .container {
         flex-direction: column;
     }
+
+    #mobile-app .containgier .offer {
+        max-width: 100%;
 
 } 
 
