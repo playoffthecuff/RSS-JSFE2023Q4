@@ -6,7 +6,8 @@
     <title>Menu</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="menu.css">
-    <link rel="icon" href="./images/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="media.css"
+    <link rel="icon" href="./icons/fav-icon.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
                         <div class="link-underline" id="full-width"></div>
                     </div>
                 </div>
+                <div class="button-icon-burger"></div>
             </div>
         </div>
 
@@ -128,7 +130,7 @@
                             </div>
                         </div>       
                     </div>
-                    <div class="preview">
+                    <div class="preview visible">
                         <div class="box">
                             <img src="./images/coffee-5.png" alt="Espresso">
                         </div>
@@ -146,7 +148,7 @@
                             </div>
                         </div>       
                     </div>
-                    <div class="preview">
+                    <div class="preview visible">
                         <div class="box">
                             <img src="./images/coffee-6.png" alt="Latte">
                         </div>
@@ -164,7 +166,7 @@
                             </div>
                         </div>       
                     </div>
-                    <div class="preview">
+                    <div class="preview visible">
                         <div class="box">
                             <img src="./images/coffee-7.png" alt="Latte macchiato">
                         </div>
@@ -182,7 +184,7 @@
                             </div>
                         </div>       
                     </div>
-                    <div class="preview">
+                    <div class="preview visible">
                         <div class="box">
                             <img src="./images/coffee-8.png" alt="Coffee with cognac">
                         </div>
@@ -200,12 +202,16 @@
                             </div>
                         </div>       
                     </div>
+                    <div class="button-icon-dark hidden">
+                        <img src="./icons/refresh.svg" alt="refresh icon">
+                    </div>
                 </div>
             </div>
         </div>
       </header>
+
       <footer class="contacts" id="contact-us">
-        <div class="container-contacts">
+        <div class="container">
             <div class="offer">
                 <div class="text-offer">Sip, Savor, Smile. <span class="its-coffee">It’s coffee time!</span></div>
                 <div class="socials">
