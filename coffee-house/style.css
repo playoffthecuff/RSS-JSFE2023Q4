@@ -462,6 +462,11 @@ font-weight: 400;
 line-height: 150%; /* 24px */
 }
 
+.text .text-medium {
+    font-weight: 600;
+}
+
+
 .controls {
     display: flex;
 align-items: flex-start;

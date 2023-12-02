@@ -16,13 +16,16 @@ h1 {
   }
 }
 
+.hero .container {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
 @media (max-width: 578px) {
 
 
 
-      .hero .container {
-        padding: 60px 16px;
-      }
+    
 
       .choose {
         font-size: 32px;
@@ -91,7 +94,8 @@ h1 {
 
     .hero .container {
 
-        padding: 100px 60px;
+        padding-left: 60px;
+        padding-right: 60px;
         }
 
 }
