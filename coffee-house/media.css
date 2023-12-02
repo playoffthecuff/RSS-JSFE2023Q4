@@ -80,19 +80,6 @@ h1 {
 } 
 
 
-@media (max-width: 1089px) {
-
-.container div.hidden {
-    display: flex;
-}
-
-.grid .visible {
-    display: none;
-}
-
-
-
-}
 
 
 @media (max-width: 910px) {
@@ -145,7 +132,13 @@ h1 {
         padding: 100px 60px;
     }
 
-
+    .container div.hidden {
+        display: flex;
+    }
+    
+    .grid .visible {
+        display: none;
+    }
 
 }
 
