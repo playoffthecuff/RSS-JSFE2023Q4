@@ -374,7 +374,7 @@ transition: background-color 0.5s ease-out;
 .button-icon-dark:hover {
     background-color: var(--background-container);
 }
-}
+
 
 .button-icon-dark:hover img.hidden {
     display: block;
@@ -383,7 +383,7 @@ transition: background-color 0.5s ease-out;
 .button-icon-dark:hover img.visible {
     display: none;
 }
-
+}
 
 
 .row-slider {
@@ -600,6 +600,7 @@ margin: auto;
 
 }
 
+@media (hover: hover) {
 .box1 img:hover {
    transform: scale(0.9);
 }
@@ -607,6 +608,8 @@ margin: auto;
 .box2 img:hover {
     transform: scale(0.9);
  }
+
+}
 
 #mobile-app {
     display: flex;
@@ -809,6 +812,7 @@ transition: background-color 0.5s ease-out;
     background-image: url(./icons/facebook-light.svg);
 }
 
+@media (hover: hover) {
 .button-icon-light:hover {
     background-color: var(--border-light);
 }
@@ -823,6 +827,7 @@ transition: background-color 0.5s ease-out;
 
 #facebook:hover {
     background-image: url(./icons/facebook-dark.svg);
+}
 }
 
 .its-coffee {

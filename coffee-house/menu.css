@@ -80,6 +80,8 @@ transition: all 0.5s ease-out;
 box-sizing: border-box;
 }
 
+
+@media (hover: hover) {
 .tab-item:hover {
     background: var(--background-container);
     cursor: pointer;
@@ -90,6 +92,7 @@ box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: center;
     
+}
 }
 
 .tabs .active {
@@ -211,9 +214,11 @@ overflow: hidden;
         align: middle;
      }
 
+     @media (hover: hover) {
 .preview:hover img {
     transform: scale(1.0);
 }
+     }
 
 .preview .description {
     display: flex;
