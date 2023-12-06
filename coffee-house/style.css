@@ -140,11 +140,49 @@ height: 44px;
 justify-content: center;
 align-items: center;
 border-radius: 100px;
-border: 1px solid var(--border-dark, #665F55);
-background-image: url(./icons/button-icon-burger.svg);
+border: 1px solid var(--border-dark);
 background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
+}
+
+.button-icon-burger .menu {
+    display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 0px;
+}
+
+.button-icon-burger .menu .vector {
+    width: 16px;
+height: 0px;
+border: 1.5px solid var(--text-dark);
+border-radius: 2px;
+position: relative;
+transition: 0.4s ease-out;
+}
+
+.button-icon-burger .menu #above {
+    top: 4px;
+}
+
+.button-icon-burger .menu #below {
+    top: -4px;
+}
+
+/* .button-icon-burger:hover .vector {
+    position: absolute;
+} */
+
+.button-icon-burger:hover #above {
+    top: auto;
+    transform: rotate(45deg) translateY(0px) translateX(2px);
+}
+
+.button-icon-burger:hover #below {
+    top: auto;
+    transform: rotate(-45deg) translateY(0px) translateX(2px);
 }
 
 .hero {
@@ -157,19 +195,30 @@ align-self: stretch;
 
 .hero .container {
     display: flex;
+    z-index: 1;
+  position: relative;
 max-width: 1360px;
-padding: 100px 100px;
+padding: 100px 0;
 flex-direction: column;
 justify-content: center;
 align-items: flex-start;
 align-self: stretch;
-background: url(./images/img-hero.jpg);
 border-radius: 40px;
 background-position: 50% 50%;
 background-size: cover;
 background-repeat: no-repeat;
-background-color: lightgray;
+border-radius: 40px;
 }
+
+.hero .container video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 40px;
+  }
 
 .offer {
     display: flex;
@@ -178,6 +227,8 @@ flex-direction: column;
 justify-content: center;
 align-items: flex-start;
 gap: 40px;
+z-index: 1;
+margin-left: 100px;
 }
 
 h1 {

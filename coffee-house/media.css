@@ -21,6 +21,10 @@ h1 {
     padding-bottom: 60px;
   }
 
+.hero .container .offer {
+    max-width: calc(100vw - 64px);
+}
+
 }
 
 @media (max-width: 578px) {
@@ -97,10 +101,9 @@ h1 {
         max-width: 100%;
     }
 
-    .hero .container {
+    .offer {
 
-        padding-left: 60px;
-        padding-right: 60px;
+        margin-left: 60px;
         }
 
 }
@@ -169,8 +172,8 @@ h1 {
         font-size: 32px;
       }
 
-      .hero {
-        padding: 0 16px;
+      .offer {
+        margin-left: 16px;
       }
 
       header .container {
@@ -191,7 +194,7 @@ h1 {
         max-width: calc(100vw - 32px);
     }
 
-    .hero .container {
+    .hero {
     padding-left: 16px;
     padding-right: 16px;
     }
