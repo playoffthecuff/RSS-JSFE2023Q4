@@ -215,6 +215,11 @@ transition: 0.5s;
     align-items: center;
     gap: 60px;
     align-self: stretch;
+    margin: 0;
+}
+
+.fs32 {
+    font-size: 32px;
 }
 
 .pop-up li {
@@ -231,6 +236,17 @@ font-style: normal;
 font-weight: 600;
 line-height: 125%; /* 40px */
 justify-content: center;
+gap: 16px;
+}
+
+.collapse-burger {
+    gap: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.width-40 {
+    width:40px;
 }
 
 .pop-up li a {
@@ -254,6 +270,8 @@ align-items: flex-start;
 gap: 16px;
 align-self: stretch;
 width: 100%;
+height: 40px;
+margin: 0;
 }
 
 
