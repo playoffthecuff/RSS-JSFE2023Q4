@@ -252,3 +252,8 @@ align-self: stretch;
 .title .descr {
     width: 270px;
 }
+
+.disabled-link {
+    pointer-events: none;
+    cursor: default;
+}

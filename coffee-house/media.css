@@ -152,6 +152,9 @@ h1 {
         display: none;
     }
 
+    .pop-up {
+        display: flex;
+    }
 }
 
 
