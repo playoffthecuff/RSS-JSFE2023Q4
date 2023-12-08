@@ -29,10 +29,6 @@ h1 {
 
 @media (max-width: 578px) {
 
-
-
-    
-
       .choose {
         font-size: 32px;
         }
@@ -45,8 +41,16 @@ h1 {
             font-size: 32px; 
         }
 
+}
+
+@media (max-width: 512px) {
+    
+    .slider-1, .slider-2, .slider-3 {
+        width: calc(100vw - 32px);
+    }
 
 }
+
 
 
 @media (max-width: 1439px) {

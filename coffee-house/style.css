@@ -387,8 +387,8 @@ background: var(--background-body);
         display: none;
        transition: all 0.5s ease-out;
        opacity: 0;
-       
-   } 
+
+   }
 }
 
 
@@ -396,7 +396,7 @@ background: var(--background-body);
 
 @media (hover: hover) {
 a.button-primary:hover img.hidden {
-    
+
     display: block;
     position: relative;
     transition: display 0.5s ease-out;
@@ -405,15 +405,15 @@ a.button-primary:hover img.hidden {
 
 
 
-        
+
         a.button-primary:hover h2{
             margin-left: -12px;
             transition: margin-left 0.5s ease-out;
         }
-        
+
         #real-button:hover .cup-coffee-hover{
             display: block;
-           
+
             transition: display 0.5s ease-out;
         }
 
@@ -473,8 +473,15 @@ font-style: italic;
     align-items: center;
     gap: 40px;
     align-self: stretch;
-
 }
+
+.slider .wrapper {
+    min-width: 300px;
+    max-width: 1152px;
+    display: flex;
+    flex: 1 0 0;
+}
+
 
 .visible {
     display: block;
@@ -500,6 +507,7 @@ align-items: center;
 border-radius: 100px;
 border: 1px solid var(--border-dark);
 transition: background-color 0.5s ease-out;
+cursor: pointer;
 }
 
 .button-icon-dark img.hidden {
@@ -524,35 +532,60 @@ transition: background-color 0.5s ease-out;
 
 
 .row-slider {
-    display: flex;
-min-width: 300px;
-max-width: 1152px;
-justify-content: center;
-align-items: flex-start;
-flex: 1 0 0;
+    display: inline-block;
+    vertical-align: middle;
+/* min-width: 300px; */
+width: 480px;
+/* height: 630px; */
+overflow: hidden;
+margin: 0 auto;
 }
 
 .slide {
     display: flex;
-min-width: 300px;
-max-width: 1152px;
-flex-direction: column;
+/* min-width: 300px;
+max-width: 480px; */
 align-items: center;
+position: relative;
+left: 0;
+/* width: 1440px; */
+transition: 0.5s;
 }
 
 .content {
-display: flex;
-max-width: 480px;
+display: block;
 flex-direction: column;
 align-items: center;
 gap: 20px;
 }
 
 .slider-1 {
-    max-width: 480px;
+    width: 480px;
     align-self: stretch;
     aspect-ratio: 1/1;
 background-image: url(./images/coffee-slider-1.png);
+/* background-color: lightgray; */
+background-position:  50%;
+background-size: cover;
+background-repeat: no-repeat;
+}
+
+.slider-2 {
+    width: 480px;
+    align-self: stretch;
+    aspect-ratio: 1/1;
+background-image: url(./images/coffee-slider-2.png);
+/* background-color: lightgray; */
+background-position:  50%;
+background-size: cover;
+background-repeat: no-repeat;
+}
+
+.slider-3 {
+    width: 480px;
+    align-self: stretch;
+    aspect-ratio: 1/1;
+background-image: url(./images/coffee-slider-3.png);
 /* background-color: lightgray; */
 background-position:  50%;
 background-size: cover;
@@ -584,7 +617,7 @@ font-size: 24px;
 font-style: normal;
 font-weight: 600;
 line-height: 125%; /* 30px */
-    
+
 }
 
 .text-medium {
@@ -614,15 +647,41 @@ gap: 12px;
     width: 40px;
 height: 4px;
 border-radius: 100px;
+overflow: hidden;
+background: var(--border-light);
 }
 
-.border-dark-color {
+.control-animate {
+    display: block;
+    background: var(--border-dark);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    
+}
+
+/* .transition-animate {
+    transition: 5.12s;
+} */
+
+.control-animate-after {
+    left: 0 !important;
+    transition: 5.12s;
+}
+
+.control-animate-start {
+    left: 0;
+}
+
+/* .border-dark-color {
     background: var(--border-dark);
 }
 
 .border-light-color {
     background: var(--border-light);
-}
+} */
 
 .header-menu {
     display: flex;
@@ -672,7 +731,7 @@ gap: 40px;
 }
 
 .column1 {
-    
+
     display: flex;
 flex-direction: column;
 align-items: flex-start;
@@ -681,7 +740,7 @@ overflow: hidden;
 
 }
 .column2 {
-    
+
     display: flex;
 flex-direction: column;
 align-items: flex-start;
@@ -693,7 +752,7 @@ overflow: hidden;
 
 
 .box1 {
- 
+
     max-width: 660px;
     height: 590px;
     border-radius: 20px;
@@ -854,7 +913,7 @@ flex-shrink: 0;
     color: var(--text-dark, #403F3D);
     text-align: center;
     font-feature-settings: 'clig' off, 'liga' off;
-    
+
     /* Desktop/Body/caption */
     font-family: Inter;
     font-size: 10px;
@@ -934,6 +993,14 @@ border: 1px solid var(--border-light);
 background-repeat: no-repeat;
 background-position: center;
 transition: background-color 0.5s ease-out;
+cursor: pointer;
+}
+
+.paused {
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -o-animation-play-state: paused; 
+    animation-play-state: paused;
 }
 
 #twitter {
