@@ -55,9 +55,9 @@ const setValues = async (category) => {
     const obj = await fetch('products.json');
     const fullArray = await obj.json();
     const filteredResult = fullArray.filter((element) => element['category'] === category);
-    productTitles.forEach((title, index) => title.innerHTML = filteredResult[index][keyTitle]);
-    productDescriptions.forEach((description, index) => description.innerHTML = filteredResult[index][keyDescription]);
-    productPrices.forEach((prices, index) => prices.innerHTML = filteredResult[index][keyPrice]);
+    productTitles.forEach((title, index) => title.innerHTML = (filteredResult[index] == undefined) ? '' : filteredResult[index][keyTitle]);
+    productDescriptions.forEach((description, index) => description.innerHTML = (filteredResult[index] == undefined) ? '' : filteredResult[index][keyDescription]);
+    productPrices.forEach((prices, index) => prices.innerHTML = (filteredResult[index] == undefined) ? '' : filteredResult[index][keyPrice]);
   };
 
 
@@ -205,7 +205,7 @@ const openModal = () => {
         if (event.currentTarget.classList.contains('tea')) category = 'tea';
         if (event.currentTarget.classList.contains('dessert')) category = 'dessert';
        setModalValues(category, selectedNumber);
-    additionValue();
+    additionValue('s');
        modalBoxImage.innerHTML = '<img class ="' + category + '" src="./images/' + category + '-' + selectedNumber + '.png" alt ="' + category + selectedNumber + '">';
     }
 
@@ -216,13 +216,12 @@ const openModal = () => {
         let overPriceForSecondAdd = 0;
         let overPriceForThirdAdd = 0;
         let sum = 0;
-        
+               
         const obj = await fetch('products.json');
         const fullArray = await obj.json();
         const filteredResult = fullArray.filter((element) => element['category'] === category);
         sum = Number(filteredResult[selectedNumber - 1]['price']);
         overPriceForSize = Number(filteredResult[selectedNumber - 1]['sizes'][selectedSize]['add-price']);
-        //  console.log(selectedFirstAdditive, selectedSecondAdditive, selectedThirdAdditive);
         overPriceForFirstAdd = (selectedFirstAdditive === 0) ? 0 : Number(filteredResult[selectedNumber - 1]['additives'][0]['add-price']);
         overPriceForSecondAdd = (selectedSecondAdditive === 0) ? 0 : Number(filteredResult[selectedNumber - 1]['additives'][1]['add-price']);
         overPriceForThirdAdd = (selectedThirdAdditive === 0) ? 0 : Number(filteredResult[selectedNumber - 1]['additives'][2]['add-price']);
@@ -231,7 +230,10 @@ const openModal = () => {
       };
 
 const closeModal = () => {
-    if (event.target === modalBackground || event.target === closeButton) modalBackground.classList.add('no-display');
+        if (event.target === modalBackground || event.target === closeButton) {
+        modalBackground.classList.add('no-display');
+        selectedSize = 's';
+        }
     enableScroll();
 }
 
@@ -247,6 +249,7 @@ event.currentTarget.lastElementChild.classList.add('active');
 if (event.currentTarget.classList.contains('one')) selectedSize = 's';
 if (event.currentTarget.classList.contains('two')) selectedSize = 'm';
 if (event.currentTarget.classList.contains('three')) selectedSize = 'l';
+modalBackground.removeEventListener('click', (closeModal));
 additionValue();
 }
 
