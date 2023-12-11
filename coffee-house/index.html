@@ -34,11 +34,33 @@
                         <div class="link-underline"></div>
                     </a>
                 </div>
-                <div class="button-icon-burger"></div>
+                <div class="button-icon-burger" id="burger-button">
+                    <div class="menu">
+                        <div class="vector above" id="above"></div>
+                        <div class="vector below" id="below"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="hero">
+            <div class="pop-up">
+                <ul class="nav">
+                    <li><a class="collapse-burger" href="#favorite-coffee">Favorite coffee</a></li>
+                    <li><a class="collapse-burger" href="#about">About</a></li>
+                    <li><a class="collapse-burger" href="#mobile-app">Mobile app</a></li>
+                    <li><a class="collapse-burger" href="#contact-us">Contact us</a></li>
+                </ul>
+                <ul class="coffee-menu">
+                    <li>
+                        <a class="collapse-burger" href="menu.html">
+                            <h3 class="fs32">Menu</h3>
+                            <img class="width-40" src="./images/coffee-cup.svg" alt="coffee-cup">
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="container">
+                <video autoplay muted playsinline loop disablepictureinpicture disableremoteplayback src="./video/video (2160p).mp4"></video>
                 <div class="offer">
                     <h1><span class="h-accent">Enjoy</span> premium coffee at our charming cafe</h1>
                     <div class="text">With its inviting atmosphere and delicious coffee options, the Coffee House Resource is a popular destination for coffee lovers and those seeking a warm and inviting space to enjoy their favorite beverage.</div>
@@ -53,37 +75,73 @@
             <div class="choose">Choose your <span class="choose-accent">favorite</span> coffee</div>
             <div class="block-slider">
                 <div class="slider">
-                    <div class="button-icon-dark">
+                    <div class="button-icon-dark" id="left-button">
                         <img class="visible" src="./icons/arrow-left-dark.svg" alt="arrow left">
                         <img class="hidden" src="./icons/arrow-left-light.svg" alt="arrow left">
                     </div>
-                    <div class="row-slider">
-                        <div class="slide">
-                            <div class="content">
-                                <div class="slider-1"></div>
-                                <div class="description">
-                                    <div class="align-stretch">
-                                        <h3>S’mores Frappuccino</h3>
+                    <div class="wrapper">
+                        <div class="row-slider">
+                            <div class="slide">
+                                <div class="content">
+                                    <div class="slider-1"></div>
+                                    <div class="description">
+                                        <div class="align-stretch">
+                                            <h3>S’mores Frappuccino</h3>
+                                        </div>
+                                        <div class="align-stretch text-align-center">
+                                            This new drink takes an espresso and mixes it with brown sugar and cinnamon before being topped with oat milk.
+                                        </div>
+                                        <div class="align-stretch">
+                                            <h3>$5.50</h3>
+                                        </div>
                                     </div>
-                                    <div class="align-stretch text-align-center">
-                                        This new drink takes an espresso and mixes it with brown sugar and cinnamon before being topped with oat milk.
+                                </div>
+                                <div class="content">
+                                    <div class="slider-2" id="foo"></div>
+                                    <div class="description">
+                                        <div class="align-stretch">
+                                            <h3>Caramel Macchiato</h3>
+                                        </div>
+                                        <div class="align-stretch text-align-center">
+                                            Fragrant and unique classic espresso with rich caramel-peanut syrup, with cream under whipped thick foam.
+                                        </div>
+                                        <div class="align-stretch">
+                                            <h3>$5.00</h3>
+                                        </div>
                                     </div>
-                                    <div class="align-stretch">
-                                        <h3>$5.50</h3>
+                                </div>
+                                <div class="content">
+                                    <div class="slider-3"></div>
+                                    <div class="description">
+                                        <div class="align-stretch">
+                                            <h3>Ice coffee</h3>
+                                        </div>
+                                        <div class="align-stretch text-align-center">
+                                            A popular summer drink that tones and invigorates. Prepared from coffee, milk and ice.
+                                        </div>
+                                        <div class="align-stretch">
+                                            <h3>$4.50</h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="button-icon-dark">
+                    <div class="button-icon-dark" id="right-button">
                         <img class="visible" src="./icons/arrow-right-dark.svg" alt="arrow right">
                         <img class="hidden" src="./icons/arrow-right-light.svg" alt="arrow right">
                     </div>
                 </div>
                 <div class="controls">
-                    <div class="control border-dark-color"></div>
-                    <div class="control border-light-color"></div>
-                    <div class="control border-light-color"></div>
+                    <div class="control">
+                        <div class="control-animate transition-animate control-animate-after"></div>
+                    </div>
+                    <div class="control">
+                        <div class="control-animate transition-animate"></div>
+                    </div>
+                    <div class="control">
+                        <div class="control-animate transition-animate"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -191,7 +249,7 @@
     </div>
 </footer>
 
-
+<script src="index.js"></script>
 </body>
 
 </html>
