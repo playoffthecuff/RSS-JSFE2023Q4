@@ -162,6 +162,11 @@ h1 {
     .pop-up {
         display: flex;
     }
+
+    .menu {
+        overflow-x: hidden;
+    }
+
     
 }
 
