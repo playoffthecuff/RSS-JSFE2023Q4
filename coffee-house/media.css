@@ -21,9 +21,9 @@ h1 {
     padding-bottom: 60px;
   }
 
-.hero .container .offer {
+/* .hero .container .offer {
     max-width: calc(100vw - 64px);
-}
+} */
 
 }
 
@@ -109,8 +109,15 @@ h1 {
 
         margin-left: 60px;
         }
-
 }
+
+
+@media (max-width: 880px) {
+    .modal-window {
+        max-width: calc(100vw - 80px);
+      }
+}
+
 
 
 
@@ -159,6 +166,7 @@ h1 {
     .pop-up {
         display: flex;
     }
+    
 }
 
 
@@ -246,4 +254,14 @@ h1 {
         padding: 0 16px;
     }
 
+    }
+
+
+    @media (max-width: 700px) {
+        .modal-window .box {
+            display: none;
+        }
+        .modal-window .description  {
+            padding: 0;
+        }
     }

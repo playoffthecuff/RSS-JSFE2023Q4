@@ -844,6 +844,9 @@ flex: 1 0 0;
     max-width: 630px;
 }
 
+.contacts .container .offer {
+    margin: 0;
+}
 
 .buttons {
     display: flex;
