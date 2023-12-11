@@ -230,6 +230,7 @@ const openModal = () => {
       };
 
 const closeModal = () => {
+    console.log(event.target);
         if (event.target === modalBackground || event.target === closeButton) {
         modalBackground.classList.add('no-display');
         selectedSize = 's';
@@ -249,7 +250,6 @@ event.currentTarget.lastElementChild.classList.add('active');
 if (event.currentTarget.classList.contains('one')) selectedSize = 's';
 if (event.currentTarget.classList.contains('two')) selectedSize = 'm';
 if (event.currentTarget.classList.contains('three')) selectedSize = 'l';
-modalBackground.removeEventListener('click', (closeModal));
 additionValue();
 }
 
