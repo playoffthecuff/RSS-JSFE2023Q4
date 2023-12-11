@@ -74,6 +74,7 @@ const setTeaFilter = () => {
     hideVisibleCards();
     boxProductImagesVisible.forEach((box, index) => box.innerHTML = '<img class ="' + category + '" src="./images/' + category + '-' + (index + 1) + '.png" alt ="' + category + index + '">');
     setValues(category);
+    showHiddenCards();
 }
 
 const setDessertFilter = () => {

@@ -108,11 +108,20 @@ const runInterval = () => {
     controlIndicators[controlIndex].style.left = '-100%';
 }
 
+function handler(event) {
+    event = event || window.event;
+
+    if (event.stopPropagation)
+        event.stopPropagation();
+
+    event.cancelBubble = true;
+    return false;
+}
+
 carouselWindow.addEventListener('mouseover', (stopInterval));
 carouselWindow.addEventListener('touchstart', (stopInterval));
 carouselWindow.addEventListener('mouseout', (runInterval));
 carouselWindow.addEventListener('touchend', (runInterval));
-
 
 leftButton.addEventListener('click', (slideLeft));
 rightButton.addEventListener('click', (slideRight));

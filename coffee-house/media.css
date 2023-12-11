@@ -135,10 +135,6 @@ h1 {
         display: none;
     }
     
-    .box2 {
-        display: none;
-    }
-
     .images {
         flex-direction: column;
     }
@@ -263,5 +259,9 @@ h1 {
         }
         .modal-window .description  {
             padding: 0;
+        }
+
+        .box2 {
+            display: none;
         }
     }

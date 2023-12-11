@@ -479,7 +479,7 @@ font-style: italic;
     min-width: 300px;
     max-width: 1152px;
     display: flex;
-    flex: 1 0 0;
+    flex: 1 0 0;       
 }
 
 
@@ -568,6 +568,7 @@ background-image: url(./images/coffee-slider-1.png);
 background-position:  50%;
 background-size: cover;
 background-repeat: no-repeat;
+pointer-events: none;
 }
 
 .slider-2 {
@@ -579,6 +580,7 @@ background-image: url(./images/coffee-slider-2.png);
 background-position:  50%;
 background-size: cover;
 background-repeat: no-repeat;
+pointer-events: none;
 }
 
 .slider-3 {
@@ -590,6 +592,7 @@ background-image: url(./images/coffee-slider-3.png);
 background-position:  50%;
 background-size: cover;
 background-repeat: no-repeat;
+pointer-events: none;
 }
 
 .description {
