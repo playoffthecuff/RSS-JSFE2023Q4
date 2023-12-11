@@ -190,13 +190,13 @@ padding: 0px 40px;
 flex-direction: column;
 align-items: center;
 align-self: stretch;
-overflow: hidden;
+overflow-x: clip;
 position: relative;
 }
 
 .pop-up {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 100px);
     position: absolute;
     top: 0px;
     left: calc(100vw);
@@ -209,6 +209,7 @@ align-items: center;
 gap: 100px;
 flex: 1 0 0;
 transition: 0.5s;
+z-index: 10;
 }
 
 .pop-up .nav {
