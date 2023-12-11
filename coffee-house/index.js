@@ -14,6 +14,7 @@ const fromBurgerToCross = (event) => {
         popUp.classList.toggle('pop-up__visible');
 }
 burgerButton.addEventListener('click', (fromBurgerToCross));
+// burgerButton.addEventListener('click', (showBurger));
 burgerLinks.forEach(item => {
     item.addEventListener('click', (fromBurgerToCross))
 });
