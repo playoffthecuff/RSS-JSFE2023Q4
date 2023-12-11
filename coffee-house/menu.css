@@ -347,7 +347,7 @@ align-items: flex-start;
 gap: 40px;
 align-self: stretch;
 position: relative;
-overflow: hidden;
+overflow-x: hidden;
 }
 
 .menu .container {
