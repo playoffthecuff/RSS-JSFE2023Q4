@@ -30,6 +30,8 @@ const carouselWindow = document.querySelector('.row-slider');
 let position = 0;
 let controlIndex = 0;
 let cardWidth = slideCard.offsetWidth;
+controlIndicators[controlIndex].classList.toggle('control-animate-after');
+
 const slideLeft = () => {
     controlIndicators[controlIndex].classList.toggle('control-animate-after');
         if (sliderLine.style.left === '' || sliderLine.style.left === '0px') {
