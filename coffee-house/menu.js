@@ -157,6 +157,8 @@ const setModalValues = async (category, selectedNumber) => {
     modalVolumes[2].innerHTML = filteredResult[selectedNumber - 1]['sizes']['l']['size'];
     modalAdditives.forEach((element, index) => element.innerHTML = filteredResult[selectedNumber - 1]['additives'][index]['name']);
     buyingCost.innerHTML = '$' + filteredResult[selectedNumber - 1]['price'];
+    modalTitle.innerHTML = filteredResult[selectedNumber - 1][keyTitle];
+    modalDescription.innerHTML = filteredResult[selectedNumber - 1][keyDescription];
   };
 
 const disableScroll = () => {
