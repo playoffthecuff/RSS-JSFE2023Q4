@@ -1,0 +1,201 @@
+@font-face {
+  font-family: "Inter", sans-serif;
+  src: url("../fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Inter", sans-serif;
+  src: url("../fonts/Inter-Bold.woff2") format("woff2");
+  font-weight: bold;
+}
+body {
+  background-color: hsl(0, 0%, 80%);
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  justify-self: center;
+}
+body main section {
+  min-width: 360px;
+  max-width: 720px;
+  max-height: 844px;
+  padding: 2%;
+  box-sizing: border-box;
+}
+body main .gallows {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+body main .gallows .gallows-img {
+  width: 100%;
+  height: 100%;
+}
+body main .gallows .gallows-img .hidden-body-part {
+  fill-opacity: 0;
+}
+body main .quiz {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  flex-wrap: wrap;
+}
+body main .quiz .try-board {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 1vh 4vh 4vh;
+}
+body main .quiz .try-board .guess {
+  padding: min(0.5vh, 0.5vw);
+  font-size: clamp(16px, 4vw, 3vh);
+}
+body main .quiz .try-board .counter {
+  color: hsl(0, 100%, 40%);
+}
+body main .quiz .word {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 4vh;
+}
+body main .quiz .word .letter {
+  display: flex;
+  width: 8%;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: min(8vw, 4vh);
+}
+body main .quiz .keyboard {
+  display: flex;
+  gap: max(1vw, 1vh);
+  justify-content: center;
+  width: 100%;
+  padding: 2%;
+  flex-wrap: wrap;
+}
+@media (hover: hover) {
+  body main .quiz .keyboard .key:hover {
+    cursor: pointer;
+    color: black;
+  }
+}
+body main .quiz .keyboard .key {
+  display: flex;
+  width: 6vh;
+  min-width: 48px;
+  aspect-ratio: 1;
+  color: hsl(0, 0%, 48%);
+  align-items: center;
+  justify-content: center;
+  font-size: max(2vw, 3vh);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  transition: 0.4s;
+  border-radius: 16%;
+  box-shadow: 0.25vw 0.25vw 1vw hsl(0, 0%, 64%), -0.25vw -0.25vw 1vw hsl(0, 0%, 100%);
+  font-weight: 700;
+}
+@media (hover: none) {
+  body main .quiz .keyboard .key {
+    color: hsl(0, 0%, 32%);
+  }
+}
+body main .quiz .keyboard .key:active {
+  box-shadow: inset 5px 5px 16px hsl(0, 0%, 64%), inset -5px -5px 16px hsl(0, 0%, 100%);
+}
+body main .quiz .keyboard .disabled {
+  pointer-events: none;
+  box-shadow: inset 0.16vw 0.16vw 0.64vw hsl(0, 0%, 64%), inset -0.16vw -0.16vw 0.64vw hsl(0, 0%, 100%);
+}
+body .modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  padding: 1vh;
+  background-color: hsla(0, 0%, 8%, 0.48);
+  -webkit-backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+          backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+}
+body .hidden {
+  visibility: hidden;
+}
+body .modal-window {
+  display: flex;
+  gap: clamp(8px, 2vh, 2vw);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: hsla(0, 0%, 8%, 0.64);
+  -webkit-backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+          backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+  padding: 4%;
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: clamp(8px, 4vh, 4vw);
+  transition: transform 0.15s ease 0s, opacity 0.15s ease 0s;
+  transform: scale(1);
+  color: white;
+  font-size: clamp(16px, 4vw, 4vh);
+}
+body .modal-window .verdict-message {
+  margin: clamp(16px, 4vw, 4vh) auto;
+}
+body .modal-window .verdict-message .highlight {
+  color: hsl(0, 100%, 40%);
+  font-weight: bold;
+}
+body .modal-window .answer {
+  margin: 0 auto;
+}
+body .modal-window .secret-word {
+  color: hsl(0, 100%, 40%);
+  margin: 0 auto;
+}
+body .modal-window .replay-button {
+  display: flex;
+  align-items: flex-start;
+  margin: clamp(16px, 4vw, 4vh) auto;
+}
+@media (hover: hover) {
+  body .modal-window .replay-button:hover {
+    cursor: pointer;
+  }
+}
+body .modal-window .replay-button .replay-icon {
+  width: clamp(48px, 6vw, 6vh);
+  height: auto;
+  fill: white;
+  stroke: white;
+  transition: 2.4s;
+}
+@media (hover: hover) {
+  body .modal-window .replay-button .replay-icon:hover {
+    fill: hsl(0, 100%, 40%);
+    transform: rotate(-360deg);
+  }
+}
+body .modal-window .replay-button .replay-icon:active {
+  fill: yellow;
+}/*# sourceMappingURL=style.css.map */

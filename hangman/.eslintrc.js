@@ -14,4 +14,9 @@ module.exports = {
   rules: {
   },
 };
-"import/extensions": [<severity>, "never"];
+
+{
+  "rules": {
+    "import/extensions": [<severity>, "never"];
+  }
+}
