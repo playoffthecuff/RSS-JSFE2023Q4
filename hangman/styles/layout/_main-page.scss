@@ -1,0 +1,24 @@
+body {
+  background-color: $background-color;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-self: center;
+
+    section {
+      min-width: 360px;
+      max-width: 720px;
+      max-height: 844px;
+      padding: 2%;
+      box-sizing: border-box;
+    }
+  }
+}

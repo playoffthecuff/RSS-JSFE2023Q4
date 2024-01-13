@@ -1,0 +1,21 @@
+.modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  padding: 1vh;
+  background-color: $background-transparent-color;
+  backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+
+  &.hidden {
+    visibility: hidden;
+  }
+}

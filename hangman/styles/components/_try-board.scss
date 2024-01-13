@@ -1,0 +1,16 @@
+.try-board {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 1vh 4vh 4vh;
+
+  .guess {
+    padding: min(0.5vh, 0.5vw);
+    font-size: clamp(16px, 4vw, 3vh);
+  }
+
+  .counter {
+    color: $highlight-text-color;
+  }
+}

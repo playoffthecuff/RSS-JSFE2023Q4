@@ -1,3 +1,5 @@
+@charset 'utf-8';
+
 $background-color: hsl(0, 0%, 80%);
 $background-transparent-color: hsla(0, 0%, 8%, 0.48);
 $background-modal-window-color: hsla(0, 0%, 8%, 0.64);
@@ -166,11 +168,13 @@ body {
     padding: 1vh;
     background-color: $background-transparent-color;
     backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+
+    &.hidden {
+      visibility: hidden;
+    }
   }
 
-  .hidden {
-    visibility: hidden;
-  }
+
 
   .modal-window {
     display: flex;
