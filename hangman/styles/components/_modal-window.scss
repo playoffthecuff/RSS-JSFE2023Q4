@@ -13,15 +13,16 @@
   transition: transform 0.15s ease 0s, opacity 0.15s ease 0s;
   transform: scale(1);
   color: white;
-  font-size: clamp(16px, 4vw, 4vh);
+  font-size: clamp(20px, 4vw, 4vh);
 
-  .verdict-message {
+  .verdict-wrapper {
     margin: clamp(16px, 4vw, 4vh) auto;
     .highlight {
-      color: $highlight-text-color;
+      color: $accent-text-color;
       font-weight: bold;
     }
   }
+
   .answer {
     margin: 0 auto;
   }

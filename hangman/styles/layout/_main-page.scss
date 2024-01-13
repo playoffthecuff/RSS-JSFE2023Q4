@@ -7,6 +7,10 @@ body {
   align-items: center;
   justify-content: center;
 
+  &.no-scroll {
+    overflow-y: hidden;
+  }
+
   main {
     display: flex;
     flex-wrap: wrap;

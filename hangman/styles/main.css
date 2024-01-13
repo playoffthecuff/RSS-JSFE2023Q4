@@ -17,6 +17,9 @@ body {
   align-items: center;
   justify-content: center;
 }
+body.no-scroll {
+  overflow-y: hidden;
+}
 body main {
   display: flex;
   flex-wrap: wrap;
@@ -74,6 +77,13 @@ body main section {
 }
 .gallows-img .hidden-body-part {
   fill-opacity: 0;
+  transform: scale(0);
+  transition: 0.8s;
+}
+.gallows-img .visible {
+  fill-opacity: 1;
+  transition: 0.8s;
+  transform: scale(1);
 }
 
 .try-board {
@@ -167,13 +177,13 @@ body main section {
   transition: transform 0.15s ease 0s, opacity 0.15s ease 0s;
   transform: scale(1);
   color: white;
-  font-size: clamp(16px, 4vw, 4vh);
+  font-size: clamp(20px, 4vw, 4vh);
 }
-.modal-window .verdict-message {
+.modal-window .verdict-wrapper {
   margin: clamp(16px, 4vw, 4vh) auto;
 }
-.modal-window .verdict-message .highlight {
-  color: hsl(0, 100%, 40%);
+.modal-window .verdict-wrapper .highlight {
+  color: hsl(60, 100%, 40%);
   font-weight: bold;
 }
 .modal-window .answer {
