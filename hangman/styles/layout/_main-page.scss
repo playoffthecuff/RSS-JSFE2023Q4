@@ -20,7 +20,7 @@ body {
     section {
       min-width: 360px;
       max-width: 720px;
-      max-height: 844px;
+      max-height: max(50vh, 40vw);
       padding: 2%;
       box-sizing: border-box;
     }

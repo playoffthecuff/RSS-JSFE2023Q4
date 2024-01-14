@@ -3,7 +3,7 @@
   justify-content: center;
   justify-self: center;
   width: 100%;
-  padding: 4vh;
+  padding: 4vh 0;
 
   .letter {
     display: flex;
@@ -11,6 +11,6 @@
     aspect-ratio: 1;
     align-items: center;
     justify-content: center;
-    font-size: min(8vw, 4vh);
+    font-size: min(6vw, 4vh);
   }
 }

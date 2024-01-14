@@ -95,16 +95,36 @@ modalContainerElement.innerHTML = `<div class="modal-window">
 </div>
 `;
 bodyElement.appendChild(modalContainerElement);
-const verdictMessagePreElement = modalContainerElement.querySelector('.verdict-message');
-const verdictMessagePostElement = modalContainerElement.querySelector('.highlight');
+const verdictMessagePreElement =
+  modalContainerElement.querySelector('.verdict-message');
+const verdictMessagePostElement =
+  modalContainerElement.querySelector('.highlight');
 const secretWordElement = modalContainerElement.querySelector('.secret-word');
 
 let closeToWin = secretWord.length;
-const displayKeyboardClickOrTapHandler = () => {
-  event.currentTarget.classList.add('disabled');
+const keyStates = {};
+
+const keyboardClickOrTapHandler = () => {
+  console.log(event.key);
+  const keyCode = event.code;
+  if (!keyCode) {
+  if (event.currentTarget.classList.contains('key')) {
+    event.currentTarget.classList.add('disabled');
+  }
+  }
+  if (keyCode) {
+    if (keyStates[keyCode]) {
+      return;
+    }
+    for (const key of keysElements) {
+      if (key.textContent === event.key.toUpperCase())
+      key.classList.add('disabled');
+    }
+    keyStates[keyCode] = true;
+  }
   let checkResult = 1;
   for (let i = 0; i < secretWord.length; i += 1) {
-    if (event.currentTarget.textContent === secretWord[i]) {
+    if (event.currentTarget.textContent === secretWord[i] || (event.key || '0').toUpperCase() === secretWord[i]) {
       letters[i].textContent = secretWord[i];
       checkResult = 0;
       closeToWin -= 1;
@@ -139,14 +159,17 @@ const displayKeyboardClickOrTapHandler = () => {
 };
 
 const finishGame = (result) => {
-    verdictMessagePreElement.textContent = result === 'win' ? 'Congratulations: ' : 'Sorry: ';
-    verdictMessagePostElement.textContent = result === 'win' ? 'You Win!' : 'You Lose!';
-    secretWordElement.textContent = secretWord;
-    modalContainerElement.classList.remove('hidden');
-    document.body.classList.add('no-scroll');
-}
+  verdictMessagePreElement.textContent =
+    result === 'win' ? 'Congratulations: ' : 'Sorry: ';
+  verdictMessagePostElement.textContent =
+    result === 'win' ? 'You Win!' : 'You Lose!';
+  secretWordElement.textContent = secretWord;
+  modalContainerElement.classList.remove('hidden');
+  document.body.classList.add('no-scroll');
+};
 
 keysElements.forEach((key) =>
-  key.addEventListener('click', displayKeyboardClickOrTapHandler)
+  key.addEventListener('click', keyboardClickOrTapHandler)
 );
 
+document.addEventListener('keyup', keyboardClickOrTapHandler);
