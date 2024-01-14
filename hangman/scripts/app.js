@@ -29,7 +29,7 @@ const getNewSecretWord = () => {
   ) {
     secretWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
   } else {
-    getNewSecretWord();
+    return getNewSecretWord();
   }
 };
 getNewSecretWord();
@@ -100,6 +100,8 @@ const verdictMessagePreElement =
 const verdictMessagePostElement =
   modalContainerElement.querySelector('.highlight');
 const secretWordElement = modalContainerElement.querySelector('.secret-word');
+const replayButtonElement =
+  modalContainerElement.querySelector('.replay-button');
 
 const finishGame = (result) => {
   verdictMessagePreElement.textContent =
@@ -109,13 +111,13 @@ const finishGame = (result) => {
   secretWordElement.textContent = secretWord;
   modalContainerElement.classList.remove('hidden');
   document.body.classList.add('no-scroll');
+  replayButtonElement.addEventListener('click', startNewGame);
 };
 
 let closeToWin = secretWord.length;
 const keyStates = {};
 
-const keyboardClickOrTapHandler = () => {
-  console.log(event.key);
+const keyboardPushOrTapHandler = () => {
   const keyCode = event.code;
   if (!keyCode) {
     if (event.currentTarget.classList.contains('key')) {
@@ -169,8 +171,36 @@ const keyboardClickOrTapHandler = () => {
   if (incorrectCount === 6) return finishGame('lose');
 };
 
+const startNewGame = () => {
+  Object.keys(keyStates).forEach((key) => {
+    delete keyStates[key];
+  });
+  getNewSecretWord();
+  closeToWin = secretWord.length;
+  head.classList.remove('visible');
+  body.classList.remove('visible');
+  leftArm.classList.remove('visible');
+  rightArm.classList.remove('visible');
+  leftLeg.classList.remove('visible');
+  rightLeg.classList.remove('visible');
+  for (const key of keysElements) {
+    key.classList.remove('disabled');
+  }
+  incorrectCount = 0;
+  incorrectCountElement.textContent = incorrectCount;
+  divWordElement.innerHTML = '';
+  for (const char of secretWord) {
+    const element = document.createElement('div');
+    element.classList.add('letter');
+    element.textContent = '_';
+    divWordElement.appendChild(element);
+  }
+  letters = divWordElement.querySelectorAll('.letter');
+  modalContainerElement.classList.add('hidden');
+}
+
 keysElements.forEach((key) =>
-  key.addEventListener('click', keyboardClickOrTapHandler)
+  key.addEventListener('click', keyboardPushOrTapHandler)
 );
 
-document.addEventListener('keyup', keyboardClickOrTapHandler);
+document.addEventListener('keyup', keyboardPushOrTapHandler);
