@@ -101,6 +101,16 @@ const verdictMessagePostElement =
   modalContainerElement.querySelector('.highlight');
 const secretWordElement = modalContainerElement.querySelector('.secret-word');
 
+const finishGame = (result) => {
+  verdictMessagePreElement.textContent =
+    result === 'win' ? 'Congratulations: ' : 'Sorry: ';
+  verdictMessagePostElement.textContent =
+    result === 'win' ? 'You Win!' : 'You Lose!';
+  secretWordElement.textContent = secretWord;
+  modalContainerElement.classList.remove('hidden');
+  document.body.classList.add('no-scroll');
+};
+
 let closeToWin = secretWord.length;
 const keyStates = {};
 
@@ -108,11 +118,12 @@ const keyboardClickOrTapHandler = () => {
   console.log(event.key);
   const keyCode = event.code;
   if (!keyCode) {
-  if (event.currentTarget.classList.contains('key')) {
-    event.currentTarget.classList.add('disabled');
-  }
+    if (event.currentTarget.classList.contains('key')) {
+      event.currentTarget.classList.add('disabled');
+    }
   }
   if (keyCode) {
+    if (event.key.length !== 1 || !event.key.match(/[a-z]/i)) return;
     if (keyStates[keyCode]) {
       return;
     }
@@ -156,16 +167,6 @@ const keyboardClickOrTapHandler = () => {
   }
   if (closeToWin === 0) return finishGame('win');
   if (incorrectCount === 6) return finishGame('lose');
-};
-
-const finishGame = (result) => {
-  verdictMessagePreElement.textContent =
-    result === 'win' ? 'Congratulations: ' : 'Sorry: ';
-  verdictMessagePostElement.textContent =
-    result === 'win' ? 'You Win!' : 'You Lose!';
-  secretWordElement.textContent = secretWord;
-  modalContainerElement.classList.remove('hidden');
-  document.body.classList.add('no-scroll');
 };
 
 keysElements.forEach((key) =>

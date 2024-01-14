@@ -43,5 +43,6 @@
     pointer-events: none;
     box-shadow: inset 0.16vw 0.16vw 0.64vw $dark-shadow-color,
                 inset -0.16vw -0.16vw 0.64vw $light-shadow-color;
+    color: lighten($dark-text-color, 16%);
   }
 }
