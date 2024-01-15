@@ -1,5 +1,5 @@
-import { words } from './words.js';
-import { gallowsImg } from './gallows-img.js';
+import { words } from './words';
+import { gallowsImg } from './gallows-img';
 
 const mainElement = document.createElement('main');
 
@@ -24,17 +24,15 @@ sectionQuizElement.appendChild(divWordElement);
 
 let secretWord = '';
 const getNewSecretWord = () => {
-  if (
-    secretWord !== words[Math.floor(Math.random() * words.length)].toUpperCase()
-  ) {
-    secretWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
-  } else {
-    return getNewSecretWord();
+  if (secretWord !== words[Math.floor(Math.random() * words.length)].toUpperCase()) {
+    return words[Math.floor(Math.random() * words.length)].toUpperCase();
   }
+    return getNewSecretWord();
 };
-getNewSecretWord();
 
-for (const char of secretWord) {
+secretWord = getNewSecretWord();
+
+for (let i = 0; i < secretWord.length; i += 1) {
   const element = document.createElement('div');
   element.classList.add('letter');
   element.textContent = '_';
@@ -103,6 +101,37 @@ const secretWordElement = modalContainerElement.querySelector('.secret-word');
 const replayButtonElement =
   modalContainerElement.querySelector('.replay-button');
 
+let closeToWin = secretWord.length;
+const keyStates = {};
+
+const startNewGame = () => {
+  Object.keys(keyStates).forEach((key) => {
+    delete keyStates[key];
+  });
+  secretWord = getNewSecretWord();
+  closeToWin = secretWord.length;
+  head.classList.remove('visible');
+  body.classList.remove('visible');
+  leftArm.classList.remove('visible');
+  rightArm.classList.remove('visible');
+  leftLeg.classList.remove('visible');
+  rightLeg.classList.remove('visible');
+  for (let i = 0; i < keysElements.length; i += 1) {
+    keysElements[i].classList.remove('disabled');
+  }
+  incorrectCount = 0;
+  incorrectCountElement.textContent = incorrectCount;
+  divWordElement.innerHTML = '';
+  for (let i = 0; i <  secretWord.length; i += 1) {
+    const element = document.createElement('div');
+    element.classList.add('letter');
+    element.textContent = '_';
+    divWordElement.appendChild(element);
+  }
+  letters = divWordElement.querySelectorAll('.letter');
+  modalContainerElement.classList.add('hidden');
+}
+
 const finishGame = (result) => {
   verdictMessagePreElement.textContent =
     result === 'win' ? 'Congratulations: ' : 'Sorry: ';
@@ -114,10 +143,7 @@ const finishGame = (result) => {
   replayButtonElement.addEventListener('click', startNewGame);
 };
 
-let closeToWin = secretWord.length;
-const keyStates = {};
-
-const keyboardPushOrTapHandler = () => {
+const keyboardPushOrTapHandler = (event) => {
   const keyCode = event.code;
   if (!keyCode) {
     if (event.currentTarget.classList.contains('key')) {
@@ -129,9 +155,9 @@ const keyboardPushOrTapHandler = () => {
     if (keyStates[keyCode]) {
       return;
     }
-    for (const key of keysElements) {
-      if (key.textContent === event.key.toUpperCase())
-      key.classList.add('disabled');
+    for (let i = 0; i < keysElements.length; i += 1) {
+      if (keysElements[i].textContent === event.keysElements[i].toUpperCase())
+      keysElements[i].classList.add('disabled');
     }
     keyStates[keyCode] = true;
   }
@@ -170,34 +196,6 @@ const keyboardPushOrTapHandler = () => {
   if (closeToWin === 0) return finishGame('win');
   if (incorrectCount === 6) return finishGame('lose');
 };
-
-const startNewGame = () => {
-  Object.keys(keyStates).forEach((key) => {
-    delete keyStates[key];
-  });
-  getNewSecretWord();
-  closeToWin = secretWord.length;
-  head.classList.remove('visible');
-  body.classList.remove('visible');
-  leftArm.classList.remove('visible');
-  rightArm.classList.remove('visible');
-  leftLeg.classList.remove('visible');
-  rightLeg.classList.remove('visible');
-  for (const key of keysElements) {
-    key.classList.remove('disabled');
-  }
-  incorrectCount = 0;
-  incorrectCountElement.textContent = incorrectCount;
-  divWordElement.innerHTML = '';
-  for (const char of secretWord) {
-    const element = document.createElement('div');
-    element.classList.add('letter');
-    element.textContent = '_';
-    divWordElement.appendChild(element);
-  }
-  letters = divWordElement.querySelectorAll('.letter');
-  modalContainerElement.classList.add('hidden');
-}
 
 keysElements.forEach((key) =>
   key.addEventListener('click', keyboardPushOrTapHandler)
