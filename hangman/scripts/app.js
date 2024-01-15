@@ -1,5 +1,5 @@
-import { words } from './words';
-import { gallowsImg } from './gallows-img';
+import { words } from './words.js';
+import { gallowsImg } from './gallows-img.js';
 
 const mainElement = document.createElement('main');
 
@@ -75,7 +75,7 @@ const keysElements = keyBoardElement.querySelectorAll('.key');
 
 const modalContainerElement = document.createElement('div');
 modalContainerElement.classList.add('modal-container', 'hidden');
-modalContainerElement.innerHTML = `<div class="modal-window">
+modalContainerElement.innerHTML = `<div class="modal-window hidden">
 <div class="verdict-wrapper">
   <span class="verdict-message"></span>
   <span class="highlight"></span>
@@ -92,6 +92,8 @@ modalContainerElement.innerHTML = `<div class="modal-window">
 </div>
 </div>
 `;
+const modalWindowElement = modalContainerElement.querySelector('.modal-window');
+
 bodyElement.appendChild(modalContainerElement);
 const verdictMessagePreElement =
   modalContainerElement.querySelector('.verdict-message');
@@ -130,6 +132,7 @@ const startNewGame = () => {
   }
   letters = divWordElement.querySelectorAll('.letter');
   modalContainerElement.classList.add('hidden');
+  modalWindowElement.classList.add('hidden');
 }
 
 const finishGame = (result) => {
@@ -139,6 +142,7 @@ const finishGame = (result) => {
     result === 'win' ? 'You Win!' : 'You Lose!';
   secretWordElement.textContent = secretWord;
   modalContainerElement.classList.remove('hidden');
+  modalWindowElement.classList.remove('hidden');
   document.body.classList.add('no-scroll');
   replayButtonElement.addEventListener('click', startNewGame);
 };
@@ -156,7 +160,7 @@ const keyboardPushOrTapHandler = (event) => {
       return;
     }
     for (let i = 0; i < keysElements.length; i += 1) {
-      if (keysElements[i].textContent === event.keysElements[i].toUpperCase())
+      if (keysElements[i].textContent === event.key.toUpperCase())
       keysElements[i].classList.add('disabled');
     }
     keyStates[keyCode] = true;
@@ -191,9 +195,12 @@ const keyboardPushOrTapHandler = (event) => {
       rightLeg.classList.add('visible');
       break;
     default:
+      // eslint-disable-next-line no-console
       console.log('WooHoo, slamming them tonight!');
   }
+  // eslint-disable-next-line consistent-return
   if (closeToWin === 0) return finishGame('win');
+  // eslint-disable-next-line consistent-return
   if (incorrectCount === 6) return finishGame('lose');
 };
 

@@ -9,6 +9,7 @@
     padding: min(0.5vh, 0.5vw);
     font-size: clamp(20px, 3vh, 4vw);
     display: flex;
+    user-select: none;
   }
 
   .counter {
