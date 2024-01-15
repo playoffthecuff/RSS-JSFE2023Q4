@@ -12,11 +12,12 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        "js": "always"
+      }
+    ]
   },
 };
-
-// {
-//   "rules": {
-//     "import/extensions": [<severity>, "never"];
-//   }
-// }

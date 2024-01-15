@@ -66,9 +66,12 @@ body main section {
   background-color: hsla(0, 0%, 8%, 0.48);
   -webkit-backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
           backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+  opacity: 1;
+  transition: 0.8s;
 }
 .modal-container.hidden {
   visibility: hidden;
+  opacity: 0;
 }
 
 .gallows-img {
@@ -97,6 +100,9 @@ body main section {
   padding: min(0.5vh, 0.5vw);
   font-size: clamp(20px, 3vh, 4vw);
   display: flex;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .try-board .counter {
   color: hsl(0, 100%, 40%);
@@ -117,6 +123,9 @@ body main section {
   align-items: center;
   justify-content: center;
   font-size: min(6vw, 4vh);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .keyboard {
@@ -177,10 +186,15 @@ body main section {
   max-height: 100%;
   max-width: 100%;
   border-radius: clamp(8px, 4vh, 4vw);
-  transition: transform 0.15s ease 0s, opacity 0.15s ease 0s;
+  opacity: 1;
+  transition: transform 0.8s ease 0s, opacity 0.8s ease 0s;
   transform: scale(1);
   color: white;
   font-size: clamp(20px, 4vw, 4vh);
+}
+.modal-window.hidden {
+  transform: scale(0);
+  opacity: 0;
 }
 .modal-window .verdict-wrapper {
   margin: clamp(16px, 4vw, 4vh) auto;

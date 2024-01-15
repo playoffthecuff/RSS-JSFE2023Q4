@@ -14,8 +14,11 @@
   padding: 1vh;
   background-color: $background-transparent-color;
   backdrop-filter: blur(clamp(4px, 0.5vh, 0.5vw));
+  opacity: 1;
+  transition: 0.8s;
 
   &.hidden {
     visibility: hidden;
+    opacity: 0;
   }
 }
