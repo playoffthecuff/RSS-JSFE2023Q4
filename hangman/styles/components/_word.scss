@@ -1,0 +1,16 @@
+.word {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 4vh 0;
+
+  .letter {
+    display: flex;
+    width: 8%;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    font-size: min(6vw, 4vh);
+  }
+}
