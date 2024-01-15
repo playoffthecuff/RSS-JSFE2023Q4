@@ -133,6 +133,7 @@ const startNewGame = () => {
   letters = divWordElement.querySelectorAll('.letter');
   modalContainerElement.classList.add('hidden');
   modalWindowElement.classList.add('hidden');
+  document.body.classList.remove('no-scroll');
 }
 
 const finishGame = (result) => {
