@@ -107,6 +107,7 @@ let closeToWin = secretWord.length;
 const keyStates = {};
 
 const startNewGame = () => {
+  document.addEventListener('keyup', keyboardPushOrTapHandler);
   Object.keys(keyStates).forEach((key) => {
     delete keyStates[key];
   });
@@ -137,6 +138,7 @@ const startNewGame = () => {
 }
 
 const finishGame = (result) => {
+  document.removeEventListener('keyup', keyboardPushOrTapHandler);
   verdictMessagePreElement.textContent =
     result === 'win' ? 'Congratulations: ' : 'Sorry: ';
   verdictMessagePostElement.textContent =
