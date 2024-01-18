@@ -44,6 +44,7 @@ const startNewGame = () => {
   words.updateLetters();
   words.incorrectCount = 0;
   words.updateCounter();
+  words.updateQuestion();
   modal.hideModal();
 }
 

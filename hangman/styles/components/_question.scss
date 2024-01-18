@@ -1,0 +1,9 @@
+.question {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 2vh 0 1vh;
+  text-align: center;
+  font-size: clamp(16px, 2.4vh, 3.2vw);
+}

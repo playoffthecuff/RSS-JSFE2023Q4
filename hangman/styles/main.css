@@ -94,7 +94,7 @@ body main section {
   justify-content: center;
   justify-self: center;
   width: 100%;
-  padding: 1vh 0 4vh;
+  padding: 1vh 0 2vh;
 }
 .try-board .guess {
   padding: min(0.5vh, 0.5vw);
@@ -114,7 +114,7 @@ body main section {
   justify-content: center;
   justify-self: center;
   width: 100%;
-  padding: 4vh 0;
+  padding: 1vh 0;
 }
 .word .letter {
   display: flex;
@@ -235,4 +235,14 @@ body main section {
 }
 .modal-window .replay-button .replay-icon:active {
   fill: yellow;
+}
+
+.question {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 100%;
+  padding: 2vh 0 1vh;
+  text-align: center;
+  font-size: clamp(16px, 2.4vh, 3.2vw);
 }/*# sourceMappingURL=main.css.map */

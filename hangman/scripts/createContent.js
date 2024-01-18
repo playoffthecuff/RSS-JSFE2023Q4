@@ -16,8 +16,10 @@ const sectionQuizElement = createElement('section', 'quiz');
 mainElement.appendChild(sectionQuizElement);
 
 const wordElement = words.createWordElement();
-sectionQuizElement.appendChild(wordElement);
 words.letters = wordElement.querySelectorAll('.letter');
+const questionElement = words.createQuestionElement();
+sectionQuizElement.appendChild(questionElement);
+sectionQuizElement.appendChild(wordElement);
 
 const tryBoardElement = words.createTryBoardElement();
 sectionQuizElement.appendChild(tryBoardElement);
