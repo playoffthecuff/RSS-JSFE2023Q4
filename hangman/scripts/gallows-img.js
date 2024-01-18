@@ -129,3 +129,27 @@ inkscape:label="gallows" />
   </g>
 </g>
 </svg>`;
+
+export const hangman = {
+  counter: 0,
+  partIDs: [
+    'head',
+    'body',
+    'left-arm',
+    'right-arm',
+    'left-leg',
+    'right-leg'
+  ],
+  showBodyPart() {
+    if (this.counter < this.partIDs.length) {
+      document.getElementById(this.partIDs[this.counter]).classList.add('visible');
+      this.counter += 1;
+    }
+  },
+  hideDude() {
+    for (let i = 0; i < this.partIDs.length; i += 1) {
+      document.getElementById(this.partIDs[i]).classList.remove('visible');
+    }
+    this.counter = 0;
+  }
+}
