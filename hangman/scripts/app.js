@@ -2,8 +2,7 @@ import { words } from './words.js';
 import { hangman } from './gallows-img.js';
 import { keyboard } from './keyboard.js';
 import { modal } from './modal.js';
-import { mainElement } from './createContent.js';
-import { modalContainer } from './createContent.js';
+import { mainElement, modalContainer } from './createContent.js';
 
 const bodyElement = document.body;
 bodyElement.appendChild(mainElement);
@@ -16,24 +15,29 @@ function inputHandler(letter) {
     words.updateCounter();
   };
   const gameStatus = words.gameStatus();
+  // eslint-disable-next-line no-use-before-define
   if (gameStatus !== 'gaming') return finishGame(gameStatus);
 }
 
 // eslint-disable-next-line consistent-return
 function clickHandler (event) {
   const letter = keyboard.keys[Number(event.currentTarget.id.slice(3))];
+  if (!keyboard.isKeyDisabled(letter)) {
   const keyID = event.currentTarget.id;
   keyboard.disableKey(keyID);
   return inputHandler(letter);
+  }
 }
 
 function keyupHandler(event) {
   if (event.key.length !== 1 || !event.key.match(/[a-z]/i)) return;
   const letter = event.key.toUpperCase();
+  if (!keyboard.isKeyDisabled(letter)) {
   const keyID = `key${keyboard.keys.indexOf(letter)}`;
   keyboard.disableKey(keyID);
   // eslint-disable-next-line consistent-return
   return inputHandler(letter);
+  }
 }
 
 const startNewGame = () => {

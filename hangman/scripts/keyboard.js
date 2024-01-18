@@ -1,8 +1,11 @@
 import { createElement } from "./createElement.js";
 
+const keysIDs = new Set();
+
 export const keyboard = {
   keys: [],
   disabledKeys: [],
+  disabledLetters: [],
   createKeyboard() {
     const keyBoard = createElement('div', 'keyboard');
     for (let i = 65; i < 91; i += 1) {
@@ -16,14 +19,21 @@ export const keyboard = {
   },
   disableKey(keyId) {
     const id = keyId;
+    const index = Number(keyId.slice(3));
     const key = document.getElementById(id);
     key.classList.add('disabled');
     this.disabledKeys.push(key);
+    keysIDs.add(index);
   },
   enableKeyboard() {
     const {length} = this.disabledKeys;
     for (let i = 0; i < length; i += 1) {
       this.disabledKeys.shift().classList.remove('disabled');
     }
+    keysIDs.clear();
+  },
+  isKeyDisabled(letter) {
+    const index = this.keys.indexOf(letter);
+    return keysIDs.has(index);
   }
 }
