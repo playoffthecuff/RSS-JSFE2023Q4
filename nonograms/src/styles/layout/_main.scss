@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+
+  main {
+    min-width: 500px;
+    max-width: 768px;
+    padding: 0 clamp(4px, 2vw, 40vw);
+    margin: 0 auto;
+  }
+}
