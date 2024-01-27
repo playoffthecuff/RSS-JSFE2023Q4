@@ -1,4 +1,5 @@
 import { createElement } from "./createElement.js";
+import { finishGame } from "./gameProcess.js";
 
 function createCell (row, column) {
   const element = createElement('div', 'cell');
@@ -8,7 +9,7 @@ function createCell (row, column) {
 }
 
 export const GameField = {
-  answer: [],
+  solution: [],
   state: [],
 
   fillCell: (event) => {
@@ -17,7 +18,7 @@ export const GameField = {
     const row = event.target.dataset.row;
     const column = event.target.dataset.column;
     GameField.state[row][column] = !(GameField.state[row][column]);
-    const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element === GameField.answer[rowIndex][columnIndex]));
+    if (GameField.isWin()) finishGame();
   },
 
   markCell: (event) => {
@@ -71,7 +72,7 @@ export const GameField = {
     const gameSubField = createElement('div', 'game-subfield', 'main-field');
     gameSubField.style.flexGrow = size;
     for (let row = 0; row < size; row += 1) {
-      this.answer.push(arr[row]);
+      this.solution.push(arr[row]);
       this.state.push([]);
       for (let column = 0; column < size; column += 1) {
         this.state[row].push(false);
@@ -94,7 +95,7 @@ export const GameField = {
   },
 
   createSideHintField() {
-    const arr = this.countRowSequences(this.answer);
+    const arr = this.countRowSequences(this.solution);
     let size = 0;
     for (const subArr of arr) {
       size = Math.max(size, subArr.length);
@@ -124,7 +125,7 @@ export const GameField = {
   },
   
   createAboveHintField() {
-    const arr = this.countColumnSequences(this.answer);
+    const arr = this.countColumnSequences(this.solution);
     const reverseArr = arr.map((subArr) => subArr.reverse());
     let size = 0;
     for (const subArr of arr) {
@@ -154,10 +155,10 @@ export const GameField = {
   createCrossField() {
     let rowsQty = 0;
     let columnsQty = 0;
-    for (const subArr of this.countColumnSequences(this.answer)) {
+    for (const subArr of this.countColumnSequences(this.solution)) {
       rowsQty = Math.max(rowsQty, subArr.length);
     };
-    for (const subArr of this.countRowSequences(this.answer)) {
+    for (const subArr of this.countRowSequences(this.solution)) {
       columnsQty = Math.max(columnsQty, subArr.length);
     };
     const relSize = 100 / (columnsQty) + '%';
@@ -173,6 +174,11 @@ export const GameField = {
       }
     }
     return crossField;
-  }
+  },
 
+  isWin: () => {
+    const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element === GameField.solution[rowIndex][columnIndex]));
+    return win;
+  }
+  
 }
