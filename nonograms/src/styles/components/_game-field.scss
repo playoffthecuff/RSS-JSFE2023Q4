@@ -1,32 +1,63 @@
 .game-field {
-  display: flex;
   margin: 0 auto;
-  // max-width: calc(500px - clamp(2px, 1dvh, 1vw));
-  flex-wrap: wrap;
+  display: flex;
+  
 
-  @media (hover: hover) {
-    .cell:hover {
-      cursor: pointer;
-      outline: darkslateblue solid 2px;
-      transition: 0.2s;
-      z-index: 3;
+  .game-subfield {
+    display: flex;
+    margin: 0;
+    flex-wrap: wrap;
+    outline: 2px solid gray;
+
+    .border-right {
+      box-sizing: border-box;
+      border-right: 2px solid gray;
+    }
+
+    .border-bottom {
+      box-sizing: border-box;
+      border-bottom: 2px solid gray;
+    }
+
+    &.hint-field {
+      pointer-events: none;
+      background-color: lightgray;
+    }
+
+    &.main-field {
+      color: rgba(0, 0, 0, 0);
+    }
+
+    @media (hover: hover) {
+      .cell:hover {
+        cursor: pointer;
+        outline: darkslateblue solid 2px;
+        transition: 0.2s;
+        z-index: 3;
+      }
+    }
+
+    .cell {
+      display: flex;
+      aspect-ratio: 1;
+      outline: gray solid 1px;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto';
+      font-size: 48px;
+
+      &.hidden-content {
+        color: rgba(0, 0, 0, 0);
+      }
+    }
+
+    .cell.filled {
+      background-color: black;
+    }
+
+    .cell.marked {
+      background: url("../../../icons/CloseLight24px.svg") no-repeat center center / cover ;
+    }
   }
   }
-
-  .cell {
-    aspect-ratio: 1;
-    flex-grow: 0;
-    flex-shrink: 0;
-    outline: gray solid 1px;
-  }
-
-  .cell.filled {
-    background-color: black;
-  }
-
-  .cell.marked {
-    background: url("../../../public/icons/CloseLight24px.svg") no-repeat center center / cover ;
-  }
-
-}
 

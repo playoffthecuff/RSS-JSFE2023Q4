@@ -18,17 +18,18 @@ export const GameField = {
     const column = event.target.dataset.column;
     GameField.state[row][column] = !(GameField.state[row][column]);
     const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element === GameField.answer[rowIndex][columnIndex]));
-    console.log(win);
   },
 
   markCell: (event) => {
     event.currentTarget.classList.remove('filled');
     event.currentTarget.classList.toggle('marked');
     event.preventDefault();
-    console.log(this.state);
+    const row = event.target.dataset.row;
+    const column = event.target.dataset.column;
+    GameField.state[row][column] = false;
   },
 
-  countRowSequences (arr) {
+  countRowSequences(arr) {
     const result = [];
     for (let row = 0; row < arr.length; row += 1) {
       result.push([]);
@@ -45,7 +46,7 @@ export const GameField = {
     return result;
   },
 
-  countColumnSequences (arr) {
+  countColumnSequences(arr) {
     const result = [];
     for (let column = 0; column < arr.length; column += 1) {
       result.push([]);
@@ -64,25 +65,114 @@ export const GameField = {
     return result;
   },
 
-
-  createGameField (arr) {
+  createGameSubField(arr) {
     const size = arr.length;
     const relSize = 100 / (size) + '%';
-    const gameField = createElement('section', 'game-field');
+    const gameSubField = createElement('div', 'game-subfield', 'main-field');
+    gameSubField.style.flexGrow = size;
     for (let row = 0; row < size; row += 1) {
       this.answer.push(arr[row]);
       this.state.push([]);
       for (let column = 0; column < size; column += 1) {
         this.state[row].push(false);
         const cell = createCell(row, column);
+        if ((column + 1) % 5 === 0) cell.classList.add('border-right');
+        if ((row + 1) % 5 === 0) cell.classList.add('border-bottom');
+        if (arr[row][column]) {
+          cell.textContent = 1;
+        } else {
+          cell.textContent = 0;
+        }
         const style = cell.style;
         style.flexBasis = relSize;
         cell.addEventListener('click', this.fillCell);
         cell.addEventListener('contextmenu', this.markCell);
-        gameField.append(cell);
+        gameSubField.append(cell);
       }
     }
-    console.log(this.answer);
-    return gameField;
+    return gameSubField;
+  },
+
+  createSideHintField() {
+    const arr = this.countRowSequences(this.answer);
+    let size = 0;
+    for (const subArr of arr) {
+      size = Math.max(size, subArr.length);
+    };
+    const modifiedArr = arr.map((subArr) => {
+      if (subArr.length < size) {
+        subArr.unshift(0);
+        return subArr;
+      }
+      return subArr;
+    })
+    const relSize = 100 / (size) + '%';
+    const sideHintSubField = createElement('div', 'game-subfield', 'hint-field');
+    sideHintSubField.style.flexGrow = size;
+    for (let row = 0; row < arr.length; row += 1) {
+      for (let column = 0; column < size; column += 1) {
+        const cell = createCell(row, column);
+        cell.textContent = modifiedArr[row][column];
+        if (!modifiedArr[row][column]) cell.classList.add('hidden-content');
+        const style = cell.style;
+        style.flexBasis = relSize;
+        sideHintSubField.append(cell);
+      }
+    }
+    console.log(modifiedArr);
+    return sideHintSubField;
+  },
+  
+  createAboveHintField() {
+    const arr = this.countColumnSequences(this.answer);
+    const reverseArr = arr.map((subArr) => subArr.reverse());
+    let size = 0;
+    for (const subArr of arr) {
+      size = Math.max(size, subArr.length);
+    };
+    const relSize = 100 / (arr.length) + '%';
+    const aboveHintSubField = createElement('div', 'game-subfield', 'hint-field');
+    aboveHintSubField.style.flexGrow = arr.length;
+    for (let row = size; row > 0; row -= 1) {
+      for (let column = 0; column < arr.length; column += 1) {
+        const cell = createCell(row, column);
+        if (reverseArr[column][row - 1]) {
+          cell.textContent = reverseArr[column][row - 1];
+        } else {
+          cell.textContent = 0;
+          cell.classList.add('hidden-content');
+        }
+        const style = cell.style;
+        style.flexBasis = relSize;
+        aboveHintSubField.append(cell);
+      }
+    }
+
+    return aboveHintSubField;
+  },
+
+  createCrossField() {
+    let rowsQty = 0;
+    let columnsQty = 0;
+    for (const subArr of this.countColumnSequences(this.answer)) {
+      rowsQty = Math.max(rowsQty, subArr.length);
+    };
+    for (const subArr of this.countRowSequences(this.answer)) {
+      columnsQty = Math.max(columnsQty, subArr.length);
+    };
+    const relSize = 100 / (columnsQty) + '%';
+    const crossField = createElement('div', 'game-subfield', 'hint-field');
+    crossField.style.flexGrow = columnsQty;
+    for (let row = 0; row < rowsQty; row += 1) {
+      for (let column = 0; column < columnsQty; column += 1) {
+        const cell = createCell(row, column);
+        cell.classList.add('hidden-content');
+        cell.style.flexBasis = relSize;
+        cell.textContent = 1;
+        crossField.append(cell);
+      }
+    }
+    return crossField;
   }
+
 }

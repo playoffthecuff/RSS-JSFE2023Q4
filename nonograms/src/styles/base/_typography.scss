@@ -1,11 +1,17 @@
 @font-face {
   font-family: 'Inter', sans-serif;
-  src: url('../fonts/Inter-Regular.woff2') format('woff2');
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Inter', sans-serif;
-  src: url('../fonts/Inter-Bold.woff2') format('woff2');
+  src: url('/fonts/Inter-Bold.woff2') format('woff2');
   font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Roboto', sans-serif;
+  src: url('/fonts/RobotoMono-Medium.woff2') format('woff2');
+  font-weight: normal;
 }
