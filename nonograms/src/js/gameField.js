@@ -1,5 +1,5 @@
 import { createElement } from "./createElement.js";
-import { countTime, finishGame } from "./gameProcess.js";
+import { clearCellAudio, countTime, fillCellAudio, finishGame, markCellAudio, startGameAudio } from "./gameProcess.js";
 
 function createCell (row, column) {
   const element = createElement('div', 'cell');
@@ -17,12 +17,19 @@ export const GameField = {
     if (!GameField.isStart) {
       countTime(new Date());
       GameField.isStart = true;
+      startGameAudio.play();
     }
     event.currentTarget.classList.remove('marked');
     event.currentTarget.classList.toggle('filled');
+    
     const row = event.target.dataset.row;
     const column = event.target.dataset.column;
     GameField.state[row][column] = !(GameField.state[row][column]);
+    if (GameField.state[row][column]) {
+      fillCellAudio.play();
+    } else {
+      clearCellAudio.play();
+    }
     if (GameField.isWin()) finishGame();
   },
 
@@ -32,6 +39,11 @@ export const GameField = {
     event.preventDefault();
     const row = event.target.dataset.row;
     const column = event.target.dataset.column;
+    if (event.currentTarget.classList.contains('marked')) {
+      markCellAudio.play();
+    } else {
+      clearCellAudio.play();
+    }
     GameField.state[row][column] = false;
   },
 

@@ -1,15 +1,16 @@
 import { createElement } from './createElement.js';
 import { Nonograms, generateSVG } from './nonograms.js';
-import { startGame } from './gameProcess.js';
+import { restart, startGame } from './gameProcess.js';
 
 export const main = createElement('main');
 export const menu = createElement('section', 'select-container');
 
 export const controlPanel = createElement('section', 'select-container');
-const restartButton = createElement('div', 'cp-button');
+export const restartButton = createElement('div', 'cp-button', 'no-interactive');
 restartButton.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M483.077-200q-117.25 0-198.625-81.339-81.375-81.34-81.375-198.539 0-117.199 81.375-198.661Q365.827-760 483.077-760q71.308 0 133.538 33.884 62.231 33.885 100.308 94.577V-740q0-8.5 5.758-14.25T736.95-760q8.512 0 14.243 5.75 5.73 5.75 5.73 14.25v156.923q0 13.731-9.288 23.02-9.289 9.288-23.019 9.288H567.692q-8.5 0-14.25-5.758t-5.75-14.269q0-8.512 5.75-14.242 5.75-5.731 14.25-5.731h128q-31.231-59.846-87.884-94.539Q551.154-720 483.077-720q-100 0-170 70t-70 170q0 100 70 170t170 70q71.468 0 130.849-38.731 59.382-38.73 88.074-102.884 3.385-7.846 10.962-11.039 7.577-3.192 15.505-.5 8.456 2.693 11.226 11 2.769 8.308-.616 16.154-33.308 75.385-102.388 120.693Q567.609-200 483.077-200Z"/></svg>';
+restartButton.addEventListener('click', restart);
 export const timerBlock = createElement('div', 'timer');
-timerBlock.textContent = '00:00:00';
+timerBlock.textContent = '00:00';
 const saveButton = createElement('div', 'cp-button');
 saveButton.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M224.615-160Q197-160 178.5-178.5 160-197 160-224.615v-510.77Q160-763 178.5-781.5 197-800 224.615-800h411.616q12.923 0 25.115 5.231 12.193 5.23 20.885 13.923l98.615 98.615q8.693 8.692 13.923 20.885Q800-649.154 800-636.231v411.616Q800-197 781.5-178.5 763-160 735.385-160h-510.77ZM760-646 646-760H224.615q-10.769 0-17.692 6.923T200-735.385v510.77q0 10.769 6.923 17.692T224.615-200h510.77q10.769 0 17.692-6.923T760-224.615V-646ZM480-298.461q33.077 0 56.539-23.462Q560-345.384 560-378.461T536.539-435Q513.077-458.462 480-458.462T423.461-435Q400-411.538 400-378.461t23.461 56.538q23.462 23.462 56.539 23.462Zm-176.923-270.77h232.308q13.923 0 23.115-9.192 9.193-9.192 9.193-23.115v-55.385q0-13.923-9.193-23.116-9.192-9.192-23.115-9.192H303.077q-13.923 0-23.116 9.192-9.192 9.193-9.192 23.116v55.385q0 13.923 9.192 23.115 9.193 9.192 23.116 9.192ZM200-646v446-560 114Z"/></svg>';
 const loadButton = createElement('div', 'cp-button');
@@ -29,6 +30,8 @@ controlPanel.append(restartButton, timerBlock, saveButton, loadButton);
 
 main.append(menu);
 main.append(controlPanel);
+
+
 
 // main.append(gameSection);
 

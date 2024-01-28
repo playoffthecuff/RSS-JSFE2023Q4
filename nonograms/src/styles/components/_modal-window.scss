@@ -47,6 +47,9 @@
   }
 
   .verdict-wrapper {
+    width: 50vw;
+    text-align: center;
+    line-height: 200%;
     font-family: 'Inter';
     margin: clamp(16px, 4vw, 4vh) auto;
     .highlight {

@@ -31,6 +31,12 @@
   .cp-button {
     margin: clamp(4px, 1vw, 32px);
     cursor: pointer;
+
+    &.no-interactive {
+      fill: $dark-shadow-color;
+      cursor: default;
+      pointer-events: none;
+    }
   }
 
   .timer {
