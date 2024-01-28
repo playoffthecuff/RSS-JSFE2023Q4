@@ -195,6 +195,10 @@ export const GameField = {
   isWin: () => {
     const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element === GameField.solution[rowIndex][columnIndex]));
     return win;
+  },
+
+  clearState() {
+    this.state.forEach((subArr) => subArr.fill(false));
   }
-  
+
 }
