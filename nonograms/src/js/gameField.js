@@ -1,5 +1,6 @@
 import { createElement } from "./createElement.js";
-import { clearCellAudio, countTime, fillCellAudio, finishGame, markCellAudio, startGameAudio } from "./gameProcess.js";
+import { restartButton, saveButton } from "./createLayout.js";
+import { clearCellAudio, countTime, fillCellAudio, finishGame, gameSection, markCellAudio, pastSeconds, startGameAudio } from "./gameProcess.js";
 
 function createCell (row, column) {
   const element = createElement('div', 'cell');
@@ -15,13 +16,16 @@ export const GameField = {
 
   fillCell: (event) => {
     if (!GameField.isStart) {
-      countTime(new Date());
+      countTime(new Date(), pastSeconds);
       GameField.isStart = true;
       startGameAudio.play();
+      restartButton.classList.remove('no-interactive');
+      restartButton.firstElementChild.classList.remove('no-interactive');
     }
+    saveButton.classList.remove('no-interactive');
+    saveButton.firstElementChild.classList.remove('no-interactive');
     event.currentTarget.classList.remove('marked');
     event.currentTarget.classList.toggle('filled');
-    
     const row = event.target.dataset.row;
     const column = event.target.dataset.column;
     GameField.state[row][column] = !(GameField.state[row][column]);
@@ -185,7 +189,7 @@ export const GameField = {
         const cell = createCell(row, column);
         cell.classList.add('hidden-content');
         cell.style.flexBasis = relSize;
-        cell.textContent = 1;
+        cell.textContent = 0;
         crossField.append(cell);
       }
     }
@@ -199,6 +203,5 @@ export const GameField = {
 
   clearState() {
     this.state.forEach((subArr) => subArr.fill(false));
-  }
-
+  },
 }

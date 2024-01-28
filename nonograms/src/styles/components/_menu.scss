@@ -16,7 +16,9 @@
     width: clamp(128px, 28vw, 182px);
     height: clamp(128px, 28vw, 182px);
     fill: #8f8f8f;
-    outline: 1px solid #8f8f8f;
+    outline: 2px solid #8f8f8f;
+    border-radius: clamp(8px, 0.8vw, 12px);
+    overflow: hidden;
   }
 
   @media (hover: hover) {
@@ -54,6 +56,10 @@
     height: auto;
     fill: $darkest-color;
     transition: 2.4s;
+
+    &.no-interactive {
+      fill: $dark-shadow-color;
+    }
 
     @media (hover: hover) {
       &:hover {
