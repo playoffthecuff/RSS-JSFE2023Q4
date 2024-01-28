@@ -1,5 +1,5 @@
 import { createElement } from "./createElement";
-import { startGame } from "./gameProcess";
+import { restart } from "./gameProcess";
 
 const message = 'Great! You have solved the nonogram!';
 
@@ -13,4 +13,4 @@ replayButton.innerHTML = '<svg class="replay-icon" xmlns="http://www.w3.org/2000
 replayWrapper.append(replayButton);
 window.append(verdict, replayWrapper);
 modalContainer.append(window);
-replayButton.addEventListener('click', startGame);
+replayButton.addEventListener('click', restart);

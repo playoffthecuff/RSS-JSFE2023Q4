@@ -1,5 +1,5 @@
 import { createElement } from "./createElement.js";
-import { finishGame } from "./gameProcess.js";
+import { countTime, finishGame } from "./gameProcess.js";
 
 function createCell (row, column) {
   const element = createElement('div', 'cell');
@@ -11,8 +11,13 @@ function createCell (row, column) {
 export const GameField = {
   solution: [],
   state: [],
+  isStart: false,
 
   fillCell: (event) => {
+    if (!GameField.isStart) {
+      countTime(new Date());
+      GameField.isStart = true;
+    }
     event.currentTarget.classList.remove('marked');
     event.currentTarget.classList.toggle('filled');
     const row = event.target.dataset.row;
@@ -120,7 +125,6 @@ export const GameField = {
         sideHintSubField.append(cell);
       }
     }
-    console.log(modifiedArr);
     return sideHintSubField;
   },
   
