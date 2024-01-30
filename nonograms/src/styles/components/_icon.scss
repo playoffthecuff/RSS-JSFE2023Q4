@@ -1,0 +1,39 @@
+.dark-mode {
+  .icon {
+    fill: $lightest-color;
+  }
+}
+
+.icon {
+  width: clamp(48px, 8vw, 64px);
+  height: clamp(48px, 8vw, 64px);
+  fill: $darkest-color;
+  transition: 2.4s;
+  z-index: 1;
+
+  &.right-offset {
+    margin-right: -50%;
+  }
+
+  &.no-interactive {
+    fill: $middle-gray-color;
+  }
+
+  &.hidden {
+    opacity: 0;
+    z-index: 0;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      fill: $highlight-text-color;
+      transform: rotate(-360deg);
+  }
+}
+
+  &:active {
+    fill: $accent-text-color;
+  }
+}
+
+

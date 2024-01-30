@@ -2,36 +2,35 @@
   margin: 0 auto;
   display: flex;
   
-
   .game-subfield {
     display: flex;
     margin: 0;
     flex-wrap: wrap;
-    outline: 2px solid gray;
+    outline: 2px solid $light-gray-color;
 
     .border-right {
       box-sizing: border-box;
-      border-right: 2px solid gray;
+      border-right: 2px solid $light-gray-color;
     }
 
     .border-bottom {
       box-sizing: border-box;
-      border-bottom: 2px solid gray;
+      border-bottom: 2px solid $light-gray-color;
     }
 
     &.hint-field {
       pointer-events: none;
-      background-color: lightgray;
+      background-color: $lightest-color;
     }
 
     &.main-field {
-      color: rgba(0, 0, 0, 0);
+      color: $darkest-transparent-color;
     }
 
     @media (hover: hover) {
       .cell:hover {
         cursor: pointer;
-        outline: darkslateblue solid 2px;
+        outline: $light-hover-color solid 2px;
         transition: 0.1s;
         z-index: 3;
       }
@@ -40,7 +39,7 @@
     .cell {
       display: flex;
       aspect-ratio: 1;
-      outline: gray solid 1px;
+      outline: $light-gray-color solid 1px;
       align-items: center;
       justify-content: center;
       font-family: 'Roboto';
@@ -52,12 +51,49 @@
     }
 
     .cell.filled {
-      background-color: black;
+      background-color: $darkest-color;
     }
 
     .cell.marked {
       background: url("../../../icons/CloseLight24px.svg") no-repeat center center / cover ;
     }
   }
-  }
 
+}
+
+.dark-mode {
+
+  .game-subfield {
+    outline-color: $dark-gray-color;
+
+    .border-right {
+      border-right-color: $dark-gray-color;
+    }
+
+    .border-bottom {
+      border-bottom-color: $dark-gray-color;
+    }
+
+    &.hint-field {
+      background-color: $dark-field-color;
+    }
+
+    @media (hover: hover) {
+      .cell:hover {
+        outline-color: $dark-hover-color;
+      }
+    }
+
+    .cell {
+      outline-color: $dark-gray-color;
+    }
+
+    .cell.filled {
+      background-color: $lightest-color;
+    }
+
+    .cell.marked {
+      background: url("../../../icons/CloseDark24px.svg") no-repeat center center / cover ;
+    }
+  }
+}
