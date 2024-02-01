@@ -1,7 +1,7 @@
-import { loadButton, main, menu, restartButton, saveButton, timerBlock } from "./createLayout";
+import { loadButton, main, restartButton, saveButton, timerBlock } from "./createLayout";
 import { modalContainer, verdict } from "./modalWindow";
 import { GameField } from './gameField.js';
-import { Nonograms } from "./nonograms.js";
+import { NonogramsEasy, NonogramsHard, NonogramsMedium } from "./nonograms.js";
 import { createElement } from "./createElement.js";
 
 export const fillCellAudio = new Audio('/audio/button-26_1.mp3');
@@ -29,11 +29,30 @@ function createGameField(arr) {
   return gameSection;
 }
 
+let level = '';
+
 export function startGame(event) {
+  if (main.querySelector('.game-container')) main.removeChild(gameSection);
+  GameField.solution = [];
+  GameField.state = [];
+  GameField.isStart = false;
+  const id = event.currentTarget.id;
+  level = id.slice(0, id.length - 1);
+  let gamesArr;
+  switch (level) {
+    case 'easy':
+      gamesArr = NonogramsEasy;
+      break;
+    case 'medium':
+      gamesArr = NonogramsMedium;
+      break;
+    case 'hard':
+      gamesArr = NonogramsHard;
+      break;
+  }
   const targetId = event.currentTarget.id;
   if (!modalContainer.classList.contains('hidden')) modalContainer.classList.add('hidden');
-  menu.classList.add('hidden');
-  main.append(createGameField(Nonograms[targetId]));
+  main.append(createGameField(gamesArr[targetId]));
 }
 
 export function finishGame() {
@@ -83,13 +102,11 @@ export function loadGame() {
 }
 
 export function restart() {
-  GameField.isStart = false;
   restartGameAudio.play();
   clearInterval(timerId);
   pastSeconds = 0;
   timerBlock.textContent = '00:00';
   modalContainer.classList.add('hidden');
-  menu.classList.remove('hidden');
   main.removeChild(gameSection);
   GameField.solution = [];
   GameField.state = [];
@@ -114,7 +131,7 @@ export function countTime(startDate, pastSeconds = 0) {
 
     timerBlock.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }, 1000)
-};
+}
 
 export function resetGame() {
   GameField.isStart = false;
@@ -130,4 +147,26 @@ export function resetGame() {
     node.classList.remove('marked');
     node.classList.remove('filled');
   });
+}
+
+export function startRandomGame() {
+  let nonogramLevel;
+  let level;
+  if (Math.random() * 3 < 1) {
+    nonogramLevel = NonogramsEasy;
+    level = 'easy';
+  } else if (1 < Math.random() * 3 && Math.random() < 2) {
+    nonogramLevel = NonogramsMedium;
+    level = 'medium';
+  } else {
+    nonogramLevel = NonogramsHard;
+    level = 'hard';
+  };
+  const nonogramNumber = Math.floor(Math.random() * 6 + 1);
+  const nonogram = level + nonogramNumber;
+  if (main.querySelector('.game-container')) main.removeChild(gameSection);
+  GameField.solution = [];
+  GameField.state = [];
+  GameField.isStart = false;
+  main.append(createGameField(nonogramLevel[nonogram]));
 }

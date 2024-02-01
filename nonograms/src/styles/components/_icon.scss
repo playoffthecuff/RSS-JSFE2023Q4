@@ -1,6 +1,18 @@
 .dark-mode {
   .icon {
-    fill: $lightest-color;
+    fill: $warm-icon-color;
+    stroke: $warm-icon-color;
+
+    @media (hover: hover) {
+      &:hover {
+        fill: $highlight-dark-color;
+        stroke: $highlight-dark-color;
+    }
+  }
+  }
+  .icon.mode {
+    fill: $accent-text-color;
+    stroke: $accent-text-color;
   }
 }
 
@@ -8,6 +20,7 @@
   width: clamp(48px, 8vw, 64px);
   height: clamp(48px, 8vw, 64px);
   fill: $darkest-color;
+  stroke: $darkest-color;
   transition: 2.4s;
   z-index: 1;
 
@@ -17,6 +30,7 @@
 
   &.no-interactive {
     fill: $middle-gray-color;
+    stroke: $middle-gray-color;
   }
 
   &.hidden {
@@ -27,13 +41,20 @@
   @media (hover: hover) {
     &:hover {
       fill: $highlight-text-color;
+      stroke: $highlight-text-color;
       transform: rotate(-360deg);
   }
 }
 
   &:active {
     fill: $accent-text-color;
+    stroke: $accent-text-color;
   }
+}
+
+.icon.mode {
+  fill: $light-hover-color;
+  stroke: $light-hover-color;
 }
 
 

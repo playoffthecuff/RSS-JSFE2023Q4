@@ -6,16 +6,16 @@
     display: flex;
     margin: 0;
     flex-wrap: wrap;
-    outline: 2px solid $light-gray-color;
+    outline: 3px solid $light-gray-color;
 
     .border-right {
       box-sizing: border-box;
-      border-right: 2px solid $light-gray-color;
+      border-right: 4px solid $light-gray-color;
     }
 
     .border-bottom {
       box-sizing: border-box;
-      border-bottom: 2px solid $light-gray-color;
+      border-bottom: 4px solid $light-gray-color;
     }
 
     &.hint-field {
@@ -42,8 +42,9 @@
       outline: $light-gray-color solid 1px;
       align-items: center;
       justify-content: center;
-      font-family: 'Roboto';
-      font-size: 48px;
+      font-family: 'Roboto Mono', monospace;
+      flex-shrink: 0;
+      flex-grow: 0;
 
       &.hidden-content {
         color: rgba(0, 0, 0, 0);
@@ -55,7 +56,7 @@
     }
 
     .cell.marked {
-      background: url("../../../icons/CloseLight24px.svg") no-repeat center center / cover ;
+      background: url("/icons/CloseLight24px.svg") no-repeat center center / cover ;
     }
   }
 
@@ -64,18 +65,19 @@
 .dark-mode {
 
   .game-subfield {
-    outline-color: $dark-gray-color;
+    outline-color: $mid-gray-color;
 
     .border-right {
-      border-right-color: $dark-gray-color;
+      border-right-color: $mid-gray-color;
     }
 
     .border-bottom {
-      border-bottom-color: $dark-gray-color;
+      border-bottom-color: $mid-gray-color;
     }
 
     &.hint-field {
       background-color: $dark-field-color;
+      transition: 2.4s;
     }
 
     @media (hover: hover) {
@@ -85,15 +87,15 @@
     }
 
     .cell {
-      outline-color: $dark-gray-color;
+      outline-color: $mid-gray-color;
     }
 
     .cell.filled {
-      background-color: $lightest-color;
+      background-color: $warm-lightest-color;
     }
 
     .cell.marked {
-      background: url("../../../icons/CloseDark24px.svg") no-repeat center center / cover ;
+      background: url("/icons/CloseDark24px.svg") no-repeat center center / cover ;
     }
   }
 }

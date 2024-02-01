@@ -1,6 +1,6 @@
 import { createElement } from './createElement.js';
-import { Nonograms, generateSVG } from './nonograms.js';
-import { loadGame, resetGame, saveGame, startGame } from './gameProcess.js';
+import { NonogramsEasy, NonogramsHard, NonogramsMedium, generateSVG } from './nonograms.js';
+import { loadGame, resetGame, saveGame, startGame, startRandomGame } from './gameProcess.js';
 
 export let theme = '';
 
@@ -19,13 +19,13 @@ function toggleTheme() {
 const header = createElement('header');
 export const themeButton = createElement('div', 'button');
 themeButton.addEventListener('click', toggleTheme);
-const sunIcon = '<svg class="icon right-offset" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><rect fill="none" height="24" width="24"/><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg>';
-const moonIcon = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"  viewBox="0 0 24 24"><rect fill="none" height="24" width="24"/><path d="M11.01,3.05C6.51,3.54,3,7.36,3,12c0,4.97,4.03,9,9,9c4.63,0,8.45-3.5,8.95-8c0.09-0.79-0.78-1.42-1.54-0.95 c-0.84,0.54-1.84,0.85-2.91,0.85c-2.98,0-5.4-2.42-5.4-5.4c0-1.06,0.31-2.06,0.84-2.89C12.39,3.94,11.9,2.98,11.01,3.05z"/></svg>'
+const sunIcon = '<svg class="icon mode right-offset" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg>';
+const moonIcon = '<svg class="icon mode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"  viewBox="0 0 24 24"><path d="M11.01,3.05C6.51,3.54,3,7.36,3,12c0,4.97,4.03,9,9,9c4.63,0,8.45-3.5,8.95-8c0.09-0.79-0.78-1.42-1.54-0.95 c-0.84,0.54-1.84,0.85-2.91,0.85c-2.98,0-5.4-2.42-5.4-5.4c0-1.06,0.31-2.06,0.84-2.89C12.39,3.94,11.9,2.98,11.01,3.05z"/></svg>'
 themeButton.innerHTML = sunIcon + moonIcon;
 if (theme === 'day') {
-  themeButton.firstElementChild.classList.add('hidden');
-} else {
   themeButton.lastElementChild.classList.add('hidden');
+} else {
+  themeButton.firstElementChild.classList.add('hidden');
 }
 (function () {
   if (localStorage.getItem('theme')) {
@@ -41,9 +41,66 @@ if (theme === 'day') {
   }
 }());
 header.append(themeButton);
+
 export const main = createElement('main');
-export const menu = createElement('section', 'select-container');
-export const controlPanel = createElement('section', 'select-container');
+export const levelPicker = createElement('section', 'container');
+export const randomGameButton = createElement('div', 'button');
+randomGameButton.innerHTML = '<svg version="1.1" class = "icon" viewBox="0 0 768 768" xmlns="http://www.w3.org/2000/svg"><g id="g14" transform="translate(83.249857,62.175506)"><path d="m 283.59033,27.338416 c 24.87566,-1.092603 49.18988,1.913195 72.94265,9.017502 61.5227,22.278534 123.0443,44.557067 184.567,66.835602 26.86278,12.3614 42.88806,32.69534 48.07584,61.00075 0.73716,83.80972 0.73716,167.61944 0,251.42916 -4.72028,35.41863 -21.11358,64.5929 -49.18103,87.52281 -63.18049,36.86461 -126.17641,73.9955 -188.98777,111.39267 -32.27158,17.13007 -64.69128,17.48335 -97.25686,1.06089 C 185.51785,575.92291 116.99597,536.67025 48.184528,497.83983 27.123997,475.76711 14.782323,449.77549 11.16061,419.86496 11.347387,332.15862 12.452579,244.45864 14.476185,156.76609 19.473861,130.76279 34.393948,112.19735 59.236445,101.06976 117.81159,80.205376 176.38675,59.34206 234.9619,38.477683 c 15.9435,-5.4192 32.15335,-9.132289 48.62843,-11.139267 z" id="path3" style="stroke-width:34.6499; fill:none" /> <path d="m 440.5,127.5 c 12.821,-1.245 25.154,0.588 37,5.5 14.819,5.504 21.652,16.004 20.5,31.5 -4.298,10.296 -11.798,17.129 -22.5,20.5 -23.668,8.394 -45.668,5.394 -66,-9 -11.673,-13.938 -10.339,-26.604 4,-38 8.435,-5.228 17.435,-8.728 27,-10.5 z" id="path4" transform="translate(-150,-40.719488)" /><path d="m 664.5,172.5 c 18.323,0.488 26.49,9.822 24.5,28 -1.647,4.656 -4.48,8.489 -8.5,11.5 -63.123,30.728 -126.123,61.728 -189,93 -8.037,5.899 -13.204,13.733 -15.5,23.5 -0.333,96.333 -0.667,192.667 -1,289 -4.267,14.893 -14.1,20.726 -29.5,17.5 -8.112,-3.112 -12.945,-8.946 -14.5,-17.5 -0.333,-95 -0.667,-190 -1,-285 -3.867,-12.858 -11.7,-22.358 -23.5,-28.5 -64.452,-28.726 -128.785,-57.726 -193,-87 -12.779,-11.749 -13.113,-23.749 -1,-36 5.578,-3.301 11.578,-4.301 18,-3 64,29.333 128,58.667 192,88 18.75,6.164 37.416,5.831 56,-1 61.968,-31.151 123.968,-61.984 186,-92.5 z" id="path5" transform="translate(-150,-40.719488)" /><path d="m 229.5,250.5 c 14.975,-0.762 25.808,5.571 32.5,19 10.534,24.048 8.2,46.715 -7,68 -15.958,12.223 -29.958,10.223 -42,-6 -12.898,-23.279 -12.565,-46.279 1,-69 4.211,-5.394 9.377,-9.394 15.5,-12 z" id="path6" transform="translate(-150,-40.719488)" /><path d="m 657.5,250.5 c 15.897,-0.613 27.063,6.387 33.5,21 8.448,21.497 6.782,42.164 -5,62 -10.657,13.352 -23.157,15.519 -37.5,6.5 -11.849,-12.369 -17.516,-27.202 -17,-44.5 0.155,-16.139 6.155,-29.639 18,-40.5 2.891,-1.274 5.558,-2.774 8,-4.5 z" id="path7" transform="translate(-150,-40.719488)" /><path d="m 591.5,362.5 c 11.496,-0.669 20.663,3.664 27.5,13 13.998,23.315 13.998,46.649 0,70 -10.103,12.85 -22.27,15.35 -36.5,7.5 -15.027,-15.084 -20.86,-33.251 -17.5,-54.5 2.645,-16.778 11.478,-28.778 26.5,-36 z" id="path10" transform="translate(-150,-40.719488)" /><path d="m 371.5,485.5 c 11.496,-0.669 20.663,3.664 27.5,13 11.538,18.654 13.538,38.321 6,59 -3.865,11.305 -11.365,18.805 -22.5,22.5 -5.089,0.826 -10.089,0.492 -15,-1 -13.768,-9.019 -21.268,-21.852 -22.5,-38.5 -2.899,-19.973 2.934,-36.806 17.5,-50.5 3.092,-1.546 6.092,-3.046 9,-4.5 z" id="path12" transform="translate(-150,-40.719488)" /><path d="m 528.5,485.5 c 9.446,-0.463 17.613,2.537 24.5,9 15.28,21.219 17.613,43.885 7,68 -9.168,17.664 -22.668,22.164 -40.5,13.5 -14.777,-14.762 -20.611,-32.595 -17.5,-53.5 2.231,-17.351 11.064,-29.684 26.5,-37 z" id="path13" transform="translate(-150,-40.719488)" /></g></svg>';
+export const easyLevelButton = createElement('div', 'button', 'no-interactive');
+easyLevelButton.innerHTML = '<svg class="icon no-interactive" viewBox="0 -960 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M 480,-300 Z" id="path8" /><path d="m 477.692,-675.433 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path6" /><path d="m 702.5,-546.25 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 Q 714.71431,-606.25 702.5,-606.25 q -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path4-0" /><ellipse style="fill:none;stroke-width:40.0156;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path12" cx="486.18475" cy="479.11279" rx="339.98758" ry="339.99637" transform="matrix(0.99996972,-0.00778243,-0.0092068,-0.99995762,0,0)" /><ellipse style="stroke-width:41.7331;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path15" cx="481.75754" cy="-482.87619" rx="39.13343" ry="39.133442" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="m 307.539,-212.308 c 57.11872,-22.19974 114.23633,-44.39906 171.72446,-44.39906 57.48813,0 115.34226,22.19931 173.19754,44.39906" id="path18" transform="translate(3.32416,13.551527)" /><path style="stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="M 481.75892,-482.8762 277.692,-562.308" id="path3" /></svg>';
+export const mediumLevelButton = createElement('div', 'button');
+mediumLevelButton.innerHTML = '<svg class="icon" viewBox="0 -960 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M 480,-300 Z" id="path8" /><path d="m 677.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path6" /><path d="m 277.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path4" /><ellipse style="fill:none;stroke-width:40.0156;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path12" cx="486.18475" cy="479.11279" rx="339.98758" ry="339.99637" transform="matrix(0.99996972,-0.00778243,-0.0092068,-0.99995762,0,0)" /><ellipse style="stroke-width:41.7331;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path15" cx="481.75754" cy="-482.87619" rx="39.13343" ry="39.133442" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" d="m 307.539,-212.308 c 57.11872,-22.19974 114.23633,-44.39906 171.72446,-44.39906 57.48813,0 115.34226,22.19931 173.19754,44.39906" id="path18" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" d="m 481.75896,-482.8762 -10e-4,-254.38516" id="path20" /></svg>';
+export const hardLevelButton = createElement('div', 'button');
+hardLevelButton.innerHTML = '<svg class="icon" viewBox="0 -960 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M 480,-300 Z" id="path8" /><path d="m 477.692,-675.433 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path6" /><path d="m 277.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path4" /><ellipse style="fill:none;stroke-width:40.0156;stroke-linecap:round;stroke-linejoin:round" id="path12" cx="486.18475" cy="479.11279" rx="339.98758" ry="339.99637" transform="matrix(0.99996972,-0.00778243,-0.0092068,-0.99995762,0,0)" /><ellipse style="stroke-width:41.7331;stroke-linecap:round;stroke-linejoin:round" id="path15" cx="481.75754" cy="-482.87619" rx="39.13343" ry="39.133442" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="m 307.539,-212.308 c 57.11872,-22.19974 114.23633,-44.39906 171.72446,-44.39906 57.48813,0 115.34226,22.19931 173.19754,44.39906" id="path18" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="m 466.56441,-477.43953 235.86144,-95.29528" id="path20" /></svg>';
+levelPicker.append(randomGameButton, easyLevelButton, mediumLevelButton, hardLevelButton);
+randomGameButton.addEventListener('click', startRandomGame);
+easyLevelButton.addEventListener('click', function() {
+  this.classList.add('no-interactive');
+  this.firstElementChild.classList.add('no-interactive');
+  mediumLevelButton.classList.remove('no-interactive');
+  mediumLevelButton.firstElementChild.classList.remove('no-interactive');
+  hardLevelButton.classList.remove('no-interactive');
+  hardLevelButton.firstElementChild.classList.remove('no-interactive');
+  if (menuMedium.classList.contains('hidden')) {
+    menuHard.classList.add('hidden');
+  } else {
+    menuMedium.classList.add('hidden');
+  };
+  menuEasy.classList.remove('hidden');
+});
+mediumLevelButton.addEventListener('click', function() {
+  this.classList.add('no-interactive');
+  this.firstElementChild.classList.add('no-interactive');
+  easyLevelButton.classList.remove('no-interactive');
+  easyLevelButton.firstElementChild.classList.remove('no-interactive');
+  hardLevelButton.classList.remove('no-interactive');
+  hardLevelButton.firstElementChild.classList.remove('no-interactive');
+  if (menuEasy.classList.contains('hidden')) {
+    menuHard.classList.add('hidden');
+  } else {
+    menuEasy.classList.add('hidden');
+  };
+  menuMedium.classList.remove('hidden');
+});
+hardLevelButton.addEventListener('click', function() {
+  this.classList.add('no-interactive');
+  this.firstElementChild.classList.add('no-interactive');
+  easyLevelButton.classList.remove('no-interactive');
+  easyLevelButton.firstElementChild.classList.remove('no-interactive');
+  mediumLevelButton.classList.remove('no-interactive');
+  mediumLevelButton.firstElementChild.classList.remove('no-interactive');
+  if (menuEasy.classList.contains('hidden')) {
+    menuMedium.classList.add('hidden');
+  } else {
+    menuEasy.classList.add('hidden');
+  };
+  menuHard.classList.remove('hidden');
+});
+
+export const menuEasy = createElement('section', 'container');
+export const menuMedium = createElement('section', 'container', 'hidden');
+export const menuHard = createElement('section', 'container', 'hidden');
+export const controlPanel = createElement('section', 'container');
 export const restartButton = createElement('div', 'button', 'no-interactive');
 restartButton.innerHTML = '<svg class="icon no-interactive" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M483.077-200q-117.25 0-198.625-81.339-81.375-81.34-81.375-198.539 0-117.199 81.375-198.661Q365.827-760 483.077-760q71.308 0 133.538 33.884 62.231 33.885 100.308 94.577V-740q0-8.5 5.758-14.25T736.95-760q8.512 0 14.243 5.75 5.73 5.75 5.73 14.25v156.923q0 13.731-9.288 23.02-9.289 9.288-23.019 9.288H567.692q-8.5 0-14.25-5.758t-5.75-14.269q0-8.512 5.75-14.242 5.75-5.731 14.25-5.731h128q-31.231-59.846-87.884-94.539Q551.154-720 483.077-720q-100 0-170 70t-70 170q0 100 70 170t170 70q71.468 0 130.849-38.731 59.382-38.73 88.074-102.884 3.385-7.846 10.962-11.039 7.577-3.192 15.505-.5 8.456 2.693 11.226 11 2.769 8.308-.616 16.154-33.308 75.385-102.388 120.693Q567.609-200 483.077-200Z"/></svg>';
 restartButton.addEventListener('click', resetGame);
@@ -62,16 +119,38 @@ loadButton.addEventListener('click', loadGame);
 controlPanel.append(restartButton, timerBlock, saveButton, loadButton);
 
 (function () {
-  for (let game in Nonograms) {
+  for (let game in NonogramsEasy) {
     const gameSelectButton = createElement('div', 'card');
-    gameSelectButton.innerHTML = generateSVG(Nonograms[game]);
+    gameSelectButton.innerHTML = generateSVG(NonogramsEasy[game]);
     gameSelectButton.id = game;
     gameSelectButton.addEventListener('click', startGame);
-    menu.append(gameSelectButton);
+    menuEasy.append(gameSelectButton);
+  }
+}());
+
+(function () {
+  for (let game in NonogramsMedium) {
+    const gameSelectButton = createElement('div', 'card');
+    gameSelectButton.innerHTML = generateSVG(NonogramsMedium[game]);
+    gameSelectButton.id = game;
+    gameSelectButton.addEventListener('click', startGame);
+    menuMedium.append(gameSelectButton);
+  }
+}());
+
+(function () {
+  for (let game in NonogramsHard) {
+    const gameSelectButton = createElement('div', 'card');
+    gameSelectButton.innerHTML = generateSVG(NonogramsHard[game]);
+    gameSelectButton.id = game;
+    gameSelectButton.addEventListener('click', startGame);
+    menuHard.append(gameSelectButton);
   }
 }());
 
 document.body.append(header);
-main.append(menu);
+main.append(levelPicker);
+main.append(menuEasy);
+main.append(menuMedium);
+main.append(menuHard);
 main.append(controlPanel);
-

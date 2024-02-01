@@ -96,6 +96,7 @@ export const GameField = {
       this.solution.push(arr[row]);
       this.state.push([]);
       for (let column = 0; column < size; column += 1) {
+        let startFontSize = 120 / size;
         this.state[row].push(false);
         const cell = createCell(row, column);
         if ((column + 1) % 5 === 0) cell.classList.add('border-right');
@@ -105,8 +106,9 @@ export const GameField = {
         } else {
           cell.textContent = 0;
         }
-        const style = cell.style;
-        style.flexBasis = relSize;
+        if (arr[row][column] > 9) startFontSize /= 1.9;
+        cell.style.flexBasis = relSize;
+        cell.style.fontSize = `clamp(${startFontSize}px, ${startFontSize / 3}vw, ${startFontSize * 2}px)`;
         cell.addEventListener('click', this.fillCell);
         cell.addEventListener('contextmenu', this.markCell);
         gameSubField.append(cell);
@@ -122,9 +124,8 @@ export const GameField = {
       size = Math.max(size, subArr.length);
     };
     const modifiedArr = arr.map((subArr) => {
-      if (subArr.length < size) {
+      while (subArr.length < size) {
         subArr.unshift(0);
-        return subArr;
       }
       return subArr;
     })
@@ -133,11 +134,14 @@ export const GameField = {
     sideHintSubField.style.flexGrow = size;
     for (let row = 0; row < arr.length; row += 1) {
       for (let column = 0; column < size; column += 1) {
+        let startFontSize = 120 / modifiedArr.length;
         const cell = createCell(row, column);
+        if ((row + 1) % 5 === 0) cell.classList.add('border-bottom');
         cell.textContent = modifiedArr[row][column];
         if (!modifiedArr[row][column]) cell.classList.add('hidden-content');
-        const style = cell.style;
-        style.flexBasis = relSize;
+        if (modifiedArr[row][column] > 9) startFontSize /= 1.9;
+        cell.style.flexBasis = relSize;
+        cell.style.fontSize = `clamp(${startFontSize}px, ${startFontSize / 3}vw, ${startFontSize * 2}px)`;
         sideHintSubField.append(cell);
       }
     }
@@ -156,15 +160,18 @@ export const GameField = {
     aboveHintSubField.style.flexGrow = arr.length;
     for (let row = size; row > 0; row -= 1) {
       for (let column = 0; column < arr.length; column += 1) {
+        let startFontSize = 120 / arr.length;
         const cell = createCell(row, column);
+        if ((column + 1) % 5 === 0) cell.classList.add('border-right');
         if (reverseArr[column][row - 1]) {
           cell.textContent = reverseArr[column][row - 1];
         } else {
           cell.textContent = 0;
           cell.classList.add('hidden-content');
         }
-        const style = cell.style;
-        style.flexBasis = relSize;
+        if (reverseArr[column][row - 1] > 9) startFontSize /= 1.9;
+        cell.style.flexBasis = relSize;
+        cell.style.fontSize = `clamp(${startFontSize}px, ${startFontSize / 3}vw, ${startFontSize * 2}px)`;
         aboveHintSubField.append(cell);
       }
     }
@@ -181,6 +188,7 @@ export const GameField = {
     for (const subArr of this.countRowSequences(this.solution)) {
       columnsQty = Math.max(columnsQty, subArr.length);
     };
+    const startFontSize = 120 / this.solution.length;
     const relSize = 100 / (columnsQty) + '%';
     const crossField = createElement('div', 'game-subfield', 'hint-field');
     crossField.style.flexGrow = columnsQty;
@@ -189,6 +197,7 @@ export const GameField = {
         const cell = createCell(row, column);
         cell.classList.add('hidden-content');
         cell.style.flexBasis = relSize;
+        cell.style.fontSize = `clamp(${startFontSize}px, ${startFontSize / 3}vw, ${startFontSize * 2}px)`;
         cell.textContent = 0;
         crossField.append(cell);
       }
