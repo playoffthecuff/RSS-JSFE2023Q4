@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  margin: clamp(8px, 2dvh, 4dvh) 0;
-  gap: clamp(8px, 4vw, 44px);
+  margin: clamp(8px, 2dvh, 4dvh);
+  row-gap: clamp(8px, 4vw, 32px);
   justify-content: space-between;
   transition: 0.8s;
 

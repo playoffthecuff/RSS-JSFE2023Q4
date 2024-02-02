@@ -1,4 +1,4 @@
-import { loadButton, main, restartButton, saveButton, timerBlock } from "./createLayout";
+import { loadButton, main, restartButton, saveButton, showSolutionButton, timerBlock } from "./createLayout";
 import { modalContainer, verdict } from "./modalWindow";
 import { GameField } from './gameField.js';
 import { NonogramsEasy, NonogramsHard, NonogramsMedium } from "./nonograms.js";
@@ -12,6 +12,21 @@ export const startGameAudio = new Audio('/audio/117[kb]Gong.wav_1.mp3');
 const winGameAudio = new Audio('/audio/95_kb_Fanfare-Lydian.wav.mp3');
 
 export let gameSection;
+
+export function disableButton(button) {
+  button.classList.add('no-interactive');
+  button.firstElementChild.classList.add('no-interactive');
+}
+
+export function enableButton(button) {
+  button.classList.remove('no-interactive');
+  button.firstElementChild.classList.remove('no-interactive');
+}
+
+export function toggleButton(button) {
+  button.classList.toggle('no-interactive');
+  button.firstElementChild.classList.toggle('no-interactive');
+}
 
 function createGameField(arr) {
   gameSection = createElement('section', 'game-container');
@@ -32,6 +47,10 @@ function createGameField(arr) {
 let level = '';
 
 export function startGame(event) {
+  enableButton(showSolutionButton);
+  disableButton(restartButton);
+  disableButton(saveButton);
+  stopAndClearTimer();
   if (main.querySelector('.game-container')) main.removeChild(gameSection);
   GameField.solution = [];
   GameField.state = [];
@@ -66,17 +85,17 @@ export function finishGame() {
 }
 
 export function saveGame() {
+  disableButton(saveButton);
+  enableButton(loadButton);
   localStorage.setItem('state', JSON.stringify(GameField.state));
   localStorage.setItem('solution', JSON.stringify(GameField.solution));
   localStorage.setItem('totalSeconds', totalSeconds);
   localStorage.setItem('gameSection', gameSection.outerHTML);
-  saveButton.classList.add('no-interactive');
-  saveButton.firstElementChild.classList.add('no-interactive');
-  loadButton.classList.remove('no-interactive');
-  loadButton.firstElementChild.classList.remove('no-interactive');
 }
 
 export function loadGame() {
+  enableButton(restartButton);
+  enableButton(showSolutionButton);
   if (main.querySelector('.game-container')) main.removeChild(gameSection);
   GameField.isStart = false;
   const gameSectionString = localStorage.getItem('gameSection');
@@ -89,7 +108,6 @@ export function loadGame() {
   });
   main.append(gameSection);
   const _totalSeconds = Number(localStorage.getItem('totalSeconds'));
-  console.log(_totalSeconds);
   const _minutes = Math.floor(_totalSeconds / 60);
   const _seconds = _totalSeconds - _minutes * 60;
   pastSeconds = _totalSeconds;
@@ -97,24 +115,19 @@ export function loadGame() {
   GameField.state = JSON.parse(localStorage.getItem('state'));
   GameField.solution = JSON.parse(localStorage.getItem('solution'));
   clearInterval(timerId);
-  restartButton.classList.remove('no-interactive');
-  restartButton.firstElementChild.classList.remove('no-interactive');
 }
 
 export function restart() {
+  toggleButton(restartButton);
+  toggleButton(saveButton);
+  disableButton(showSolutionButton);
   restartGameAudio.play();
-  clearInterval(timerId);
-  pastSeconds = 0;
-  timerBlock.textContent = '00:00';
+  stopAndClearTimer();
   modalContainer.classList.add('hidden');
   main.removeChild(gameSection);
   GameField.solution = [];
   GameField.state = [];
   GameField.isStart = false;
-  restartButton.classList.toggle('no-interactive');
-  restartButton.firstElementChild.classList.toggle('no-interactive');
-  saveButton.classList.toggle('no-interactive');
-  saveButton.firstElementChild.classList.toggle('no-interactive');
 }
 
 let timerId;
@@ -128,34 +141,39 @@ export function countTime(startDate, pastSeconds = 0) {
     minutes = Math.floor(difference / 60000 % 60);
     seconds = Math.floor(difference / 1000 % 60);
     totalSeconds = Math.floor(difference / 1000);
-
     timerBlock.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }, 1000)
 }
 
-export function resetGame() {
-  GameField.isStart = false;
+function stopAndClearTimer() {
   clearInterval(timerId);
   pastSeconds = 0;
   timerBlock.textContent = '00:00';
+}
+
+export function resetGame() {
+  disableButton(restartButton);
+  disableButton(saveButton);
+  enableButton(showSolutionButton);
+  GameField.isStart = false;
+  stopAndClearTimer();
   GameField.clearState();
-  restartButton.classList.add('no-interactive');
-  restartButton.firstElementChild.classList.add('no-interactive');
-  saveButton.classList.add('no-interactive');
-  saveButton.firstElementChild.classList.add('no-interactive');
-  document.querySelector('.main-field').childNodes.forEach((node) => {
+  gameSection.querySelector('.main-field').childNodes.forEach((node) => {
     node.classList.remove('marked');
     node.classList.remove('filled');
+    node.classList.remove('disabled');
   });
 }
 
 export function startRandomGame() {
+  enableButton(showSolutionButton);
+  stopAndClearTimer();
   let nonogramLevel;
   let level;
   if (Math.random() * 3 < 1) {
     nonogramLevel = NonogramsEasy;
     level = 'easy';
-  } else if (1 < Math.random() * 3 && Math.random() < 2) {
+  } else if (1 < Math.random() * 3 && Math.random() * 3 < 2) {
     nonogramLevel = NonogramsMedium;
     level = 'medium';
   } else {
@@ -170,3 +188,25 @@ export function startRandomGame() {
   GameField.isStart = false;
   main.append(createGameField(nonogramLevel[nonogram]));
 }
+
+export function showSolution() {
+  disableButton(saveButton);
+  disableButton(showSolutionButton);
+  enableButton(restartButton);
+  const arr = GameField.solution;
+  const gameSubField = gameSection.querySelector('.main-field');
+  const cells = gameSubField.children;
+  for (let i = 0; i < cells.length; i += 1) {
+    const cell = cells[i];
+    cell.classList.remove('filled', 'marked');
+    cell.classList.add('disabled');
+  }
+  for (let row = 0; row < arr.length; row += 1) {
+    for (let column = 0; column < arr.length; column += 1) {
+      if (arr[row][column]) {
+        const cell = gameSubField.querySelector(`[data-row="${row}"][data-column="${column}"]`);
+        if (!cell.classList.contains('filled')) cell.classList.add('filled');
+      }
+    }
+  }
+} 

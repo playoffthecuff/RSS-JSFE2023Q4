@@ -21,6 +21,7 @@
     &.hint-field {
       pointer-events: none;
       background-color: $lightest-color;
+      user-select: none;
     }
 
     &.main-field {
@@ -96,6 +97,10 @@
 
     .cell.marked {
       background: url("/icons/CloseDark24px.svg") no-repeat center center / cover ;
+    }
+
+    .cell.disabled {
+      pointer-events: none;
     }
   }
 }

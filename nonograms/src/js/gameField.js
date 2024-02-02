@@ -1,6 +1,6 @@
 import { createElement } from "./createElement.js";
 import { restartButton, saveButton } from "./createLayout.js";
-import { clearCellAudio, countTime, fillCellAudio, finishGame, gameSection, markCellAudio, pastSeconds, startGameAudio } from "./gameProcess.js";
+import { clearCellAudio, countTime, enableButton, fillCellAudio, finishGame, gameSection, markCellAudio, pastSeconds, startGameAudio } from "./gameProcess.js";
 
 function createCell (row, column) {
   const element = createElement('div', 'cell');
@@ -19,11 +19,9 @@ export const GameField = {
       countTime(new Date(), pastSeconds);
       GameField.isStart = true;
       startGameAudio.play();
-      restartButton.classList.remove('no-interactive');
-      restartButton.firstElementChild.classList.remove('no-interactive');
+      enableButton(restartButton);
     }
-    saveButton.classList.remove('no-interactive');
-    saveButton.firstElementChild.classList.remove('no-interactive');
+    enableButton(saveButton);
     event.currentTarget.classList.remove('marked');
     event.currentTarget.classList.toggle('filled');
     const row = event.target.dataset.row;

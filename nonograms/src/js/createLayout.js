@@ -1,12 +1,16 @@
 import { createElement } from './createElement.js';
 import { NonogramsEasy, NonogramsHard, NonogramsMedium, generateSVG } from './nonograms.js';
-import { loadGame, resetGame, saveGame, startGame, startRandomGame } from './gameProcess.js';
+import { disableButton, enableButton, loadGame, resetGame, saveGame, showSolution, startGame, startRandomGame } from './gameProcess.js';
 
 export let theme = '';
 
-function toggleTheme() {
+function toggleThemeButton() {
   themeButton.firstElementChild.classList.toggle('hidden');
   themeButton.lastElementChild.classList.toggle('hidden');
+}
+
+function toggleTheme() {
+  toggleThemeButton();
   document.body.classList.toggle('dark-mode');
   if (theme === 'day') {
     theme = 'night';
@@ -19,8 +23,8 @@ function toggleTheme() {
 const header = createElement('header');
 export const themeButton = createElement('div', 'button');
 themeButton.addEventListener('click', toggleTheme);
-const sunIcon = '<svg class="icon mode right-offset" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg>';
-const moonIcon = '<svg class="icon mode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"  viewBox="0 0 24 24"><path d="M11.01,3.05C6.51,3.54,3,7.36,3,12c0,4.97,4.03,9,9,9c4.63,0,8.45-3.5,8.95-8c0.09-0.79-0.78-1.42-1.54-0.95 c-0.84,0.54-1.84,0.85-2.91,0.85c-2.98,0-5.4-2.42-5.4-5.4c0-1.06,0.31-2.06,0.84-2.89C12.39,3.94,11.9,2.98,11.01,3.05z"/></svg>'
+const sunIcon = '<svg style="stroke:none" class="icon mode right-offset" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0 c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2 c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1 C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06 c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41 l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41 c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36 c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg>';
+const moonIcon = '<svg style="stroke:none" class="icon mode" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"  viewBox="0 0 24 24"><path d="M11.01,3.05C6.51,3.54,3,7.36,3,12c0,4.97,4.03,9,9,9c4.63,0,8.45-3.5,8.95-8c0.09-0.79-0.78-1.42-1.54-0.95 c-0.84,0.54-1.84,0.85-2.91,0.85c-2.98,0-5.4-2.42-5.4-5.4c0-1.06,0.31-2.06,0.84-2.89C12.39,3.94,11.9,2.98,11.01,3.05z"/></svg>'
 themeButton.innerHTML = sunIcon + moonIcon;
 if (theme === 'day') {
   themeButton.lastElementChild.classList.add('hidden');
@@ -35,8 +39,7 @@ if (theme === 'day') {
     localStorage.setItem('theme', theme);
   }
   if (theme === 'night') {
-    themeButton.firstElementChild.classList.toggle('hidden');
-    themeButton.lastElementChild.classList.toggle('hidden');
+    toggleThemeButton();
     document.body.classList.toggle('dark-mode');
   }
 }());
@@ -55,12 +58,9 @@ hardLevelButton.innerHTML = '<svg class="icon" viewBox="0 -960 960 960" version=
 levelPicker.append(randomGameButton, easyLevelButton, mediumLevelButton, hardLevelButton);
 randomGameButton.addEventListener('click', startRandomGame);
 easyLevelButton.addEventListener('click', function() {
-  this.classList.add('no-interactive');
-  this.firstElementChild.classList.add('no-interactive');
-  mediumLevelButton.classList.remove('no-interactive');
-  mediumLevelButton.firstElementChild.classList.remove('no-interactive');
-  hardLevelButton.classList.remove('no-interactive');
-  hardLevelButton.firstElementChild.classList.remove('no-interactive');
+  disableButton(this);
+  enableButton(mediumLevelButton);
+  enableButton(hardLevelButton);
   if (menuMedium.classList.contains('hidden')) {
     menuHard.classList.add('hidden');
   } else {
@@ -69,12 +69,9 @@ easyLevelButton.addEventListener('click', function() {
   menuEasy.classList.remove('hidden');
 });
 mediumLevelButton.addEventListener('click', function() {
-  this.classList.add('no-interactive');
-  this.firstElementChild.classList.add('no-interactive');
-  easyLevelButton.classList.remove('no-interactive');
-  easyLevelButton.firstElementChild.classList.remove('no-interactive');
-  hardLevelButton.classList.remove('no-interactive');
-  hardLevelButton.firstElementChild.classList.remove('no-interactive');
+  disableButton(this);
+  enableButton(easyLevelButton);
+  enableButton(hardLevelButton);
   if (menuEasy.classList.contains('hidden')) {
     menuHard.classList.add('hidden');
   } else {
@@ -83,12 +80,9 @@ mediumLevelButton.addEventListener('click', function() {
   menuMedium.classList.remove('hidden');
 });
 hardLevelButton.addEventListener('click', function() {
-  this.classList.add('no-interactive');
-  this.firstElementChild.classList.add('no-interactive');
-  easyLevelButton.classList.remove('no-interactive');
-  easyLevelButton.firstElementChild.classList.remove('no-interactive');
-  mediumLevelButton.classList.remove('no-interactive');
-  mediumLevelButton.firstElementChild.classList.remove('no-interactive');
+  disableButton(this);
+  enableButton(easyLevelButton);
+  enableButton(mediumLevelButton);
   if (menuEasy.classList.contains('hidden')) {
     menuMedium.classList.add('hidden');
   } else {
@@ -116,7 +110,10 @@ if (!localStorage.getItem('totalSeconds')) {
   loadButton.firstElementChild.classList.add('no-interactive');
 };
 loadButton.addEventListener('click', loadGame);
-controlPanel.append(restartButton, timerBlock, saveButton, loadButton);
+export const showSolutionButton = createElement('div', 'button', 'no-interactive');
+showSolutionButton.innerHTML = '<svg class="icon no-interactive" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-164.615q-22.154 0-38.154-12.884-16-12.885-18.769-33.116H400q-16.077 0-28.039-11.961Q360-234.538 360-250.615v-120.462q-62.077-34.384-96.039-93.769Q230-524.231 230-590q0-104.846 72.577-177.423T480-840q104.846 0 177.423 72.577T730-590q0 66.231-33.961 125.385-33.962 59.154-96.039 93.538v120.462q0 16.077-11.961 28.039-11.962 11.961-28.039 11.961h-23.077q-2.769 20.231-18.769 33.116-16 12.884-38.154 12.884Zm-80-86h160v-39.077H400v39.077Zm0-69.846h160V-360H400v39.539ZM392-400h70.308v-124.923l-70.847-70.846q-5.153-5.154-5.538-12.154-.385-7 5.538-12.923 5.924-5.923 12.539-5.923 6.615 0 12.539 5.923L480-557.385l63.461-63.461q5.154-5.154 12.154-5.539 7-.384 12.924 5.539 5.923 5.923 5.923 12.538 0 6.616-5.923 12.539l-70.847 70.846V-400H568q54-26 88-76.5T690-590q0-88-61-149t-149-61q-88 0-149 61t-61 149q0 63 34 113.5t88 76.5Zm88-157.385ZM480-600Z"/></svg>';
+showSolutionButton.addEventListener('click', showSolution);
+controlPanel.append(restartButton, timerBlock, saveButton, loadButton, showSolutionButton);
 
 (function () {
   for (let game in NonogramsEasy) {
