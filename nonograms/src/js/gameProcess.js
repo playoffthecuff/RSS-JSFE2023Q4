@@ -4,12 +4,12 @@ import { GameField } from './gameField.js';
 import { NonogramsEasy, NonogramsHard, NonogramsMedium, generateSVG } from "./nonograms.js";
 import { createElement } from "./createElement.js";
 
-export const fillCellAudio = new Audio('/audio/button-26_1.mp3');
-export const markCellAudio = new Audio('/audio/button-30_1.mp3');
-export const clearCellAudio = new Audio('/audio/button-27_1.mp3');
-const restartGameAudio = new Audio('/audio/1346[kb]windows-95-startup.wav.mp3');
-export const startGameAudio = new Audio('/audio/117[kb]Gong.wav_1.mp3');
-const winGameAudio = new Audio('/audio/95_kb_Fanfare-Lydian.wav.mp3');
+export const fillCellAudio = new Audio('./audio/button-26_1.mp3');
+export const markCellAudio = new Audio('./audio/button-30_1.mp3');
+export const clearCellAudio = new Audio('./audio/button-27_1.mp3');
+const restartGameAudio = new Audio('./audio/1346[kb]windows-95-startup.wav.mp3');
+export const startGameAudio = new Audio('./audio/117[kb]Gong.wav_1.mp3');
+const winGameAudio = new Audio('./audio/95_kb_Fanfare-Lydian.wav.mp3');
 
 export let gameSection;
 
