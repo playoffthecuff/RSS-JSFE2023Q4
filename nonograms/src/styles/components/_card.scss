@@ -1,0 +1,31 @@
+.dark-mode {
+  .card {
+    fill: $mid-gray-color;
+    outline-color: $mid-gray-color;
+    transition: fill 2.4s,
+                outline-color 2.4s;
+  }
+  @media (hover: hover) {
+    .card:hover {
+      outline-color: $dark-hover-color;
+    }
+  }
+}
+
+.card {
+  width: clamp(128px, 28vw, 182px);
+  height: clamp(128px, 28vw, 182px);
+  fill: $light-gray-color;
+  outline: 2px solid $light-gray-color;
+  border-radius: clamp(8px, 0.8vw, 12px);
+  overflow: hidden;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    cursor: pointer;
+    outline: $light-hover-color solid 4px;
+    transition: outline 0.1s;
+    z-index: 3;
+  }
+}

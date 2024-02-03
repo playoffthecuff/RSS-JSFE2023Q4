@@ -1,0 +1,107 @@
+.game-field {
+  margin: 0 auto;
+  display: flex;
+  
+  .game-subfield {
+    display: flex;
+    margin: 0;
+    flex-wrap: wrap;
+    outline: 3px solid $light-gray-color;
+
+    .border-right {
+      box-sizing: border-box;
+      border-right: 4px solid $light-gray-color;
+    }
+
+    .border-bottom {
+      box-sizing: border-box;
+      border-bottom: 4px solid $light-gray-color;
+    }
+
+    &.hint-field {
+      pointer-events: none;
+      background-color: $lightest-color;
+      user-select: none;
+    }
+
+    &.main-field {
+      color: $darkest-transparent-color;
+      z-index: 2;
+    }
+
+    @media (hover: hover) {
+      .cell:hover {
+        cursor: pointer;
+        outline: $light-hover-color solid 2px;
+        transition: 0.1s;
+        z-index: 3;
+      }
+    }
+
+    .cell {
+      display: flex;
+      aspect-ratio: 1;
+      outline: $light-gray-color solid 1px;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto Mono', monospace;
+      flex-shrink: 0;
+      flex-grow: 0;
+
+      &.hidden-content {
+        color: rgba(0, 0, 0, 0);
+      }
+    }
+
+    .cell.filled {
+      background-color: $darkest-color;
+    }
+
+    .cell.marked {
+      background: url("/icons/CloseLight24px.svg") no-repeat center center / cover ;
+    }
+  }
+
+}
+
+.dark-mode {
+
+  .game-subfield {
+    outline-color: $mid-gray-color;
+
+    .border-right {
+      border-right-color: $mid-gray-color;
+    }
+
+    .border-bottom {
+      border-bottom-color: $mid-gray-color;
+    }
+
+    &.hint-field {
+      background-color: $dark-field-color;
+      transition: 2.4s;
+    }
+
+    @media (hover: hover) {
+      .cell:hover {
+        outline-color: $dark-hover-color;
+      }
+    }
+
+    .cell {
+      outline-color: $mid-gray-color;
+    }
+
+    .cell.filled {
+      background-color: $warm-lightest-color;
+    }
+
+    .cell.marked {
+      background: url("/icons/CloseDark24px.svg") no-repeat center center / cover ;
+    }
+
+    .cell.disabled {
+      pointer-events: none;
+    }
+  }
+}
