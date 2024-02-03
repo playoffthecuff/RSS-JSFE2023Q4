@@ -55,11 +55,11 @@ export const GameField = {
       result.push([]);
       let counter = 0;
       for (let column = 0; column < arr.length; column += 1) {
-        if (arr[row][column] === false && counter !== 0) {
+        if (arr[row][column] === 0 && counter !== 0) {
           result[row].push(counter);
           counter = 0;
         }
-        if (arr[row][column] === true) counter += 1;
+        if (arr[row][column] === 1) counter += 1;
         if (column === arr.length - 1 && counter !== 0) result[row].push(counter);
       }
     }
@@ -74,11 +74,11 @@ export const GameField = {
     for (let column = 0; column < arr.length; column += 1) {
       let counter = 0;
       for (let row = 0; row < arr.length; row += 1) {
-        if (arr[row][column] === false && counter !== 0) {
+        if (arr[row][column] === 0 && counter !== 0) {
           result[column].push(counter);
           counter = 0;
         }
-        if (arr[row][column] === true) counter += 1;
+        if (arr[row][column] === 1) counter += 1;
         if (row === arr.length - 1 && counter !== 0) result[column].push(counter);
       }
     }
@@ -204,7 +204,7 @@ export const GameField = {
   },
 
   isWin: () => {
-    const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element === GameField.solution[rowIndex][columnIndex]));
+    const win = GameField.state.every((row, rowIndex) => row.every((element, columnIndex) => element == GameField.solution[rowIndex][columnIndex]));
     return win;
   },
 

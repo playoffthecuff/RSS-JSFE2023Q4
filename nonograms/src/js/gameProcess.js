@@ -72,6 +72,7 @@ export function startGame(event) {
   const targetId = event.currentTarget.id;
   if (!modalContainer.classList.contains('hidden')) modalContainer.classList.add('hidden');
   main.append(createGameField(gamesArr[targetId]));
+  console.log(GameField.solution);
 }
 
 export function finishGame() {
@@ -117,6 +118,7 @@ export function loadGame() {
   GameField.state = JSON.parse(localStorage.getItem('state'));
   GameField.solution = JSON.parse(localStorage.getItem('solution'));
   clearInterval(timerId);
+  console.log(GameField.solution);
 }
 
 export function restart() {
@@ -195,6 +197,7 @@ export function startRandomGame() {
   GameField.state = [];
   GameField.isStart = false;
   main.append(createGameField(nonogramLevel[nonogram]));
+  console.log(GameField.solution);
 }
 
 export function showSolution() {
