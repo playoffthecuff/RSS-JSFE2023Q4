@@ -1,8 +1,10 @@
 import { createElement } from './createElement.js';
 import { NonogramsEasy, NonogramsHard, NonogramsMedium, generateSVG } from './nonograms.js';
-import { disableButton, enableButton, loadGame, resetGame, saveGame, showSolution, startGame, startRandomGame } from './gameProcess.js';
+import { createRecordsTable, disableButton, enableButton, loadGame, resetGame, saveGame, showSolution, startGame, startRandomGame } from './gameProcess.js';
 
 export let theme = '';
+export let records = [];
+if (localStorage.getItem('records')) records = JSON.parse(localStorage.getItem('records'));
 
 function toggleThemeButton() {
   themeButton.firstElementChild.classList.toggle('hidden');
@@ -47,6 +49,13 @@ header.append(themeButton);
 
 export const main = createElement('main');
 export const levelPicker = createElement('section', 'container');
+export const recordsTable = createElement('section', 'container', 'border', 'hidden');
+const recordsTableHeader = createElement('div', 'header');
+const closeButton = createElement('div', 'button');
+closeButton.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-437.847 277.076-234.924q-8.307 8.308-20.884 8.5-12.576.193-21.268-8.5-8.693-8.692-8.693-21.076t8.693-21.076L437.847-480 234.924-682.924q-8.308-8.307-8.5-20.884-.193-12.576 8.5-21.268 8.692-8.693 21.076-8.693t21.076 8.693L480-522.153l202.924-202.923q8.307-8.308 20.884-8.5 12.576-.193 21.268 8.5 8.693 8.692 8.693 21.076t-8.693 21.076L522.153-480l202.923 202.924q8.308 8.307 8.5 20.884.193 12.576-8.5 21.268-8.692 8.693-21.076 8.693t-21.076-8.693L480-437.847Z" /></svg>';
+recordsTableHeader.append(closeButton);
+let recordsTableContent = createRecordsTable();
+recordsTable.append(recordsTableHeader, recordsTableContent);
 export const randomGameButton = createElement('div', 'button');
 randomGameButton.innerHTML = '<svg version="1.1" class = "icon" viewBox="0 0 768 768" xmlns="http://www.w3.org/2000/svg"><g id="g14" transform="translate(83.249857,62.175506)"><path d="m 283.59033,27.338416 c 24.87566,-1.092603 49.18988,1.913195 72.94265,9.017502 61.5227,22.278534 123.0443,44.557067 184.567,66.835602 26.86278,12.3614 42.88806,32.69534 48.07584,61.00075 0.73716,83.80972 0.73716,167.61944 0,251.42916 -4.72028,35.41863 -21.11358,64.5929 -49.18103,87.52281 -63.18049,36.86461 -126.17641,73.9955 -188.98777,111.39267 -32.27158,17.13007 -64.69128,17.48335 -97.25686,1.06089 C 185.51785,575.92291 116.99597,536.67025 48.184528,497.83983 27.123997,475.76711 14.782323,449.77549 11.16061,419.86496 11.347387,332.15862 12.452579,244.45864 14.476185,156.76609 19.473861,130.76279 34.393948,112.19735 59.236445,101.06976 117.81159,80.205376 176.38675,59.34206 234.9619,38.477683 c 15.9435,-5.4192 32.15335,-9.132289 48.62843,-11.139267 z" id="path3" style="stroke-width:34.6499; fill:none" /> <path d="m 440.5,127.5 c 12.821,-1.245 25.154,0.588 37,5.5 14.819,5.504 21.652,16.004 20.5,31.5 -4.298,10.296 -11.798,17.129 -22.5,20.5 -23.668,8.394 -45.668,5.394 -66,-9 -11.673,-13.938 -10.339,-26.604 4,-38 8.435,-5.228 17.435,-8.728 27,-10.5 z" id="path4" transform="translate(-150,-40.719488)" /><path d="m 664.5,172.5 c 18.323,0.488 26.49,9.822 24.5,28 -1.647,4.656 -4.48,8.489 -8.5,11.5 -63.123,30.728 -126.123,61.728 -189,93 -8.037,5.899 -13.204,13.733 -15.5,23.5 -0.333,96.333 -0.667,192.667 -1,289 -4.267,14.893 -14.1,20.726 -29.5,17.5 -8.112,-3.112 -12.945,-8.946 -14.5,-17.5 -0.333,-95 -0.667,-190 -1,-285 -3.867,-12.858 -11.7,-22.358 -23.5,-28.5 -64.452,-28.726 -128.785,-57.726 -193,-87 -12.779,-11.749 -13.113,-23.749 -1,-36 5.578,-3.301 11.578,-4.301 18,-3 64,29.333 128,58.667 192,88 18.75,6.164 37.416,5.831 56,-1 61.968,-31.151 123.968,-61.984 186,-92.5 z" id="path5" transform="translate(-150,-40.719488)" /><path d="m 229.5,250.5 c 14.975,-0.762 25.808,5.571 32.5,19 10.534,24.048 8.2,46.715 -7,68 -15.958,12.223 -29.958,10.223 -42,-6 -12.898,-23.279 -12.565,-46.279 1,-69 4.211,-5.394 9.377,-9.394 15.5,-12 z" id="path6" transform="translate(-150,-40.719488)" /><path d="m 657.5,250.5 c 15.897,-0.613 27.063,6.387 33.5,21 8.448,21.497 6.782,42.164 -5,62 -10.657,13.352 -23.157,15.519 -37.5,6.5 -11.849,-12.369 -17.516,-27.202 -17,-44.5 0.155,-16.139 6.155,-29.639 18,-40.5 2.891,-1.274 5.558,-2.774 8,-4.5 z" id="path7" transform="translate(-150,-40.719488)" /><path d="m 591.5,362.5 c 11.496,-0.669 20.663,3.664 27.5,13 13.998,23.315 13.998,46.649 0,70 -10.103,12.85 -22.27,15.35 -36.5,7.5 -15.027,-15.084 -20.86,-33.251 -17.5,-54.5 2.645,-16.778 11.478,-28.778 26.5,-36 z" id="path10" transform="translate(-150,-40.719488)" /><path d="m 371.5,485.5 c 11.496,-0.669 20.663,3.664 27.5,13 11.538,18.654 13.538,38.321 6,59 -3.865,11.305 -11.365,18.805 -22.5,22.5 -5.089,0.826 -10.089,0.492 -15,-1 -13.768,-9.019 -21.268,-21.852 -22.5,-38.5 -2.899,-19.973 2.934,-36.806 17.5,-50.5 3.092,-1.546 6.092,-3.046 9,-4.5 z" id="path12" transform="translate(-150,-40.719488)" /><path d="m 528.5,485.5 c 9.446,-0.463 17.613,2.537 24.5,9 15.28,21.219 17.613,43.885 7,68 -9.168,17.664 -22.668,22.164 -40.5,13.5 -14.777,-14.762 -20.611,-32.595 -17.5,-53.5 2.231,-17.351 11.064,-29.684 26.5,-37 z" id="path13" transform="translate(-150,-40.719488)" /></g></svg>';
 export const easyLevelButton = createElement('div', 'button', 'no-interactive');
@@ -55,7 +64,17 @@ export const mediumLevelButton = createElement('div', 'button');
 mediumLevelButton.innerHTML = '<svg class="icon" viewBox="0 -960 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M 480,-300 Z" id="path8" /><path d="m 677.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path6" /><path d="m 277.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path4" /><ellipse style="fill:none;stroke-width:40.0156;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path12" cx="486.18475" cy="479.11279" rx="339.98758" ry="339.99637" transform="matrix(0.99996972,-0.00778243,-0.0092068,-0.99995762,0,0)" /><ellipse style="stroke-width:41.7331;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" id="path15" cx="481.75754" cy="-482.87619" rx="39.13343" ry="39.133442" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" d="m 307.539,-212.308 c 57.11872,-22.19974 114.23633,-44.39906 171.72446,-44.39906 57.48813,0 115.34226,22.19931 173.19754,44.39906" id="path18" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" d="m 481.75896,-482.8762 -10e-4,-254.38516" id="path20" /></svg>';
 export const hardLevelButton = createElement('div', 'button');
 hardLevelButton.innerHTML = '<svg class="icon" viewBox="0 -960 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M 480,-300 Z" id="path8" /><path d="m 477.692,-675.433 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path6" /><path d="m 277.692,-532.308 q 12.21431,0 21.10716,-8.89284 8.89284,-8.89285 8.89284,-21.10716 0,-12.21431 -8.89284,-21.10716 -8.89285,-8.89284 -21.10716,-8.89284 -12.21431,0 -21.10716,8.89284 -8.89284,8.89285 -8.89284,21.10716 0,12.21431 8.89284,21.10716 8.89285,8.89284 21.10716,8.89284 z" id="path4" /><ellipse style="fill:none;stroke-width:40.0156;stroke-linecap:round;stroke-linejoin:round" id="path12" cx="486.18475" cy="479.11279" rx="339.98758" ry="339.99637" transform="matrix(0.99996972,-0.00778243,-0.0092068,-0.99995762,0,0)" /><ellipse style="stroke-width:41.7331;stroke-linecap:round;stroke-linejoin:round" id="path15" cx="481.75754" cy="-482.87619" rx="39.13343" ry="39.133442" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="m 307.539,-212.308 c 57.11872,-22.19974 114.23633,-44.39906 171.72446,-44.39906 57.48813,0 115.34226,22.19931 173.19754,44.39906" id="path18" /><path style="fill:none;stroke-width:40;stroke-linecap:round;stroke-linejoin:round" d="m 466.56441,-477.43953 235.86144,-95.29528" id="path20" /></svg>';
-levelPicker.append(randomGameButton, easyLevelButton, mediumLevelButton, hardLevelButton);
+export const showRecordsTableButton = createElement('div', 'button');
+showRecordsTableButton.innerHTML = '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M324.669-298.461q13.1 0 21.908-8.862 8.808-8.862 8.808-21.962t-8.862-21.907Q337.661-360 324.561-360t-21.907 8.862q-8.808 8.861-8.808 21.961 0 13.1 8.862 21.908 8.861 8.808 21.961 8.808Zm0-150.77q13.1 0 21.908-8.861 8.808-8.862 8.808-21.962t-8.862-21.908q-8.862-8.807-21.962-8.807t-21.907 8.861q-8.808 8.862-8.808 21.962t8.862 21.908q8.861 8.807 21.961 8.807Zm0-150.769q13.1 0 21.908-8.862 8.808-8.861 8.808-21.961 0-13.1-8.862-21.908-8.862-8.808-21.962-8.808t-21.907 8.862q-8.808 8.862-8.808 21.962t8.862 21.907Q311.569-600 324.669-600Zm143.023 290.769h175.385q8.5 0 14.25-5.757 5.75-5.758 5.75-14.27 0-8.511-5.75-14.242-5.75-5.731-14.25-5.731H467.692q-8.5 0-14.25 5.758t-5.75 14.269q0 8.512 5.75 14.243 5.75 5.73 14.25 5.73Zm0-150.769h175.385q8.5 0 14.25-5.758 5.75-5.757 5.75-14.269t-5.75-14.242q-5.75-5.731-14.25-5.731H467.692q-8.5 0-14.25 5.758-5.75 5.757-5.75 14.269t5.75 14.242q5.75 5.731 14.25 5.731Zm0-150.769h175.385q8.5 0 14.25-5.758t5.75-14.269q0-8.512-5.75-14.243-5.75-5.73-14.25-5.73H467.692q-8.5 0-14.25 5.757-5.75 5.758-5.75 14.27 0 8.511 5.75 14.242 5.75 5.731 14.25 5.731ZM224.615-160Q197-160 178.5-178.5 160-197 160-224.615v-510.77Q160-763 178.5-781.5 197-800 224.615-800h510.77Q763-800 781.5-781.5 800-763 800-735.385v510.77Q800-197 781.5-178.5 763-160 735.385-160h-510.77Zm0-40h510.77q9.23 0 16.923-7.692Q760-215.385 760-224.615v-510.77q0-9.23-7.692-16.923Q744.615-760 735.385-760h-510.77q-9.23 0-16.923 7.692Q200-744.615 200-735.385v510.77q0 9.23 7.692 16.923Q215.385-200 224.615-200ZM200-760v560-560Z"/></svg>';
+levelPicker.append(randomGameButton, easyLevelButton, mediumLevelButton, hardLevelButton, showRecordsTableButton);
+showRecordsTableButton.addEventListener('click', function() {
+  disableButton(this);
+  recordsTable.classList.remove('hidden');
+});
+closeButton.addEventListener('click', function() {
+  enableButton(showRecordsTableButton);
+  recordsTable.classList.add('hidden');
+})
 randomGameButton.addEventListener('click', startRandomGame);
 easyLevelButton.addEventListener('click', function() {
   disableButton(this);
@@ -90,6 +109,12 @@ hardLevelButton.addEventListener('click', function() {
   };
   menuHard.classList.remove('hidden');
 });
+
+export function updateRecordsTable() {
+  recordsTable.removeChild(recordsTableContent);
+  recordsTableContent = createRecordsTable();
+  recordsTable.append(recordsTableContent);
+}
 
 export const menuEasy = createElement('section', 'container');
 export const menuMedium = createElement('section', 'container', 'hidden');
@@ -147,6 +172,7 @@ controlPanel.append(restartButton, timerBlock, saveButton, loadButton, showSolut
 
 document.body.append(header);
 main.append(levelPicker);
+main.append(recordsTable);
 main.append(menuEasy);
 main.append(menuMedium);
 main.append(menuHard);

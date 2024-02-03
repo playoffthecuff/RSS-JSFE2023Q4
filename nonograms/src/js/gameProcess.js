@@ -1,7 +1,7 @@
-import { loadButton, main, restartButton, saveButton, showSolutionButton, timerBlock } from "./createLayout";
+import { loadButton, main, records, restartButton, saveButton, showSolutionButton, timerBlock, updateRecordsTable } from "./createLayout";
 import { modalContainer, verdict } from "./modalWindow";
 import { GameField } from './gameField.js';
-import { NonogramsEasy, NonogramsHard, NonogramsMedium } from "./nonograms.js";
+import { NonogramsEasy, NonogramsHard, NonogramsMedium, generateSVG } from "./nonograms.js";
 import { createElement } from "./createElement.js";
 
 export const fillCellAudio = new Audio('/audio/button-26_1.mp3');
@@ -75,13 +75,15 @@ export function startGame(event) {
 }
 
 export function finishGame() {
+  winGameAudio.play();
+  writeEntryRecord();
   GameField.isStart = false;
   clearInterval(timerId);
   verdict.textContent = `Great! You have solved the nonogram in ${totalSeconds} seconds!`;
   totalSeconds = 0;
   timerBlock.textContent = '00:00';
   modalContainer.classList.remove('hidden');
-  winGameAudio.play();
+  updateRecordsTable();
 }
 
 export function saveGame() {
@@ -141,8 +143,14 @@ export function countTime(startDate, pastSeconds = 0) {
     minutes = Math.floor(difference / 60000 % 60);
     seconds = Math.floor(difference / 1000 % 60);
     totalSeconds = Math.floor(difference / 1000);
-    timerBlock.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    timerBlock.textContent = secondsToMinSecFormat(totalSeconds);
   }, 1000)
+}
+
+function secondsToMinSecFormat(seconds) {
+  const _minutes = Math.floor(seconds / 60 % 60);
+  const _seconds = Math.floor(seconds % 60);
+  return `${String(_minutes).padStart(2, '0')}:${String(_seconds).padStart(2, '0')}`
 }
 
 function stopAndClearTimer() {
@@ -209,4 +217,44 @@ export function showSolution() {
       }
     }
   }
-} 
+}
+
+export function writeEntryRecord() {
+  const entry = {};
+  entry.time = totalSeconds;
+  entry.svg = generateSVG(GameField.solution);
+  entry.level = getLevel();
+  if (records.unshift(entry) > 5) records.pop();
+  localStorage.setItem('records', JSON.stringify(records));
+}
+
+export function getLevel() {
+  let level;
+  if (GameField.solution.length < 6) {
+    level = 'Easy';
+  } else if (GameField.solution.length < 11) {
+    level = 'Medium';
+  } else {
+    level = 'Hard';
+  }
+  return level;
+}
+
+export function createRecordsTable() {
+  let recordsCopy = [...records];
+  recordsCopy.sort((a, b) => a.time - b.time);
+  const table = createElement('div', 'content');
+  for (let record of recordsCopy) {
+  const wrapper = createElement('div', 'row');
+  const picture = createElement('div');
+  picture.innerHTML = record.svg;
+  picture.firstElementChild.classList.add('icon');
+  const level = createElement('div');
+  level.textContent = record.level;
+  const time = createElement('div', 'time');
+  time.textContent = secondsToMinSecFormat(record.time);
+  wrapper.append(picture, level, time);
+  table.append(wrapper);
+  }
+  return table;
+}
