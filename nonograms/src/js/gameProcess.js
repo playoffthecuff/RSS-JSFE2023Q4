@@ -261,3 +261,10 @@ export function createRecordsTable() {
   }
   return table;
 }
+
+(function () {
+  const gamesArr = NonogramsEasy;
+  const nonogram = 'easy' + Math.floor(Math.random() * 6 + 1);
+  main.append(createGameField(gamesArr[nonogram]));
+  console.log(GameField.solution);
+})();
