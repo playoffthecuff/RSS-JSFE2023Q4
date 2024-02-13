@@ -1,4 +1,4 @@
-[self-introduction video](https://youtu.be/iX25l_2JKBs)
+[self-introduction video](https://youtu.be/iX25l_2JKBs).
 Hello! My name is Evgeniy. I'm an energy specialist with a background in "Management and Informatics in Technical Systems," focusing on automating technological processes.
 Together with my friend and colleague Roman, we've developed a product line for high-voltage power distribution and implemented numerous projects using these products. This is an interesting but difficult market that requires a lot of routine work to maintain a share of.
 In an effort to automate these tasks, I started writing small scripts in VBA. Later, we faced the task of implementing a web interface on top of our PLM system to enhance its functionality and improve the user experience. I began prototyping its interface in the Figma application. Dealing mainly with desktop applications and simple web apps, I was highly impressed by the capabilities of this environment and couldn't stop until I completed the first version of the prototype.
