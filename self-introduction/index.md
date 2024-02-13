@@ -10,7 +10,7 @@ I have always appreciated high-quality software interfaces, probably since the a
 
 Now, I'm seeking ways to create concise, understandable, and scalable code that aligns with the aesthetics of modern interfaces. Currently, it often turns out to be spaghetti code, but I feel like I'm gradually finding the right path to this goal.
 
-A recent example is the "Nonogram" puzzle app. The technology stack is modest - Sass(SCSS), Vanilla Js, and the Vite bundler. However, I managed to implement the function of generating SVG from an array. Also on past projects I used ESlint, Prettier and tried to work in the Gatsby JS framework.
+A recent example is the ("Nonogram")[https://rolling-scopes-school.github.io/playoffthecuff-JSFE2023Q4/nonograms/build/] puzzle app. The technology stack is modest - Sass(SCSS), Vanilla Js, and the Vite bundler. However, I managed to implement the function of generating SVG from an array. Also on past projects I used ESlint, Prettier and tried to work in the Gatsby JS framework.
 
 The scope of my current activity, although it is engineering in its essence, is quite conservative and highly limited technologically, due to which the development ceiling is very quickly reached and all that remains is to automate labor-intensive routines. Programming in this aspect is radically different - it is difficult to keep up with technology. Therefore, I hope to grasp the zen of development, become part of a new community and actively participate in the creation of numerous useful applications.
 
