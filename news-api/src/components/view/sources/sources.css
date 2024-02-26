@@ -5,26 +5,29 @@
     height: 136px;
     overflow: auto;
     align-items: center;
-    font: 300 1em 'Fira Sans', sans-serif;
+    font:
+        300 1em 'Fira Sans',
+        sans-serif;
 }
 
 .source__item {
     background: none;
-    border: 2px solid #30c5ff;
+    border: 2px solid #174f65;
     font: inherit;
     line-height: 1;
     margin: 0.5em;
     padding: 1em 2em;
-    color: #70d6ff;
+    color: #174f65;
     transition: 0.25s;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .source__item:hover,
 .source__item:focus {
-    border-color: #3fcc59;
-    color: #69db7e;
-    box-shadow: 0 0.5em 0.5em -0.4em #3fcc59;
+    border-color: #1c5b27;
+    color: #1c5b27;
+    box-shadow: 0 0.5em 0.5em -0.4em #1c5b27;
     transform: translateY(-0.25em);
 }
 
