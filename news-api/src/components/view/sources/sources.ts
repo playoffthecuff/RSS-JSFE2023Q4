@@ -3,7 +3,6 @@ import { SourcesData } from '../../../types';
 
 class Sources {
     draw(data: SourcesData[]) {
-        console.log(data);
         const fragment = document.createDocumentFragment();
         const sourceItemTemp: HTMLTemplateElement | null = document.querySelector('#sourceItemTemp');
 

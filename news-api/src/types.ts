@@ -9,11 +9,15 @@ export interface NewsData {
     description: string;
     publishedAt: string;
     source: NewsSource;
-    status: string;
     title: string;
-    totalResults: number;
     url: string;
     urlToImage: string;
+}
+
+export interface NewsResponse {
+    status: string;
+    totalResults: number;
+    articles: NewsData[];
 }
 
 export type SourcesData = {
@@ -24,4 +28,9 @@ export type SourcesData = {
     language: string;
     name: string;
     url: string;
+};
+
+export type SourcesResponse = {
+    status: string;
+    sources: SourcesData[];
 };
