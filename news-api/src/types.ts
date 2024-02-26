@@ -34,3 +34,9 @@ export type SourcesResponse = {
     status: string;
     sources: SourcesData[];
 };
+
+export interface LinkOptions {
+    [key: string]: string;
+}
+
+export type GetNewsCallback<T> = (data: T) => void;
