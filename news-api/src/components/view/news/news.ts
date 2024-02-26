@@ -3,7 +3,6 @@ import { NewsData } from '../../../types';
 
 class News {
     draw(data: NewsData[]) {
-        console.log(data);
         const news = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
 
         const fragment = document.createDocumentFragment();

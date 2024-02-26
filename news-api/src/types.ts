@@ -1,20 +1,27 @@
-interface NewsSource {
+type NewsSource = {
     id: string;
     name: string;
-}
+};
 
 export interface NewsData {
-    urlToImage: string;
-    status: string;
-    id: string;
-    description: string;
-    url: string;
-    category: string;
-    language: string;
-    country: string;
-    title: string;
+    author: string;
     content: string;
+    description: string;
+    publishedAt: string;
     source: NewsSource;
-    author?: string;
-    publishedAt?: string;
+    status: string;
+    title: string;
+    totalResults: number;
+    url: string;
+    urlToImage: string;
 }
+
+export type SourcesData = {
+    category: string;
+    country: string;
+    description: string;
+    id: string;
+    language: string;
+    name: string;
+    url: string;
+};
