@@ -121,10 +121,10 @@
     left: 0%;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 700px) {
     .news__item {
         flex-direction: row;
-        max-width: 700px;
+        width: 700px;
     }
 
     .news__item .news__meta {
@@ -162,5 +162,11 @@
 
     .news__item.alt .news__meta-details {
         padding-left: 25px;
+    }
+}
+
+@media (max-width: 700px) {
+    .news__item {
+        max-width: 320px;
     }
 }
