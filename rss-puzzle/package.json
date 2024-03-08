@@ -1,0 +1,38 @@
+{
+  "name": "rss-puzzle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "ci:format": "prettier --check .",
+    "lint": "eslint **/*.ts",
+    "prepare": "cd .. && husky rss-puzzle/.husky"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write",
+    "*.ts": "eslint"
+  },
+  "validate-branch-name": {
+    "pattern": "^(feat|chore|doc|fix|refactor|/RSS-PZ-)\\d{1,3}_[a-zA-Z]{8,32}$",
+    "errorMsg": "pls don't do that, dude"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "3.2.5",
+    "sass": "^1.71.1",
+    "typescript": "^5.2.2",
+    "validate-branch-name": "^1.3.0",
+    "vite": "^5.1.4"
+  }
+}

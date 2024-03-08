@@ -1,0 +1,3 @@
+cd rss-puzzle
+npx validate-branch-name
+npm run lint
