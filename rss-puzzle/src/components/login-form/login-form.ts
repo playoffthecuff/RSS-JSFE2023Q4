@@ -26,11 +26,14 @@ export default class LoginForm extends Component {
 
   private lastNameErrorMessage;
 
-  private isInputsValid;
+  private isFirstNameValid;
+
+  private isLastNameValid;
 
   constructor() {
     super('section', ['login-section'], '');
-    this.isInputsValid = 0;
+    this.isFirstNameValid = 0;
+    this.isLastNameValid = 0;
     this.loginHeader = new Component('h2', ['login-header'], 'USER LOGIN');
     this.loginForm = new Component('form', ['login-form'], '');
     this.loginButton = new Component(
@@ -38,6 +41,12 @@ export default class LoginForm extends Component {
       ['login-button', 'disabled'],
       'Login',
     );
+    this.loginButton.setAttribute('disabled', '');
+    this.loginButton.addListener('click', (event) => {
+      event.preventDefault();
+      localStorage.setItem('firstName', this.firstNameInput.getValue());
+      localStorage.setItem('lastName', this.lastNameInput.getValue());
+    });
     this.firstNameLabel = new Component(
       'label',
       ['login-label'],
@@ -68,48 +77,50 @@ export default class LoginForm extends Component {
 
   firstNameInputHandler = () => {
     let errorMsg = '';
+    this.isFirstNameValid = 1;
     if (!this.firstNameInput.isLettersCorrect()) {
       errorMsg += `${SYMBOL_ERR_MSG} `;
-      this.isInputsValid *= 0;
+      this.isFirstNameValid *= 0;
     } else {
-      this.isInputsValid *= 1;
+      this.isFirstNameValid *= 1;
     }
     if (!this.firstNameInput.isFirstLetterUpperCase()) {
       errorMsg += `${FIRST_LETTER_ERR_MSG} `;
-      this.isInputsValid *= 0;
+      this.isFirstNameValid *= 0;
     } else {
-      this.isInputsValid *= 1;
+      this.isFirstNameValid *= 1;
     }
     if (!this.firstNameInput.isStrLengthEnough(3)) {
       errorMsg += `${MIN_LENGTH_ERR_MSG}3.`;
-      this.isInputsValid *= 0;
+      this.isFirstNameValid *= 0;
     } else {
-      this.isInputsValid *= 1;
+      this.isFirstNameValid *= 1;
     }
     this.firstNameErrorMessage.setTextContent(errorMsg);
     this.toggleButton();
   };
 
   lastNameInputHandler = () => {
+    this.isLastNameValid = 1;
     let errorMsg = '';
     if (!this.lastNameInput.isLettersCorrect()) {
       errorMsg += `${SYMBOL_ERR_MSG} `;
-      this.isInputsValid *= 0;
+      this.isLastNameValid *= 0;
     } else {
-      this.isInputsValid = 1;
+      this.isLastNameValid = 1;
     }
     if (!this.lastNameInput.isFirstLetterUpperCase()) {
       errorMsg += `${FIRST_LETTER_ERR_MSG} `;
-      this.isInputsValid *= 0;
+      this.isLastNameValid *= 0;
     } else {
-      this.isInputsValid *= 1;
+      this.isLastNameValid *= 1;
     }
 
     if (!this.lastNameInput.isStrLengthEnough(4)) {
       errorMsg += `${MIN_LENGTH_ERR_MSG}4.`;
-      this.isInputsValid *= 0;
+      this.isLastNameValid *= 0;
     } else {
-      this.isInputsValid *= 1;
+      this.isLastNameValid *= 1;
     }
     this.lastNameErrorMessage.setTextContent(errorMsg);
     this.toggleButton();
@@ -120,10 +131,12 @@ export default class LoginForm extends Component {
   }
 
   toggleButton = () => {
-    if (this.isInputsValid) {
+    if (this.isFirstNameValid && this.isLastNameValid) {
       this.loginButton.removeClass('disabled');
+      this.loginButton.removeAttribute('disabled');
     } else {
       this.loginButton.addClass('disabled');
+      this.loginButton.setAttribute('disabled', '');
     }
   };
 }

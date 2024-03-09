@@ -8,25 +8,26 @@ export default class LoginInput extends Component {
     this.setAttribute('required', '');
   }
 
+  getValue() {
+    return (this.getNode() as HTMLInputElement).value;
+  }
+
   isFilled() {
-    return (this.getNode() as HTMLInputElement).value.trim() !== '';
+    return this.getValue().trim() !== '';
   }
 
   isFirstLetterUpperCase() {
-    if ((this.getNode() as HTMLInputElement).value[0]) {
-      return (
-        (this.getNode() as HTMLInputElement).value[0].toUpperCase() ===
-        (this.getNode() as HTMLInputElement).value[0]
-      );
+    if (this.getValue()[0]) {
+      return this.getValue()[0].toUpperCase() === this.getValue()[0];
     }
     return false;
   }
 
   isLettersCorrect() {
-    return /^[a-zA-Z-]+$/.test((this.getNode() as HTMLInputElement).value);
+    return /^[a-zA-Z-]+$/.test(this.getValue());
   }
 
   isStrLengthEnough(length: number) {
-    return (this.getNode() as HTMLInputElement).value.length >= length;
+    return this.getValue().length >= length;
   }
 }
