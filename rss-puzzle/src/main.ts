@@ -1,6 +1,7 @@
 import './style.scss';
-import LoginForm from './components/login-form/login-form';
+import App from './app/app';
 
-const app = new LoginForm();
+const app = new App();
+app.startApp();
 
 document.body.appendChild(app.getNode());

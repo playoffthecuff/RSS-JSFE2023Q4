@@ -1,7 +1,9 @@
 export default class Component {
-  private node: HTMLElement;
+  protected node: HTMLElement;
 
   private children: Component[];
+
+  parent: Component | null;
 
   constructor(
     tag: keyof HTMLElementTagNameMap = 'div',
@@ -14,6 +16,11 @@ export default class Component {
     }
     if (textContent) this.node.textContent = textContent;
     this.children = [];
+    this.parent = null;
+  }
+
+  setParent(parent: Component) {
+    this.parent = parent;
   }
 
   getNode() {
@@ -31,6 +38,11 @@ export default class Component {
 
   appendChildren(children: Component[]) {
     children.forEach((child) => this.appendChild(child));
+  }
+
+  removeChildren() {
+    this.children.length = 0;
+    this.node.innerHTML = '';
   }
 
   setId(id: string) {

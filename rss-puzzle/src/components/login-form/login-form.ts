@@ -30,7 +30,7 @@ export default class LoginForm extends Component {
 
   private isLastNameValid;
 
-  constructor() {
+  constructor(callback: () => void) {
     super('section', ['login-section'], '');
     this.isFirstNameValid = 0;
     this.isLastNameValid = 0;
@@ -41,11 +41,12 @@ export default class LoginForm extends Component {
       ['login-button', 'disabled'],
       'Login',
     );
+    this.loginButton.setAttribute('type', 'button');
     this.loginButton.setAttribute('disabled', '');
-    this.loginButton.addListener('click', (event) => {
-      event.preventDefault();
+    this.loginButton.addListener('click', () => {
       localStorage.setItem('firstName', this.firstNameInput.getValue());
       localStorage.setItem('lastName', this.lastNameInput.getValue());
+      callback();
     });
     this.firstNameLabel = new Component(
       'label',
