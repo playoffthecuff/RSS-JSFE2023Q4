@@ -38,15 +38,20 @@ export default class MainPage extends Component {
     this.appendNextCardsRow();
   }
 
-  callback(event: Event) {
+  callbackForward(event: Event) {
     const eventNode = event.target as Node;
-    this.resultBlock
-      .getChildren()
-      [this.lineNumber - 1].getNode()
-      .appendChild(eventNode);
-    this.wordsLeft -= 1;
-    if (this.wordsLeft < 1 && this.lineNumber < 10) {
-      this.appendNextCardsRow();
+    if (eventNode.parentElement?.classList.contains('row')) {
+      this.sourceBlock.getNode().appendChild(eventNode);
+      this.wordsLeft += 1;
+    } else {
+      this.resultBlock
+        .getChildren()
+        [this.lineNumber - 1].getNode()
+        .appendChild(eventNode);
+      this.wordsLeft -= 1;
+      if (this.wordsLeft < 1 && this.lineNumber < 10) {
+        this.appendNextCardsRow();
+      }
     }
   }
 
@@ -55,7 +60,7 @@ export default class MainPage extends Component {
       this.setTextLength();
       this.setWordsLeft();
       this.getRandomizedText().forEach((word) => {
-        const card = new Card((Event) => this.callback(Event), word);
+        const card = new Card((Event) => this.callbackForward(Event), word);
         const padding =
           (ROW_WIDTH -
             LETTER_WIDTH * this.textLength +
