@@ -1,0 +1,14 @@
+.card {
+  padding: 0 1em;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #eee;
+
+  &:hover {
+    background-color: #ccc;
+  }
+}

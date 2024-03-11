@@ -1,3 +1,23 @@
 .main-page {
   width: 100%;
 }
+
+.source-block {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.result-block {
+  .row {
+    display: flex;
+    flex-wrap: no-wrap;
+  }
+  height: 340px;
+  display: block;
+  .card {
+    border-radius: 0;
+    flex-grow: 1;
+  }
+}

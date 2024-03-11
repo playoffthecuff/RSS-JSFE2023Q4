@@ -27,12 +27,12 @@ export default class Component {
     return this.node;
   }
 
-  // getChildren() {
-  //   return this.children;
-  // }
+  getChildren() {
+    return this.children;
+  }
 
   appendChild(child: Component) {
-    // this.children.push(child);
+    this.children.push(child);
     this.node.appendChild(child.getNode());
   }
 
@@ -47,7 +47,7 @@ export default class Component {
   // }
 
   removeChildren() {
-    // this.children.length = 0;
+    this.children.length = 0;
     this.node.innerHTML = '';
   }
 
