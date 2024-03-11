@@ -4,6 +4,10 @@ import GetData from '../../services/getData';
 import level1DataSet from '../../../public/data/wordCollectionLevel1.ts';
 import Card from '../card/button/card';
 
+const ROW_WIDTH = 768;
+const LETTER_WIDTH = 8;
+const MARGIN = 10;
+
 export default class MainPage extends Component {
   private sourceBlock;
 
@@ -13,7 +17,9 @@ export default class MainPage extends Component {
 
   private lineNumber;
 
-  private wordLeft;
+  private wordsLeft;
+
+  private textLength;
 
   constructor() {
     super('main', ['main-page']);
@@ -27,7 +33,8 @@ export default class MainPage extends Component {
     this.appendChildren([this.resultBlock, this.sourceBlock]);
     this.data = new GetData(level1DataSet, 0);
     this.lineNumber = 0;
-    this.wordLeft = this.data.getRandomizedTextExample(this.lineNumber).length;
+    this.wordsLeft = 0;
+    this.textLength = 0;
     this.appendNextCardsRow();
   }
 
@@ -37,23 +44,43 @@ export default class MainPage extends Component {
       .getChildren()
       [this.lineNumber - 1].getNode()
       .appendChild(eventNode);
-    this.wordLeft -= 1;
-    if (this.wordLeft < 1 && this.lineNumber < 10) {
+    this.wordsLeft -= 1;
+    if (this.wordsLeft < 1 && this.lineNumber < 10) {
       this.appendNextCardsRow();
     }
   }
 
   appendNextCardsRow() {
     if (this.lineNumber < 10) {
-      this.wordLeft = this.data.getRandomizedTextExample(
-        this.lineNumber,
-      ).length;
-      this.data.getRandomizedTextExample(this.lineNumber).forEach((word) => {
-        this.sourceBlock.appendChild(
-          new Card((Event) => this.callback(Event), word),
-        );
+      this.setTextLength();
+      this.setWordsLeft();
+      this.getRandomizedText().forEach((word) => {
+        const card = new Card((Event) => this.callback(Event), word);
+        const padding =
+          (ROW_WIDTH -
+            LETTER_WIDTH * this.textLength +
+            MARGIN * (this.wordsLeft - 1)) /
+          this.wordsLeft /
+          2;
+        card.setAttribute('style', `padding: 0 ${padding}px`);
+        this.sourceBlock.appendChild(card);
       });
     }
     this.lineNumber += 1;
+  }
+
+  getRandomizedText() {
+    return this.data.getRandomizedTextExample(this.lineNumber);
+  }
+
+  setTextLength() {
+    this.textLength = this.getRandomizedText().reduce(
+      (acc, word) => acc + word.length,
+      0,
+    );
+  }
+
+  setWordsLeft() {
+    this.wordsLeft = this.getRandomizedText().length;
   }
 }

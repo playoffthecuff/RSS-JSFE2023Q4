@@ -1,12 +1,25 @@
+@font-face {
+  font-family: 'Inter';
+  src: url(../public/fonts/Inter-Regular.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: url(../public/fonts/QlddNThLqRwH-OJ1UHjlKENVzkWGVkL3GZQmAwLyya15.woff2)
+    format('woff2');
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter';
   margin: 0;
   padding: 0;
-  max-width: 720px;
-  min-width: 380px;
+  min-width: 768px;
   margin: 0 auto;
+  background-color: rgb(70, 70, 80);
 }
 
 .wrapper {
   display: block;
+  background-color: white;
+  margin: 0 auto;
 }

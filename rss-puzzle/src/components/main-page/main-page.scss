@@ -1,23 +1,30 @@
 .main-page {
-  width: 100%;
+  width: 768px;
+  margin: 0 auto;
+  padding: 16px 0;
 }
 
 .source-block {
   display: flex;
-  gap: 8px;
+  height: 36px;
+  gap: 0;
   justify-content: center;
   flex-wrap: wrap;
+  margin: 32px 0 16px;
 }
 
 .result-block {
+  height: 360px;
+  margin: 16px auto;
+
   .row {
     display: flex;
     flex-wrap: no-wrap;
   }
-  height: 340px;
-  display: block;
+
   .card {
     border-radius: 0;
-    flex-grow: 1;
+    box-sizing: border-box;
+    outline: 1px solid black;
   }
 }
