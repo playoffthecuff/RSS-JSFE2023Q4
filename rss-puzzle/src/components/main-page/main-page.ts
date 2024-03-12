@@ -24,6 +24,10 @@ export default class MainPage extends Component {
 
   private gameButton;
 
+  private autocompleteButton;
+
+  private padding;
+
   constructor() {
     super('main', ['main-page']);
     this.sourceBlock = new Component('section', ['source-block']);
@@ -35,11 +39,24 @@ export default class MainPage extends Component {
     }
     this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
     this.gameButton.addClass('game-button');
-    this.appendChildren([this.resultBlock, this.sourceBlock, this.gameButton]);
+    this.autocompleteButton = new Button(
+      () => this.autocomplete(),
+      '',
+      '',
+      'AUTOCOMPLETE',
+    );
+    this.autocompleteButton.addClass('game-button');
+    this.appendChildren([
+      this.resultBlock,
+      this.sourceBlock,
+      this.autocompleteButton,
+      this.gameButton,
+    ]);
     this.data = new GetData(level1DataSet, 0);
     this.lineNumber = 0;
     this.wordsLeft = 0;
     this.textLength = 0;
+    this.padding = 0;
     this.appendNextCardsRow();
   }
 
@@ -86,15 +103,13 @@ export default class MainPage extends Component {
   }
 
   continue() {
+    this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
       this.gameButton.removeNode();
       this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
       this.gameButton.addClass('game-button');
       this.appendChild(this.gameButton);
-      this.getCurrentRowNode().classList.add('solved');
       this.appendNextCardsRow();
-    } else {
-      this.getCurrentRowNode().classList.add('solved');
     }
   }
 
@@ -107,6 +122,20 @@ export default class MainPage extends Component {
     }
   }
 
+  autocomplete() {
+    this.sourceBlock.removeChildren();
+    this.getCurrentRowNode().innerHTML = '';
+    this.getTextExample()
+      .split(' ')
+      .forEach((word) => {
+        const card = new Card(() => {}, word);
+        card.setAttribute('style', `padding: 0 ${this.padding}px`);
+        this.getCurrentRowNode().appendChild(card.getNode());
+      });
+    this.getCurrentRowNode().classList.add('solved');
+    this.appendNextCardsRow();
+  }
+
   appendNextCardsRow() {
     this.gameButton.addClass('disabled');
     if (this.lineNumber < 10) {
@@ -114,17 +143,21 @@ export default class MainPage extends Component {
       this.setWordsLeft();
       this.getRandomizedText().forEach((word) => {
         const card = new Card((Event) => this.callback(Event), word);
-        const padding =
-          (ROW_WIDTH -
-            LETTER_WIDTH * this.textLength +
-            MARGIN * (this.wordsLeft - 1)) /
-          this.wordsLeft /
-          2;
-        card.setAttribute('style', `padding: 0 ${padding}px`);
+        this.setPadding();
+        card.setAttribute('style', `padding: 0 ${this.padding}px`);
         this.sourceBlock.appendChild(card);
       });
     }
     this.lineNumber += 1;
+  }
+
+  setPadding() {
+    this.padding =
+      (ROW_WIDTH -
+        LETTER_WIDTH * this.textLength +
+        MARGIN * (this.wordsLeft - 1)) /
+      this.wordsLeft /
+      2;
   }
 
   getRandomizedText() {
