@@ -4,6 +4,7 @@ import GetData from '../../services/getData';
 import level1DataSet from '../../../public/data/wordCollectionLevel1.ts';
 import Card from '../card/button/card';
 import Button from '../button/button';
+import allowDrop from '../../services/allowDrop';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 8;
@@ -28,9 +29,15 @@ export default class MainPage extends Component {
 
   private padding;
 
+  private dragNode: Node | null;
+
+  private dragElement: HTMLElement | null;
+
   constructor() {
     super('main', ['main-page']);
     this.sourceBlock = new Component('section', ['source-block']);
+    this.sourceBlock.getNode().ondragover = allowDrop;
+    this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
     this.resultBlock = new Component('section', ['result-block']);
     for (let i = 0; i < 10; i += 1) {
       const row = new Component('div', ['row']);
@@ -57,6 +64,8 @@ export default class MainPage extends Component {
     this.wordsLeft = 0;
     this.textLength = 0;
     this.padding = 0;
+    this.dragNode = null;
+    this.dragElement = null;
     this.appendNextCardsRow();
   }
 
@@ -69,20 +78,21 @@ export default class MainPage extends Component {
       eventElement.classList.remove('wrong');
       this.gameButton.addClass('disabled');
     } else {
-      this.resultBlock
-        .getChildren()
-        [this.lineNumber - 1].getNode()
-        .appendChild(eventNode);
+      this.getCurrentRowNode().appendChild(eventNode);
       this.wordsLeft -= 1;
-      if (this.getSentence() === this.getTextExample()) {
-        this.gameButton.removeNode();
-        this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
-        this.gameButton.addClass('game-button');
-        this.appendChild(this.gameButton);
-      }
-      if (this.wordsLeft === 0) {
-        this.gameButton.removeClass('disabled');
-      }
+      this.changeButton();
+    }
+  }
+
+  changeButton() {
+    if (this.getSentence() === this.getTextExample()) {
+      this.gameButton.removeNode();
+      this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
+      this.gameButton.addClass('game-button');
+      this.appendChild(this.gameButton);
+    }
+    if (this.wordsLeft === 0) {
+      this.gameButton.removeClass('disabled');
     }
   }
 
@@ -143,13 +153,55 @@ export default class MainPage extends Component {
       this.setWordsLeft();
       this.getRandomizedText().forEach((word) => {
         const card = new Card((Event) => this.callback(Event), word);
+        card.setAttribute('draggable', 'true');
+        card.getNode().ondragstart = this.dragStart;
         this.setPadding();
         card.setAttribute('style', `padding: 0 ${this.padding}px`);
         this.sourceBlock.appendChild(card);
       });
     }
     this.lineNumber += 1;
+    this.getCurrentRowNode().ondragover = allowDrop;
+    this.getCurrentRowNode().ondrop = this.dropToResult;
   }
+
+  dragStart = (event: DragEvent) => {
+    const eventNode = event.target as Node;
+    const eventElement = event.target as HTMLElement;
+    this.dragNode = eventNode;
+    this.dragElement = eventElement;
+  };
+
+  dropToResult = (event: DragEvent) => {
+    const eventElement = event.target as HTMLElement;
+    const eventNode = event.target as Node;
+    if (this.dragNode && this.getCurrentRowNode().contains(this.dragNode)) {
+      if (eventNode === this.getCurrentRowNode()) {
+        this.getCurrentRowNode().appendChild(this.dragNode);
+        this.dragElement?.classList.remove('wrong');
+      } else if (eventNode !== this.dragNode) {
+        const tempNode = document.createElement('div');
+        this.getCurrentRowNode().insertBefore(tempNode, this.dragNode);
+        this.getCurrentRowNode().insertBefore(this.dragNode, eventNode);
+        this.getCurrentRowNode().insertBefore(eventNode, tempNode);
+        this.getCurrentRowNode().removeChild(tempNode);
+        eventElement.classList.remove('wrong');
+        this.dragElement?.classList.remove('wrong');
+        this.changeButton();
+      }
+    } else {
+      if (this.dragNode) this.getCurrentRowNode().appendChild(this.dragNode);
+      this.wordsLeft -= 1;
+      this.changeButton();
+    }
+  };
+
+  dropToSourceBlock = () => {
+    if (this.dragNode && !this.sourceBlock.getNode().contains(this.dragNode)) {
+      this.sourceBlock.getNode().appendChild(this.dragNode);
+      this.wordsLeft += 1;
+    }
+  };
 
   setPadding() {
     this.padding =
