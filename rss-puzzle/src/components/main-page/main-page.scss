@@ -2,6 +2,7 @@
   width: 768px;
   margin: 0 auto;
   padding: 16px 0;
+  text-align: center;
 }
 
 .source-block {
@@ -30,15 +31,21 @@
     border-radius: 0;
     box-sizing: border-box;
     outline: 1px solid black;
+
+    &.wrong {
+      background-color: #e45;
+      color: white;
+    }
   }
 }
 
-.continue-button {
+.game-button {
+  display: inline-flex;
   background-color: #598958;
   color: white;
   transition: background-color 0.3s;
   width: 128px;
-  margin: 0 auto;
+  margin: 0 32px;
 
   &.disabled {
     background-color: #aaa;

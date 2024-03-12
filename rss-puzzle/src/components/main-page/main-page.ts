@@ -24,6 +24,8 @@ export default class MainPage extends Component {
 
   private continueButton;
 
+  private checkButton;
+
   constructor() {
     super('main', ['main-page']);
     this.sourceBlock = new Component('section', ['source-block']);
@@ -34,11 +36,14 @@ export default class MainPage extends Component {
       this.resultBlock.appendChild(row);
     }
     this.continueButton = new Button(() => this.continue(), '', '', 'CONTINUE');
-    this.continueButton.addClass('continue-button');
+    this.continueButton.addClass('game-button');
+    this.checkButton = new Button(() => this.checkResult(), '', '', 'CHECK');
+    this.checkButton.addClass('game-button');
     this.appendChildren([
       this.resultBlock,
       this.sourceBlock,
       this.continueButton,
+      this.checkButton,
     ]);
     this.data = new GetData(level1DataSet, 0);
     this.lineNumber = 0;
@@ -49,9 +54,11 @@ export default class MainPage extends Component {
 
   callback(event: Event) {
     const eventNode = event.target as Node;
+    const eventElement = event.currentTarget as HTMLElement;
     if (eventNode.parentElement?.classList.contains('row')) {
       this.sourceBlock.getNode().appendChild(eventNode);
       this.wordsLeft += 1;
+      eventElement.classList.remove('wrong');
     } else {
       this.resultBlock
         .getChildren()
@@ -60,6 +67,9 @@ export default class MainPage extends Component {
       this.wordsLeft -= 1;
       if (this.getSentence() === this.getTextExample()) {
         this.continueButton.removeClass('disabled');
+      }
+      if (this.wordsLeft === 0) {
+        this.checkButton.removeClass('disabled');
       }
     }
   }
@@ -89,8 +99,18 @@ export default class MainPage extends Component {
     }
   }
 
+  checkResult() {
+    const sentence = this.getSentence().split(' ');
+    const textExample = this.getTextExample().split(' ');
+    const { children } = this.getCurrentRowNode();
+    for (let i = 0; i < children.length; i += 1) {
+      if (sentence[i] !== textExample[i]) children[i].classList.add('wrong');
+    }
+  }
+
   appendNextCardsRow() {
     this.continueButton.addClass('disabled');
+    this.checkButton.addClass('disabled');
     if (this.lineNumber < 10) {
       this.setTextLength();
       this.setWordsLeft();
