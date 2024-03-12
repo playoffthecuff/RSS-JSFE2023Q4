@@ -22,9 +22,7 @@ export default class MainPage extends Component {
 
   private textLength;
 
-  private continueButton;
-
-  private checkButton;
+  private gameButton;
 
   constructor() {
     super('main', ['main-page']);
@@ -35,16 +33,9 @@ export default class MainPage extends Component {
       row.getNode().dataset.row = `${i}`;
       this.resultBlock.appendChild(row);
     }
-    this.continueButton = new Button(() => this.continue(), '', '', 'CONTINUE');
-    this.continueButton.addClass('game-button');
-    this.checkButton = new Button(() => this.checkResult(), '', '', 'CHECK');
-    this.checkButton.addClass('game-button');
-    this.appendChildren([
-      this.resultBlock,
-      this.sourceBlock,
-      this.continueButton,
-      this.checkButton,
-    ]);
+    this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
+    this.gameButton.addClass('game-button');
+    this.appendChildren([this.resultBlock, this.sourceBlock, this.gameButton]);
     this.data = new GetData(level1DataSet, 0);
     this.lineNumber = 0;
     this.wordsLeft = 0;
@@ -59,6 +50,7 @@ export default class MainPage extends Component {
       this.sourceBlock.getNode().appendChild(eventNode);
       this.wordsLeft += 1;
       eventElement.classList.remove('wrong');
+      this.gameButton.addClass('disabled');
     } else {
       this.resultBlock
         .getChildren()
@@ -66,10 +58,13 @@ export default class MainPage extends Component {
         .appendChild(eventNode);
       this.wordsLeft -= 1;
       if (this.getSentence() === this.getTextExample()) {
-        this.continueButton.removeClass('disabled');
+        this.gameButton.removeNode();
+        this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
+        this.gameButton.addClass('game-button');
+        this.appendChild(this.gameButton);
       }
       if (this.wordsLeft === 0) {
-        this.checkButton.removeClass('disabled');
+        this.gameButton.removeClass('disabled');
       }
     }
   }
@@ -92,6 +87,10 @@ export default class MainPage extends Component {
 
   continue() {
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
+      this.gameButton.removeNode();
+      this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
+      this.gameButton.addClass('game-button');
+      this.appendChild(this.gameButton);
       this.getCurrentRowNode().classList.add('solved');
       this.appendNextCardsRow();
     } else {
@@ -109,8 +108,7 @@ export default class MainPage extends Component {
   }
 
   appendNextCardsRow() {
-    this.continueButton.addClass('disabled');
-    this.checkButton.addClass('disabled');
+    this.gameButton.addClass('disabled');
     if (this.lineNumber < 10) {
       this.setTextLength();
       this.setWordsLeft();

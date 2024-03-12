@@ -51,6 +51,10 @@ export default class Component {
     this.node.innerHTML = '';
   }
 
+  removeNode() {
+    this.node.remove();
+  }
+
   setId(id: string) {
     this.node.id = id;
   }
