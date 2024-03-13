@@ -10,6 +10,7 @@ import infoIcon from '../../../public/icons/info24px.svg';
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
 const MARGIN = 10;
+const ANIMATION_DURATION = 800;
 
 export default class MainPage extends Component {
   private controlPanel;
@@ -40,8 +41,11 @@ export default class MainPage extends Component {
 
   private dragElement: HTMLElement | null;
 
+  private hinted;
+
   constructor() {
     super('main', ['main-page']);
+    this.hinted = false;
     this.controlPanel = new Component('section', ['control-panel']);
     this.infoBlock = new Component('section', ['info-block']);
     this.hintButton = new Button(
@@ -90,6 +94,7 @@ export default class MainPage extends Component {
   toggleHint() {
     this.hintButton.toggleClass('on');
     this.infoBlock.toggleClass('on');
+    this.hinted = !this.hinted;
   }
 
   callback(event: Event) {
@@ -113,6 +118,7 @@ export default class MainPage extends Component {
       this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
       this.gameButton.addClass('game-button');
       this.appendChild(this.gameButton);
+      if (!this.hinted) this.infoBlock.toggleClass('on');
     }
     if (this.wordsLeft === 0) {
       this.gameButton.removeClass('disabled');
@@ -136,6 +142,7 @@ export default class MainPage extends Component {
   }
 
   continue() {
+    if (!this.hinted) this.infoBlock.toggleClass('on');
     this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
       this.gameButton.removeNode();
@@ -205,7 +212,14 @@ export default class MainPage extends Component {
         this.sourceBlock.appendChild(card);
       });
     }
-    this.infoBlock.setTextContent(this.getTranslation());
+    const translation = this.getTranslation();
+    if (this.hinted) {
+      this.infoBlock.setTextContent(translation);
+    } else {
+      setTimeout(() => {
+        this.infoBlock.setTextContent(translation);
+      }, ANIMATION_DURATION);
+    }
     this.lineNumber += 1;
     this.getCurrentRowNode().ondragover = allowDrop;
     this.getCurrentRowNode().ondrop = this.dropToResult;
