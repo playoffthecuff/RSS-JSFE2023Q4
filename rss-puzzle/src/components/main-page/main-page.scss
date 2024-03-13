@@ -64,6 +64,7 @@
 
 .control-panel {
   display: flex;
+  justify-content: space-between;
 
   .hint-button {
     &.on {

@@ -6,6 +6,7 @@ import Card from '../card/button/card';
 import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
 import infoIcon from '../../../public/icons/info24px.svg';
+import speakerIcon from '../../../public/icons/volumeup24px.svg';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
@@ -16,6 +17,8 @@ export default class MainPage extends Component {
   private controlPanel;
 
   private hintButton;
+
+  private spokenButton;
 
   private infoBlock;
 
@@ -53,8 +56,14 @@ export default class MainPage extends Component {
       infoIcon,
       'toggle hint',
     );
+    this.spokenButton = new Button(
+      () => this.tellHint(),
+      speakerIcon,
+      'voice hint',
+    );
     this.hintButton.addClass('hint-button');
-    this.controlPanel.appendChild(this.hintButton);
+    this.spokenButton.addClass('spoken-button');
+    this.controlPanel.appendChildren([this.hintButton, this.spokenButton]);
     this.sourceBlock = new Component('section', ['source-block']);
     this.sourceBlock.getNode().ondragover = allowDrop;
     this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
@@ -97,6 +106,13 @@ export default class MainPage extends Component {
     this.hinted = !this.hinted;
   }
 
+  tellHint() {
+    const pre = '../../../public/';
+    const path = pre + this.data.getAudioExample(this.lineNumber - 1);
+    const audio = new Audio(path);
+    audio.play();
+  }
+
   callback(event: Event) {
     const eventNode = event.target as Node;
     const eventElement = event.currentTarget as HTMLElement;
@@ -118,7 +134,7 @@ export default class MainPage extends Component {
       this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
       this.gameButton.addClass('game-button');
       this.appendChild(this.gameButton);
-      if (!this.hinted) this.infoBlock.toggleClass('on');
+      if (!this.hinted) this.infoBlock.addClass('on');
     }
     if (this.wordsLeft === 0) {
       this.gameButton.removeClass('disabled');
@@ -142,7 +158,7 @@ export default class MainPage extends Component {
   }
 
   continue() {
-    if (!this.hinted) this.infoBlock.toggleClass('on');
+    if (!this.hinted) this.infoBlock.removeClass('on');
     this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
       this.gameButton.removeNode();
