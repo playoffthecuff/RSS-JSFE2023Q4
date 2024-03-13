@@ -61,3 +61,23 @@
     background-color: #40703e;
   }
 }
+
+.control-panel {
+  display: flex;
+
+  .hint-button {
+    &.on {
+      background-color: #aaa;
+      fill: white;
+    }
+  }
+}
+
+.info-block {
+  color: rgba(0, 0, 0, 0);
+  transition: color 0.8s;
+
+  &.on {
+    color: rgba(0, 0, 0, 1);
+  }
+}

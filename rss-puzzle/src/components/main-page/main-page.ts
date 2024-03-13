@@ -5,12 +5,19 @@ import level1DataSet from '../../../public/data/wordCollectionLevel1.ts';
 import Card from '../card/button/card';
 import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
+import infoIcon from '../../../public/icons/info24px.svg';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
 const MARGIN = 10;
 
 export default class MainPage extends Component {
+  private controlPanel;
+
+  private hintButton;
+
+  private infoBlock;
+
   private sourceBlock;
 
   private resultBlock;
@@ -35,6 +42,15 @@ export default class MainPage extends Component {
 
   constructor() {
     super('main', ['main-page']);
+    this.controlPanel = new Component('section', ['control-panel']);
+    this.infoBlock = new Component('section', ['info-block']);
+    this.hintButton = new Button(
+      () => this.toggleHint(),
+      infoIcon,
+      'toggle hint',
+    );
+    this.hintButton.addClass('hint-button');
+    this.controlPanel.appendChild(this.hintButton);
     this.sourceBlock = new Component('section', ['source-block']);
     this.sourceBlock.getNode().ondragover = allowDrop;
     this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
@@ -54,6 +70,8 @@ export default class MainPage extends Component {
     );
     this.autocompleteButton.addClass('game-button');
     this.appendChildren([
+      this.controlPanel,
+      this.infoBlock,
       this.resultBlock,
       this.sourceBlock,
       this.autocompleteButton,
@@ -67,6 +85,11 @@ export default class MainPage extends Component {
     this.dragNode = null;
     this.dragElement = null;
     this.appendNextCardsRow();
+  }
+
+  toggleHint() {
+    this.hintButton.toggleClass('on');
+    this.infoBlock.toggleClass('on');
   }
 
   callback(event: Event) {
@@ -182,9 +205,14 @@ export default class MainPage extends Component {
         this.sourceBlock.appendChild(card);
       });
     }
+    this.infoBlock.setTextContent(this.getTranslation());
     this.lineNumber += 1;
     this.getCurrentRowNode().ondragover = allowDrop;
     this.getCurrentRowNode().ondrop = this.dropToResult;
+  }
+
+  getTranslation() {
+    return this.data.getTextExampleTranslate(this.lineNumber);
   }
 
   dragStart = (event: DragEvent) => {
