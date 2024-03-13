@@ -10,7 +10,7 @@
   height: 36px;
   gap: 0;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: no-wrap;
   margin: 32px 0;
 }
 
@@ -22,6 +22,10 @@
     display: flex;
     flex-wrap: no-wrap;
     height: 36px;
+
+    & + .row {
+      margin-top: 1px;
+    }
   }
 
   .solved {

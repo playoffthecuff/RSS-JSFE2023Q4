@@ -7,7 +7,7 @@ import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
 
 const ROW_WIDTH = 768;
-const LETTER_WIDTH = 8;
+const LETTER_WIDTH = 10.6015;
 const MARGIN = 10;
 
 export default class MainPage extends Component {
@@ -135,11 +135,22 @@ export default class MainPage extends Component {
   autocomplete() {
     this.sourceBlock.removeChildren();
     this.getCurrentRowNode().innerHTML = '';
+    const textExample = this.getTextExample();
     this.getTextExample()
       .split(' ')
       .forEach((word) => {
         const card = new Card(() => {}, word);
         card.setAttribute('style', `padding: 0 ${this.padding}px`);
+        const firstSpaceIndex = textExample.indexOf(' ');
+        const lastSpaceIndex = textExample.lastIndexOf(' ');
+        if (
+          card.getNode().textContent === textExample.slice(0, firstSpaceIndex)
+        )
+          card.addClass('first');
+        if (
+          card.getNode().textContent === textExample.slice(lastSpaceIndex + 1)
+        )
+          card.addClass('last');
         this.getCurrentRowNode().appendChild(card.getNode());
       });
     this.getCurrentRowNode().classList.add('solved');
@@ -151,9 +162,20 @@ export default class MainPage extends Component {
     if (this.lineNumber < 10) {
       this.setTextLength();
       this.setWordsLeft();
+      const textExample = this.data.getTextExample(this.lineNumber);
       this.getRandomizedText().forEach((word) => {
         const card = new Card((Event) => this.callback(Event), word);
         card.setAttribute('draggable', 'true');
+        const firstSpaceIndex = textExample.indexOf(' ');
+        const lastSpaceIndex = textExample.lastIndexOf(' ');
+        if (
+          card.getNode().textContent === textExample.slice(0, firstSpaceIndex)
+        )
+          card.addClass('first');
+        if (
+          card.getNode().textContent === textExample.slice(lastSpaceIndex + 1)
+        )
+          card.addClass('last');
         card.getNode().ondragstart = this.dragStart;
         this.setPadding();
         card.setAttribute('style', `padding: 0 ${this.padding}px`);
@@ -207,7 +229,8 @@ export default class MainPage extends Component {
     this.padding =
       (ROW_WIDTH -
         LETTER_WIDTH * this.textLength +
-        MARGIN * (this.wordsLeft - 1)) /
+        MARGIN * (this.wordsLeft - 1) -
+        0) /
       this.wordsLeft /
       2;
   }
