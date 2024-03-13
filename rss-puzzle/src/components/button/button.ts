@@ -23,4 +23,8 @@ export default class Button extends Component {
       this.appendChild(this.icon);
     }
   }
+
+  getIcon() {
+    return this.icon;
+  }
 }

@@ -72,6 +72,15 @@
       fill: white;
     }
   }
+
+  .spoken-button {
+    &.active {
+      background-image: url('../../../public/icons/11.gif');
+      background-size: 50% 50%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
 }
 
 .info-block {

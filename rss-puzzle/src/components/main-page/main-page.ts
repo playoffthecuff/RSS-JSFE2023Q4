@@ -6,7 +6,7 @@ import Card from '../card/button/card';
 import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
 import infoIcon from '../../../public/icons/info24px.svg';
-import speakerIcon from '../../../public/icons/volumeup24px.svg';
+import speakerIcon from '../../../public/icons/11.png';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
@@ -110,6 +110,12 @@ export default class MainPage extends Component {
     const pre = '../../../public/';
     const path = pre + this.data.getAudioExample(this.lineNumber - 1);
     const audio = new Audio(path);
+    audio.addEventListener('ended', () => {
+      this.spokenButton.getIcon()?.removeClass('hidden');
+      this.spokenButton.removeClass('active');
+    });
+    this.spokenButton.getIcon()?.addClass('hidden');
+    this.spokenButton.addClass('active');
     audio.play();
   }
 
