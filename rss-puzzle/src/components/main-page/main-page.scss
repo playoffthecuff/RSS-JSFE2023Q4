@@ -35,11 +35,10 @@
   .card {
     border-radius: 0;
     box-sizing: border-box;
-    outline: 1px solid black;
 
     &.wrong {
-      background-color: #e45;
-      color: white;
+      background-color: #ac3030 !important;
+      background-image: none !important;
     }
   }
 }

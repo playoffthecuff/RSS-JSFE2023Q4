@@ -69,6 +69,10 @@ export default class Component {
     }
   }
 
+  getDataAttribute(attribute: string) {
+    return this.node.dataset[attribute];
+  }
+
   removeAttribute(attribute: string) {
     this.node.removeAttribute(attribute);
   }

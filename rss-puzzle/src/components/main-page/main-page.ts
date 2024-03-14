@@ -149,7 +149,7 @@ export default class MainPage extends Component {
   }
 
   changeButton() {
-    if (this.getSentence() === this.getTextExample()) {
+    if (this.checkSequence()) {
       this.gameButton.removeNode();
       this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
       this.gameButton.addClass('game-button');
@@ -179,6 +179,25 @@ export default class MainPage extends Component {
     return result.join(' ');
   }
 
+  checkSequence() {
+    const textLength = this.data.getRandomizedTextExample(
+      this.lineNumber - 1,
+    ).length;
+    const cardsLength = this.getCurrentRowNode().children.length;
+    let prevAtr = -1;
+    if (cardsLength === textLength) {
+      for (let i = 0; i < textLength; i += 1) {
+        const currAtr = Number(
+          this.getCurrentRowNode().children.item(i)?.getAttribute('data-card'),
+        );
+        if (prevAtr > currAtr) return false;
+        prevAtr = currAtr;
+      }
+      return true;
+    }
+    return false;
+  }
+
   continue() {
     if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.getCurrentRowNode().classList.add('solved');
@@ -192,11 +211,10 @@ export default class MainPage extends Component {
   }
 
   checkResult() {
-    const sentence = this.getSentence().split(' ');
-    const textExample = this.getTextExample().split(' ');
     const { children } = this.getCurrentRowNode();
     for (let i = 0; i < children.length; i += 1) {
-      if (sentence[i] !== textExample[i]) children[i].classList.add('wrong');
+      if (Number(children.item(i)?.getAttribute('data-card')) !== i)
+        children.item(i)!.classList.add('wrong');
     }
   }
 
@@ -204,11 +222,26 @@ export default class MainPage extends Component {
     this.sourceBlock.removeChildren();
     this.getCurrentRowNode().innerHTML = '';
     const textExample = this.getTextExample();
+    const textExampleArr = textExample.split(' ');
+    let wordOrder = 0;
+    const xRelativeOffsets = textExampleArr.map(
+      (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN,
+    );
+    xRelativeOffsets.unshift(0);
     this.getTextExample()
       .split(' ')
       .forEach((word) => {
-        const card = new Card(() => {}, word);
-        card.setAttribute('style', `padding: 0 ${this.padding}px`);
+        const card = new Card(wordOrder, () => {}, word);
+        const xOffset = xRelativeOffsets
+          .slice(0, wordOrder + 1)
+          .reduce((acc, offset) => acc + offset, 0);
+        wordOrder += 1;
+        const yOffset = 1 + 36 * this.lineNumber;
+        const path = this.getImageSrc();
+        card.setAttribute(
+          'style',
+          `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
+        );
         const firstSpaceIndex = textExample.indexOf(' ');
         const lastSpaceIndex = textExample.lastIndexOf(' ');
         if (
@@ -230,9 +263,17 @@ export default class MainPage extends Component {
     if (this.lineNumber < 10) {
       this.setTextLength();
       this.setWordsLeft();
+      this.setPadding();
       const textExample = this.data.getTextExample(this.lineNumber);
+      const textExampleArr = textExample.split(' ');
+      const xRelativeOffsets = textExampleArr.map(
+        (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN,
+      );
+      xRelativeOffsets.unshift(0);
       this.getRandomizedText().forEach((word) => {
-        const card = new Card((Event) => this.callback(Event), word);
+        const wordOrder = textExampleArr.indexOf(word);
+        textExampleArr[wordOrder] = 'nullWord';
+        const card = new Card(wordOrder, (Event) => this.callback(Event), word);
         card.setAttribute('draggable', 'true');
         const firstSpaceIndex = textExample.indexOf(' ');
         const lastSpaceIndex = textExample.lastIndexOf(' ');
@@ -245,8 +286,16 @@ export default class MainPage extends Component {
         )
           card.addClass('last');
         card.getNode().ondragstart = this.dragStart;
-        this.setPadding();
-        card.setAttribute('style', `padding: 0 ${this.padding}px`);
+        const path = this.getImageSrc();
+        card.getNode().dataset.card = `${wordOrder}`;
+        const xOffset = xRelativeOffsets
+          .slice(0, wordOrder + 1)
+          .reduce((acc, offset) => acc + offset, 0);
+        const yOffset = 1 + 36 * this.lineNumber;
+        card.setAttribute(
+          'style',
+          `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
+        );
         this.sourceBlock.appendChild(card);
       });
     }
@@ -263,6 +312,11 @@ export default class MainPage extends Component {
     this.lineNumber += 1;
     this.getCurrentRowNode().ondragover = allowDrop;
     this.getCurrentRowNode().ondrop = this.dropToResult;
+  }
+
+  getImageSrc() {
+    const pre = '../../../public/images/';
+    return pre + this.data.getImgSrc();
   }
 
   getTranslation() {
