@@ -7,6 +7,8 @@ import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
 import infoIcon from '../../../public/icons/info24px.svg';
 import speakerIcon from '../../../public/icons/11.png';
+import Toggler from '../toggler/toggler';
+import volumeIcon from '../../../public/icons/volumemute24px.svg';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
@@ -16,9 +18,11 @@ const ANIMATION_DURATION = 800;
 export default class MainPage extends Component {
   private controlPanel;
 
-  private hintButton;
-
   private spokenButton;
+
+  private hintToggler;
+
+  private speakerToggler;
 
   private infoBlock;
 
@@ -44,26 +48,30 @@ export default class MainPage extends Component {
 
   private dragElement: HTMLElement | null;
 
-  private hinted;
-
   constructor() {
     super('main', ['main-page']);
-    this.hinted = false;
     this.controlPanel = new Component('section', ['control-panel']);
+    const infoPanel = new Component('div', ['info-panel']);
     this.infoBlock = new Component('section', ['info-block']);
-    this.hintButton = new Button(
-      () => this.toggleHint(),
+    this.hintToggler = new Toggler(
+      this.toggleHint,
       infoIcon,
-      'toggle hint',
+      'text hint toggler',
+    );
+    this.speakerToggler = new Toggler(
+      this.toggleSpeaker,
+      volumeIcon,
+      'voice hint button toggler',
     );
     this.spokenButton = new Button(
       () => this.tellHint(),
       speakerIcon,
       'voice hint',
     );
-    this.hintButton.addClass('hint-button');
     this.spokenButton.addClass('spoken-button');
-    this.controlPanel.appendChildren([this.hintButton, this.spokenButton]);
+    this.spokenButton.addClass('off');
+    infoPanel.appendChildren([this.infoBlock, this.spokenButton]);
+    this.controlPanel.appendChildren([this.hintToggler, this.speakerToggler]);
     this.sourceBlock = new Component('section', ['source-block']);
     this.sourceBlock.getNode().ondragover = allowDrop;
     this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
@@ -84,7 +92,7 @@ export default class MainPage extends Component {
     this.autocompleteButton.addClass('game-button');
     this.appendChildren([
       this.controlPanel,
-      this.infoBlock,
+      infoPanel,
       this.resultBlock,
       this.sourceBlock,
       this.autocompleteButton,
@@ -100,11 +108,17 @@ export default class MainPage extends Component {
     this.appendNextCardsRow();
   }
 
-  toggleHint() {
-    this.hintButton.toggleClass('on');
-    this.infoBlock.toggleClass('on');
-    this.hinted = !this.hinted;
-  }
+  toggleHint = () => {
+    if (this.hintToggler.getCheckboxState()) {
+      this.infoBlock.addClass('on');
+    } else {
+      this.infoBlock.removeClass('on');
+    }
+  };
+
+  toggleSpeaker = () => {
+    this.spokenButton.toggleClass('off');
+  };
 
   tellHint() {
     const pre = '../../../public/';
@@ -140,7 +154,9 @@ export default class MainPage extends Component {
       this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
       this.gameButton.addClass('game-button');
       this.appendChild(this.gameButton);
-      if (!this.hinted) this.infoBlock.addClass('on');
+      if (!this.hintToggler.getCheckboxState()) this.infoBlock.addClass('on');
+      if (!this.speakerToggler.getCheckboxState())
+        this.spokenButton.removeClass('off');
     }
     if (this.wordsLeft === 0) {
       this.gameButton.removeClass('disabled');
@@ -164,7 +180,7 @@ export default class MainPage extends Component {
   }
 
   continue() {
-    if (!this.hinted) this.infoBlock.removeClass('on');
+    if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
       this.gameButton.removeNode();
@@ -235,7 +251,9 @@ export default class MainPage extends Component {
       });
     }
     const translation = this.getTranslation();
-    if (this.hinted) {
+    if (!this.speakerToggler.getCheckboxState())
+      this.spokenButton.addClass('off');
+    if (this.hintToggler.getCheckboxState()) {
       this.infoBlock.setTextContent(translation);
     } else {
       setTimeout(() => {
@@ -276,7 +294,12 @@ export default class MainPage extends Component {
         this.changeButton();
       }
     } else {
-      if (this.dragNode) this.getCurrentRowNode().appendChild(this.dragNode);
+      if (this.dragNode && eventNode !== this.getCurrentRowNode()) {
+        this.getCurrentRowNode().appendChild(this.dragNode);
+        this.getCurrentRowNode().insertBefore(this.dragNode, eventNode);
+      } else if (this.dragNode) {
+        this.getCurrentRowNode().appendChild(this.dragNode);
+      }
       this.wordsLeft -= 1;
       this.changeButton();
     }

@@ -15,7 +15,7 @@
 }
 
 .result-block {
-  height: 360px;
+  height: 369px;
   margin: 16px auto;
 
   .row {
@@ -72,15 +72,6 @@
       fill: white;
     }
   }
-
-  .spoken-button {
-    &.active {
-      background-image: url('../../../public/icons/11.gif');
-      background-size: 50% 50%;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  }
 }
 
 .info-block {
@@ -89,5 +80,26 @@
 
   &.on {
     color: rgba(0, 0, 0, 1);
+  }
+}
+
+.info-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+  height: 48px;
+}
+
+.spoken-button {
+  &.active {
+    background-image: url('../../../public/icons/11.gif');
+    background-size: 50% 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &.off {
+    display: none;
   }
 }

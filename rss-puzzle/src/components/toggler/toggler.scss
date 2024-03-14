@@ -1,0 +1,15 @@
+.toggler {
+  width: 64px;
+  height: 48px;
+  display: flex;
+  gap: 7px;
+  padding-left: 12px;
+  justify-content: left;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #eee;
+
+  input {
+    cursor: pointer;
+  }
+}
