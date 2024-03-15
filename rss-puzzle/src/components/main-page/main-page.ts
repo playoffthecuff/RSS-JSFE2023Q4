@@ -9,6 +9,7 @@ import infoIcon from '../../../public/icons/info24px.svg';
 import speakerIcon from '../../../public/icons/11.png';
 import Toggler from '../toggler/toggler';
 import volumeIcon from '../../../public/icons/volumemute24px.svg';
+import imageIcon from '../../../public/icons/image24px.svg';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
@@ -21,6 +22,8 @@ export default class MainPage extends Component {
   private spokenButton;
 
   private hintToggler;
+
+  private imageToggler;
 
   private speakerToggler;
 
@@ -58,6 +61,11 @@ export default class MainPage extends Component {
       infoIcon,
       'text hint toggler',
     );
+    this.imageToggler = new Toggler(
+      this.toggleImage,
+      imageIcon,
+      'image hint toggler',
+    );
     this.speakerToggler = new Toggler(
       this.toggleSpeaker,
       volumeIcon,
@@ -71,7 +79,11 @@ export default class MainPage extends Component {
     this.spokenButton.addClass('spoken-button');
     this.spokenButton.addClass('off');
     infoPanel.appendChildren([this.infoBlock, this.spokenButton]);
-    this.controlPanel.appendChildren([this.hintToggler, this.speakerToggler]);
+    this.controlPanel.appendChildren([
+      this.hintToggler,
+      this.imageToggler,
+      this.speakerToggler,
+    ]);
     this.sourceBlock = new Component('section', ['source-block']);
     this.sourceBlock.getNode().ondragover = allowDrop;
     this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
@@ -107,6 +119,14 @@ export default class MainPage extends Component {
     this.dragElement = null;
     this.appendNextCardsRow();
   }
+
+  toggleImage = () => {
+    if (this.imageToggler.getCheckboxState() || this.checkSequence()) {
+      this.sourceBlock.removeClassFromChildren('off');
+    } else {
+      this.sourceBlock.addClassToChildren('off');
+    }
+  };
 
   toggleHint = () => {
     if (this.hintToggler.getCheckboxState()) {
@@ -150,6 +170,7 @@ export default class MainPage extends Component {
 
   changeButton() {
     if (this.checkSequence()) {
+      this.sourceBlock.removeClassFromChildren('off');
       this.gameButton.removeNode();
       this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
       this.gameButton.addClass('game-button');
@@ -260,6 +281,8 @@ export default class MainPage extends Component {
 
   appendNextCardsRow() {
     this.gameButton.addClass('disabled');
+    this.sourceBlock.removeClassFromChildren('off');
+    this.sourceBlock.removeChildren();
     if (this.lineNumber < 10) {
       this.setTextLength();
       this.setWordsLeft();
@@ -274,6 +297,7 @@ export default class MainPage extends Component {
         const wordOrder = textExampleArr.indexOf(word);
         textExampleArr[wordOrder] = 'nullWord';
         const card = new Card(wordOrder, (Event) => this.callback(Event), word);
+        if (!this.imageToggler.getCheckboxState()) card.addClass('off');
         card.setAttribute('draggable', 'true');
         const firstSpaceIndex = textExample.indexOf(' ');
         const lastSpaceIndex = textExample.lastIndexOf(' ');

@@ -3,6 +3,21 @@
   margin: 0 auto;
   padding: 16px 0;
   text-align: center;
+
+  .card {
+    border-radius: 0;
+    box-sizing: border-box;
+
+    &.off {
+      background-image: none !important;
+      background-color: #888 !important;
+    }
+
+    &.wrong {
+      background-color: #ac3030 !important;
+      background-image: none !important;
+    }
+  }
 }
 
 .source-block {
@@ -30,16 +45,6 @@
 
   .solved {
     pointer-events: none;
-  }
-
-  .card {
-    border-radius: 0;
-    box-sizing: border-box;
-
-    &.wrong {
-      background-color: #ac3030 !important;
-      background-image: none !important;
-    }
   }
 }
 

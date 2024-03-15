@@ -83,8 +83,16 @@ export default class Component {
     }
   }
 
+  addClassToChildren(className: string) {
+    this.getChildren().forEach((child) => child.addClass(className));
+  }
+
   removeClass(className: string) {
     this.node.classList.remove(className);
+  }
+
+  removeClassFromChildren(className: string) {
+    this.getChildren().forEach((child) => child.removeClass(className));
   }
 
   toggleClass(className: string) {
