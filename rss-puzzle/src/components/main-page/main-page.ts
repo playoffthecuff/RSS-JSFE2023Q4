@@ -61,6 +61,10 @@ export default class MainPage extends Component {
       infoIcon,
       'text hint toggler',
     );
+    if (localStorage.getItem('hintTogglerState') !== 'off') {
+      this.hintToggler.setCheckedState();
+      this.switchHint();
+    }
     this.imageToggler = new Toggler(
       this.toggleImage,
       imageIcon,
@@ -78,6 +82,10 @@ export default class MainPage extends Component {
     );
     this.spokenButton.addClass('spoken-button');
     this.spokenButton.addClass('off');
+    if (localStorage.getItem('speakerTogglerState') !== 'off') {
+      this.speakerToggler.setCheckedState();
+      this.switchSpeaker();
+    }
     infoPanel.appendChildren([this.infoBlock, this.spokenButton]);
     this.controlPanel.appendChildren([
       this.hintToggler,
@@ -87,6 +95,10 @@ export default class MainPage extends Component {
     this.sourceBlock = new Component('section', ['source-block']);
     this.sourceBlock.getNode().ondragover = allowDrop;
     this.sourceBlock.getNode().ondrop = this.dropToSourceBlock;
+    if (localStorage.getItem('imageTogglerState') !== 'off') {
+      this.imageToggler.setCheckedState();
+      this.switchImage();
+    }
     this.resultBlock = new Component('section', ['result-block']);
     for (let i = 0; i < 10; i += 1) {
       const row = new Component('div', ['row']);
@@ -122,23 +134,57 @@ export default class MainPage extends Component {
 
   toggleImage = () => {
     if (this.imageToggler.getCheckboxState() || this.checkSequence()) {
+      localStorage.setItem('imageTogglerState', 'on');
       this.sourceBlock.removeClassFromChildren('off');
     } else {
+      localStorage.setItem('imageTogglerState', 'off');
       this.sourceBlock.addClassToChildren('off');
     }
   };
 
+  switchImage() {
+    if (this.imageToggler.getCheckboxState() || this.checkSequence()) {
+      this.sourceBlock.removeClassFromChildren('off');
+    } else {
+      this.sourceBlock.addClassToChildren('off');
+    }
+  }
+
   toggleHint = () => {
+    if (this.hintToggler.getCheckboxState()) {
+      this.infoBlock.addClass('on');
+      localStorage.setItem('hintTogglerState', 'on');
+    } else {
+      localStorage.setItem('hintTogglerState', 'off');
+      this.infoBlock.removeClass('on');
+    }
+  };
+
+  switchHint() {
     if (this.hintToggler.getCheckboxState()) {
       this.infoBlock.addClass('on');
     } else {
       this.infoBlock.removeClass('on');
     }
-  };
+  }
 
   toggleSpeaker = () => {
-    this.spokenButton.toggleClass('off');
+    if (this.speakerToggler.getCheckboxState()) {
+      this.spokenButton.removeClass('off');
+      localStorage.setItem('speakerTogglerState', 'on');
+    } else {
+      localStorage.setItem('speakerTogglerState', 'off');
+      this.spokenButton.addClass('off');
+    }
   };
+
+  switchSpeaker() {
+    if (this.speakerToggler.getCheckboxState()) {
+      this.spokenButton.removeClass('off');
+    } else {
+      this.spokenButton.addClass('off');
+    }
+  }
 
   tellHint() {
     const pre = '../../../public/';

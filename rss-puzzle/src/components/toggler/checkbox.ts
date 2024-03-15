@@ -13,4 +13,8 @@ export default class Checkbox extends Component {
   getCheckedState() {
     return this.node.checked;
   }
+
+  setCheckedState() {
+    this.node.checked = true;
+  }
 }

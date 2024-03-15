@@ -30,7 +30,9 @@ export default class Toggler extends Component {
 
   getCheckboxState() {
     return this.checkbox.getCheckedState();
-    // return this.checkbox
-    // return this.checkbox.getCheckedState();
+  }
+
+  setCheckedState() {
+    this.checkbox.setCheckedState();
   }
 }
