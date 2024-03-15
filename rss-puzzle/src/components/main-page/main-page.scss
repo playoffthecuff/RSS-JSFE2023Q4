@@ -10,7 +10,7 @@
 
     &.off {
       background-image: none !important;
-      background-color: #888 !important;
+      background-color: #ccc !important;
     }
 
     &.wrong {
@@ -32,6 +32,7 @@
 .result-block {
   height: 369px;
   margin: 16px auto;
+  background-color: #777;
 
   .row {
     display: flex;

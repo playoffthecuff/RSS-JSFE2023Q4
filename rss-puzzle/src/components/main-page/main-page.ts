@@ -2,6 +2,11 @@ import './main-page.scss';
 import Component from '../base-component';
 import GetData from '../../services/getData';
 import level1DataSet from '../../../public/data/wordCollectionLevel1.ts';
+import level2DataSet from '../../../public/data/wordCollectionLevel2.ts';
+import level3DataSet from '../../../public/data/wordCollectionLevel3.ts';
+import level4DataSet from '../../../public/data/wordCollectionLevel4.ts';
+import level5DataSet from '../../../public/data/wordCollectionLevel5.ts';
+import level6DataSet from '../../../public/data/wordCollectionLevel6.ts';
 import Card from '../card/button/card';
 import Button from '../button/button';
 import allowDrop from '../../services/allowDrop';
@@ -10,6 +15,7 @@ import speakerIcon from '../../../public/icons/11.png';
 import Toggler from '../toggler/toggler';
 import volumeIcon from '../../../public/icons/volumemute24px.svg';
 import imageIcon from '../../../public/icons/image24px.svg';
+import Dropdown from '../dropdown/dropdown';
 
 const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
@@ -18,6 +24,10 @@ const ANIMATION_DURATION = 800;
 
 export default class MainPage extends Component {
   private controlPanel;
+
+  private levelSelector;
+
+  private roundSelector;
 
   private spokenButton;
 
@@ -47,15 +57,32 @@ export default class MainPage extends Component {
 
   private padding;
 
+  private level: number;
+
   private dragNode: Node | null;
 
   private dragElement: HTMLElement | null;
 
   constructor() {
     super('main', ['main-page']);
+    this.level = 1;
     this.controlPanel = new Component('section', ['control-panel']);
     const infoPanel = new Component('div', ['info-panel']);
     this.infoBlock = new Component('section', ['info-block']);
+    this.levelSelector = new Dropdown(
+      this.selectLevel,
+      'levelSelector',
+      'Level',
+      'level',
+      ['1', '2', '3', '4', '5', '6'],
+    );
+    this.roundSelector = new Dropdown(
+      this.selectRound,
+      'roundSelector',
+      'Round',
+      'round',
+      this.getRoundsQty(),
+    );
     this.hintToggler = new Toggler(
       this.toggleHint,
       infoIcon,
@@ -88,6 +115,8 @@ export default class MainPage extends Component {
     }
     infoPanel.appendChildren([this.infoBlock, this.spokenButton]);
     this.controlPanel.appendChildren([
+      this.levelSelector.getWrapper(),
+      this.roundSelector.getWrapper(),
       this.hintToggler,
       this.imageToggler,
       this.speakerToggler,
@@ -129,6 +158,86 @@ export default class MainPage extends Component {
     this.padding = 0;
     this.dragNode = null;
     this.dragElement = null;
+    this.appendNextCardsRow();
+  }
+
+  selectLevel = () => {
+    const level = +this.levelSelector.getValue();
+    this.level = level;
+    this.roundSelector.setOptions(this.getRoundsQty());
+    this.setRound();
+  };
+
+  selectRound = () => {
+    this.setRound();
+  };
+
+  getRoundsQty() {
+    const level = +this.levelSelector.getValue();
+    let rounds;
+    switch (level) {
+      case 1:
+        rounds = level1DataSet.length;
+        break;
+      case 2:
+        rounds = level2DataSet.length;
+        break;
+      case 3:
+        rounds = level3DataSet.length;
+        break;
+      case 4:
+        rounds = level4DataSet.length;
+        break;
+      case 5:
+        rounds = level5DataSet.length;
+        break;
+      case 6:
+        rounds = level6DataSet.length;
+        break;
+      default:
+        rounds = 0;
+        break;
+    }
+    const roundsArr: string[] = [];
+    for (let i = 1; i <= rounds; i += 1) {
+      roundsArr.push(String(i));
+    }
+    return roundsArr;
+  }
+
+  setRound() {
+    const round = +this.roundSelector.getValue() - 1;
+    switch (this.level) {
+      case 1:
+        this.data = new GetData(level1DataSet, round);
+        break;
+      case 2:
+        this.data = new GetData(level2DataSet, round);
+        break;
+      case 3:
+        this.data = new GetData(level3DataSet, round);
+        break;
+      case 4:
+        this.data = new GetData(level4DataSet, round);
+        break;
+      case 5:
+        this.data = new GetData(level5DataSet, round);
+        break;
+      case 6:
+        this.data = new GetData(level6DataSet, round);
+        break;
+      default:
+        break;
+    }
+    this.lineNumber = 0;
+    this.wordsLeft = 0;
+    this.resultBlock.removeChildren();
+    for (let i = 0; i < 10; i += 1) {
+      const row = new Component('div', ['row']);
+      row.getNode().dataset.row = `${i}`;
+      this.resultBlock.appendChild(row);
+    }
+    this.autocompleteButton.removeClass('disabled');
     this.appendNextCardsRow();
   }
 
@@ -210,24 +319,27 @@ export default class MainPage extends Component {
     } else {
       this.getCurrentRowNode().appendChild(eventNode);
       this.wordsLeft -= 1;
-      this.changeButton();
+      this.finishSentence();
     }
   }
 
-  changeButton() {
+  finishSentence() {
     if (this.checkSequence()) {
       this.sourceBlock.removeClassFromChildren('off');
-      this.gameButton.removeNode();
-      this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
-      this.gameButton.addClass('game-button');
-      this.appendChild(this.gameButton);
+      this.changeButton();
       if (!this.hintToggler.getCheckboxState()) this.infoBlock.addClass('on');
       if (!this.speakerToggler.getCheckboxState())
         this.spokenButton.removeClass('off');
     }
-    if (this.wordsLeft === 0) {
-      this.gameButton.removeClass('disabled');
-    }
+    if (this.wordsLeft === 0) this.gameButton.removeClass('disabled');
+  }
+
+  changeButton() {
+    this.gameButton.removeNode();
+    this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
+    this.gameButton.addClass('game-button');
+    this.appendChild(this.gameButton);
+    if (this.lineNumber === 10) this.autocompleteButton.addClass('disabled');
   }
 
   getTextExample() {
@@ -274,6 +386,12 @@ export default class MainPage extends Component {
       this.gameButton.addClass('game-button');
       this.appendChild(this.gameButton);
       this.appendNextCardsRow();
+    } else if (+this.roundSelector.getValue() < this.getRoundsQty().length) {
+      this.roundSelector.setValue(String(+this.roundSelector.getValue() + 1));
+      this.setRound();
+    } else if (this.level < 6) {
+      this.levelSelector.setValue(String(this.level + 1));
+      this.selectLevel();
     }
   }
 
@@ -295,34 +413,29 @@ export default class MainPage extends Component {
       (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN,
     );
     xRelativeOffsets.unshift(0);
-    this.getTextExample()
-      .split(' ')
-      .forEach((word) => {
-        const card = new Card(wordOrder, () => {}, word);
-        const xOffset = xRelativeOffsets
-          .slice(0, wordOrder + 1)
-          .reduce((acc, offset) => acc + offset, 0);
-        wordOrder += 1;
-        const yOffset = 1 + 36 * this.lineNumber;
-        const path = this.getImageSrc();
-        card.setAttribute(
-          'style',
-          `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
-        );
-        const firstSpaceIndex = textExample.indexOf(' ');
-        const lastSpaceIndex = textExample.lastIndexOf(' ');
-        if (
-          card.getNode().textContent === textExample.slice(0, firstSpaceIndex)
-        )
-          card.addClass('first');
-        if (
-          card.getNode().textContent === textExample.slice(lastSpaceIndex + 1)
-        )
-          card.addClass('last');
-        this.getCurrentRowNode().appendChild(card.getNode());
-      });
+    textExampleArr.forEach((word, index, arr) => {
+      const card = new Card(wordOrder, () => {}, word);
+      const xOffset = xRelativeOffsets
+        .slice(0, wordOrder + 1)
+        .reduce((acc, offset) => acc + offset, 0);
+      wordOrder += 1;
+      const yOffset = 1 + 36 * this.lineNumber;
+      const path = this.getImageSrc();
+      card.setAttribute(
+        'style',
+        `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
+      );
+      if (index === 0) card.addClass('first');
+      if (index === arr.length - 1) card.addClass('last');
+      this.getCurrentRowNode().appendChild(card.getNode());
+    });
+    this.wordsLeft = 0;
     this.getCurrentRowNode().classList.add('solved');
-    this.appendNextCardsRow();
+    if (this.lineNumber < 10) {
+      this.appendNextCardsRow();
+    } else {
+      this.changeButton();
+    }
   }
 
   appendNextCardsRow() {
@@ -339,22 +452,14 @@ export default class MainPage extends Component {
         (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN,
       );
       xRelativeOffsets.unshift(0);
-      this.getRandomizedText().forEach((word) => {
+      this.getRandomizedText().forEach((word, _index, array) => {
         const wordOrder = textExampleArr.indexOf(word);
         textExampleArr[wordOrder] = 'nullWord';
         const card = new Card(wordOrder, (Event) => this.callback(Event), word);
         if (!this.imageToggler.getCheckboxState()) card.addClass('off');
         card.setAttribute('draggable', 'true');
-        const firstSpaceIndex = textExample.indexOf(' ');
-        const lastSpaceIndex = textExample.lastIndexOf(' ');
-        if (
-          card.getNode().textContent === textExample.slice(0, firstSpaceIndex)
-        )
-          card.addClass('first');
-        if (
-          card.getNode().textContent === textExample.slice(lastSpaceIndex + 1)
-        )
-          card.addClass('last');
+        if (wordOrder === 0) card.addClass('first');
+        if (wordOrder === array.length - 1) card.addClass('last');
         card.getNode().ondragstart = this.dragStart;
         const path = this.getImageSrc();
         card.getNode().dataset.card = `${wordOrder}`;
@@ -415,7 +520,7 @@ export default class MainPage extends Component {
         this.getCurrentRowNode().removeChild(tempNode);
         eventElement.classList.remove('wrong');
         this.dragElement?.classList.remove('wrong');
-        this.changeButton();
+        this.finishSentence();
       }
     } else {
       if (this.dragNode && eventNode !== this.getCurrentRowNode()) {
@@ -425,7 +530,7 @@ export default class MainPage extends Component {
         this.getCurrentRowNode().appendChild(this.dragNode);
       }
       this.wordsLeft -= 1;
-      this.changeButton();
+      this.finishSentence();
     }
   };
 
