@@ -47,6 +47,22 @@
   .solved {
     pointer-events: none;
   }
+
+  &.hidden {
+    opacity: 0;
+    transition: opacity 1.6s;
+  }
+}
+
+.description-block {
+  height: 16px;
+  margin: 16px;
+  transition: color 0.8s;
+
+  &.hidden {
+    visibility: hidden;
+    color: transparent;
+  }
 }
 
 .game-button {

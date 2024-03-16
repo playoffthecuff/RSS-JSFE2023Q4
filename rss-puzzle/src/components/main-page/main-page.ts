@@ -18,6 +18,7 @@ import imageIcon from '../../../public/icons/image24px.svg';
 import Dropdown from '../dropdown/dropdown';
 
 const ROW_WIDTH = 768;
+const IMG_HEIGHT = 369;
 const LETTER_WIDTH = 10.6015;
 const MARGIN = 10;
 const ANIMATION_DURATION = 800;
@@ -44,6 +45,10 @@ export default class MainPage extends Component {
 
   private resultBlock;
 
+  private backgroundBlock;
+
+  private descriptionBlock;
+
   private data;
 
   private lineNumber;
@@ -68,8 +73,17 @@ export default class MainPage extends Component {
 
   private roundsOptions: Component[][];
 
+  private imageWidth: number;
+
+  private xStartOffset: number;
+
+  private yStartOffset: number;
+
   constructor() {
     super('main', ['main-page']);
+    this.imageWidth = 0;
+    this.xStartOffset = 0;
+    this.yStartOffset = 0;
     this.level = 1;
     this.round = 1;
     this.roundsOptions = [];
@@ -140,7 +154,13 @@ export default class MainPage extends Component {
       this.imageToggler.setCheckedState();
       this.switchImage();
     }
+    this.descriptionBlock = new Component('section', [
+      'description-block',
+      'hidden',
+    ]);
     this.resultBlock = new Component('section', ['result-block']);
+    this.backgroundBlock = new Component('div', ['background']);
+    this.backgroundBlock.appendChild(this.resultBlock);
     for (let i = 0; i < 10; i += 1) {
       const row = new Component('div', ['row']);
       row.getNode().dataset.row = `${i}`;
@@ -158,7 +178,8 @@ export default class MainPage extends Component {
     this.appendChildren([
       this.controlPanel,
       infoPanel,
-      this.resultBlock,
+      this.backgroundBlock,
+      this.descriptionBlock,
       this.sourceBlock,
       this.autocompleteButton,
       this.gameButton,
@@ -170,7 +191,35 @@ export default class MainPage extends Component {
     this.padding = 0;
     this.dragNode = null;
     this.dragElement = null;
-    this.appendNextCardsRow();
+    this.setRound();
+    // this.appendNextCardsRow();
+  }
+
+  setImgInfo() {
+    const img = new Image();
+    img.src = this.getImageSrc();
+    img.onload = () => {
+      const { width } = img;
+      const { height } = img;
+      const ratio = width / height;
+      const boxRatio = ROW_WIDTH / IMG_HEIGHT;
+      if (ratio > boxRatio) {
+        this.imageWidth = (ROW_WIDTH * ratio) / boxRatio;
+        this.xStartOffset = (this.imageWidth - ROW_WIDTH) / 2;
+        this.yStartOffset = 0;
+      } else {
+        this.imageWidth = ROW_WIDTH;
+        this.xStartOffset = 0;
+        this.yStartOffset = (height * ROW_WIDTH) / 2 / width - IMG_HEIGHT / 2;
+      }
+      console.log(
+        width,
+        height,
+        this.imageWidth,
+        this.xStartOffset,
+        this.yStartOffset,
+      );
+    };
   }
 
   loadLastRound() {
@@ -272,7 +321,16 @@ export default class MainPage extends Component {
       this.switchToCheckButton();
     if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.autocompleteButton.removeClass('disabled');
+    this.setDescription();
+    this.descriptionBlock.addClass('hidden');
+    this.resultBlock.removeClass('hidden');
     this.appendNextCardsRow();
+  }
+
+  setDescription() {
+    this.descriptionBlock.setTextContent(
+      `${this.data.getAuthor()} - ${this.data.getName()} (${this.data.getYear()} A.D.)`,
+    );
   }
 
   toggleImage = () => {
@@ -377,6 +435,8 @@ export default class MainPage extends Component {
     this.gameButton.addClass('game-button');
     this.appendChild(this.gameButton);
     if (this.lineNumber === 10) {
+      this.descriptionBlock.removeClass('hidden');
+      this.resultBlock.addClass('hidden');
       this.autocompleteButton.addClass('disabled');
       this.roundsOptions[this.level - 1][
         +this.roundSelector.getValue() - 1
@@ -432,6 +492,8 @@ export default class MainPage extends Component {
   }
 
   continue() {
+    this.descriptionBlock.addClass('hidden');
+    this.resultBlock.removeClass('hidden');
     if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
@@ -479,15 +541,16 @@ export default class MainPage extends Component {
     xRelativeOffsets.unshift(0);
     textExampleArr.forEach((word, index, arr) => {
       const card = new Card(wordOrder, () => {}, word);
-      const xOffset = xRelativeOffsets
-        .slice(0, wordOrder + 1)
-        .reduce((acc, offset) => acc + offset, 0);
+      const xOffset =
+        xRelativeOffsets
+          .slice(0, wordOrder + 1)
+          .reduce((acc, offset) => acc + offset, 0) + this.xStartOffset;
       wordOrder += 1;
-      const yOffset = 1 + 36 * this.lineNumber;
+      const yOffset = 37 * (this.lineNumber - 1) + this.yStartOffset;
       const path = this.getImageSrc();
       card.setAttribute(
         'style',
-        `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
+        `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px / ${this.imageWidth}px auto`,
       );
       if (index === 0) card.addClass('first');
       if (index === arr.length - 1) card.addClass('last');
@@ -503,54 +566,85 @@ export default class MainPage extends Component {
   }
 
   appendNextCardsRow() {
+    this.setDescription();
     this.gameButton.addClass('disabled');
     this.sourceBlock.removeClassFromChildren('off');
     this.sourceBlock.removeChildren();
-    if (this.lineNumber < 10) {
-      this.setTextLength();
-      this.setWordsLeft();
-      this.setPadding();
-      const textExample = this.data.getTextExample(this.lineNumber);
-      const textExampleArr = textExample.split(' ');
-      const xRelativeOffsets = textExampleArr.map(
-        (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN,
-      );
-      xRelativeOffsets.unshift(0);
-      this.getRandomizedText().forEach((word, _index, array) => {
-        const wordOrder = textExampleArr.indexOf(word);
-        textExampleArr[wordOrder] = 'nullWord';
-        const card = new Card(wordOrder, (Event) => this.callback(Event), word);
-        if (!this.imageToggler.getCheckboxState()) card.addClass('off');
-        card.setAttribute('draggable', 'true');
-        if (wordOrder === 0) card.addClass('first');
-        if (wordOrder === array.length - 1) card.addClass('last');
-        card.getNode().ondragstart = this.dragStart;
-        const path = this.getImageSrc();
-        card.getNode().dataset.card = `${wordOrder}`;
-        const xOffset = xRelativeOffsets
-          .slice(0, wordOrder + 1)
-          .reduce((acc, offset) => acc + offset, 0);
-        const yOffset = 1 + 36 * this.lineNumber;
-        card.setAttribute(
+    const img = new Image();
+    img.src = this.getImageSrc();
+    img.onload = () => {
+      const { width } = img;
+      const { height } = img;
+      const ratio = width / height;
+      const boxRatio = ROW_WIDTH / IMG_HEIGHT;
+      this.imageWidth = 0;
+      this.xStartOffset = 0;
+      this.yStartOffset = 0;
+      if (ratio > boxRatio) {
+        this.imageWidth = (ROW_WIDTH * ratio) / boxRatio;
+        this.xStartOffset = (this.imageWidth - ROW_WIDTH) / 2;
+      } else {
+        this.imageWidth = ROW_WIDTH;
+        this.yStartOffset = (height * ROW_WIDTH) / 2 / width - IMG_HEIGHT / 2;
+      }
+      const path = img.src;
+      if (this.lineNumber === 0) {
+        this.backgroundBlock.removeAttribute('style');
+        this.backgroundBlock.setAttribute(
           'style',
-          `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px`,
+          `background: url(${path}) ${-this.xStartOffset}px ${-this.yStartOffset}px / ${this.imageWidth}px auto`,
         );
-        this.sourceBlock.appendChild(card);
-      });
-    }
-    const translation = this.getTranslation();
-    if (!this.speakerToggler.getCheckboxState())
-      this.spokenButton.addClass('off');
-    if (this.hintToggler.getCheckboxState()) {
-      this.infoBlock.setTextContent(translation);
-    } else {
-      setTimeout(() => {
+      }
+      if (this.lineNumber < 10) {
+        this.setTextLength();
+        this.setWordsLeft();
+        this.setPadding();
+        const textExample = this.data.getTextExample(this.lineNumber);
+        const textExampleArr = textExample.split(' ');
+        const xRelativeOffsets = textExampleArr.map(
+          (word) => word.length * LETTER_WIDTH + this.padding * 2 - MARGIN + 1,
+        );
+        xRelativeOffsets.unshift(0);
+        this.getRandomizedText().forEach((word, _index, array) => {
+          const wordOrder = textExampleArr.indexOf(word);
+          textExampleArr[wordOrder] = 'nullWord';
+          const card = new Card(
+            wordOrder,
+            (Event) => this.callback(Event),
+            word,
+          );
+          if (!this.imageToggler.getCheckboxState()) card.addClass('off');
+          card.setAttribute('draggable', 'true');
+          if (wordOrder === 0) card.addClass('first');
+          if (wordOrder === array.length - 1) card.addClass('last');
+          card.getNode().ondragstart = this.dragStart;
+          card.getNode().dataset.card = `${wordOrder}`;
+          const xOffset =
+            xRelativeOffsets
+              .slice(0, wordOrder + 1)
+              .reduce((acc, offset) => acc + offset, 0) + this.xStartOffset;
+          const yOffset = this.yStartOffset + 37 * this.lineNumber;
+          card.setAttribute(
+            'style',
+            `padding: 0 ${this.padding}px; background: url(${path}) ${-xOffset}px ${-yOffset}px / ${this.imageWidth}px auto`,
+          );
+          this.sourceBlock.appendChild(card);
+        });
+      }
+      const translation = this.getTranslation();
+      if (!this.speakerToggler.getCheckboxState())
+        this.spokenButton.addClass('off');
+      if (this.hintToggler.getCheckboxState()) {
         this.infoBlock.setTextContent(translation);
-      }, ANIMATION_DURATION);
-    }
-    this.lineNumber += 1;
-    this.getCurrentRowNode().ondragover = allowDrop;
-    this.getCurrentRowNode().ondrop = this.dropToResult;
+      } else {
+        setTimeout(() => {
+          this.infoBlock.setTextContent(translation);
+        }, ANIMATION_DURATION);
+      }
+      this.lineNumber += 1;
+      this.getCurrentRowNode().ondragover = allowDrop;
+      this.getCurrentRowNode().ondrop = this.dropToResult;
+    };
   }
 
   getImageSrc() {

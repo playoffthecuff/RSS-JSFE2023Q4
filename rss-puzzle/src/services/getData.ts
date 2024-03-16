@@ -43,8 +43,8 @@ export default class GetData {
     return this.getLevelData().id;
   }
 
-  getLevelName() {
-    return this.getLevelData.name;
+  getName() {
+    return this.getLevelData().name;
   }
 
   getImgSrc() {
