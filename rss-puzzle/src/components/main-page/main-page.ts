@@ -60,6 +60,8 @@ export default class MainPage extends Component {
 
   private level: number;
 
+  private round: number;
+
   private dragNode: Node | null;
 
   private dragElement: HTMLElement | null;
@@ -69,6 +71,7 @@ export default class MainPage extends Component {
   constructor() {
     super('main', ['main-page']);
     this.level = 1;
+    this.round = 1;
     this.roundsOptions = [];
     this.controlPanel = new Component('section', ['control-panel']);
     const infoPanel = new Component('div', ['info-panel']);
@@ -91,6 +94,7 @@ export default class MainPage extends Component {
       this.roundsOptions.push(this.roundSelector.getCreatedOptions());
     }
     this.roundSelector.appendOptions(this.roundsOptions[this.level - 1]);
+    this.loadLastRound();
     this.hintToggler = new Toggler(
       this.toggleHint,
       infoIcon,
@@ -167,6 +171,25 @@ export default class MainPage extends Component {
     this.dragNode = null;
     this.dragElement = null;
     this.appendNextCardsRow();
+  }
+
+  loadLastRound() {
+    const levelStr = localStorage.getItem('level');
+    const levelNum = levelStr ? +levelStr : 1;
+    const roundStr = localStorage.getItem('round');
+    const roundNum = roundStr ? +roundStr : 0;
+    if (
+      roundNum === this.roundsOptions[levelNum - 1].length &&
+      levelNum !== LEVELS
+    ) {
+      this.level = levelNum + 1;
+      this.round = 1;
+    } else if (roundNum !== this.roundsOptions[levelNum - 1].length) {
+      this.level = levelNum;
+      this.round = roundNum + 1;
+    }
+    this.levelSelector.setValue(String(this.level));
+    this.roundSelector.setValue(String(this.round));
   }
 
   selectLevel = () => {
@@ -358,6 +381,7 @@ export default class MainPage extends Component {
       this.roundsOptions[this.level - 1][
         +this.roundSelector.getValue() - 1
       ].addClass('solved');
+      this.saveRound();
       if (
         this.roundsOptions[this.level - 1].every((option) =>
           option.getNode().classList.contains('solved'),
@@ -365,6 +389,11 @@ export default class MainPage extends Component {
       )
         this.levelSelector.getChildren()[this.level - 1].addClass('solved');
     }
+  }
+
+  saveRound() {
+    localStorage.setItem('level', String(this.level));
+    localStorage.setItem('round', this.roundSelector.getValue());
   }
 
   getTextExample() {
@@ -413,9 +442,13 @@ export default class MainPage extends Component {
     ) {
       this.roundSelector.setValue(String(+this.roundSelector.getValue() + 1));
       this.setRound();
-    } else if (this.level < 6) {
+    } else if (this.level < LEVELS) {
       this.levelSelector.setValue(String(this.level + 1));
       this.selectLevel();
+    } else {
+      this.levelSelector.setValue('1');
+      this.roundSelector.setValue('1');
+      this.setRound();
     }
   }
 
