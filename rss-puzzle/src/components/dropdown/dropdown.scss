@@ -7,8 +7,14 @@
   background-color: #eee;
 
   .select {
-    width: 48px;
+    width: 64px;
     height: 24px;
     text-align: center;
+    font-size: 16px;
+  }
+
+  .solved {
+    color: #666;
+    background-color: #eee;
   }
 }

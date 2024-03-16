@@ -21,6 +21,7 @@ const ROW_WIDTH = 768;
 const LETTER_WIDTH = 10.6015;
 const MARGIN = 10;
 const ANIMATION_DURATION = 800;
+const LEVELS = 6;
 
 export default class MainPage extends Component {
   private controlPanel;
@@ -63,9 +64,12 @@ export default class MainPage extends Component {
 
   private dragElement: HTMLElement | null;
 
+  private roundsOptions: Component[][];
+
   constructor() {
     super('main', ['main-page']);
     this.level = 1;
+    this.roundsOptions = [];
     this.controlPanel = new Component('section', ['control-panel']);
     const infoPanel = new Component('div', ['info-panel']);
     this.infoBlock = new Component('section', ['info-block']);
@@ -81,8 +85,12 @@ export default class MainPage extends Component {
       'roundSelector',
       'Round',
       'round',
-      this.getRoundsQty(),
     );
+    for (let i = 1; i <= LEVELS; i += 1) {
+      this.roundSelector.createOptions(this.getRoundsQtyArr(i));
+      this.roundsOptions.push(this.roundSelector.getCreatedOptions());
+    }
+    this.roundSelector.appendOptions(this.roundsOptions[this.level - 1]);
     this.hintToggler = new Toggler(
       this.toggleHint,
       infoIcon,
@@ -164,7 +172,7 @@ export default class MainPage extends Component {
   selectLevel = () => {
     const level = +this.levelSelector.getValue();
     this.level = level;
-    this.roundSelector.setOptions(this.getRoundsQty());
+    this.roundSelector.appendOptions(this.roundsOptions[level - 1]);
     this.setRound();
   };
 
@@ -172,8 +180,8 @@ export default class MainPage extends Component {
     this.setRound();
   };
 
-  getRoundsQty() {
-    const level = +this.levelSelector.getValue();
+  getRoundsQtyArr(level: number) {
+    this.level = 1;
     let rounds;
     switch (level) {
       case 1:
@@ -237,6 +245,9 @@ export default class MainPage extends Component {
       row.getNode().dataset.row = `${i}`;
       this.resultBlock.appendChild(row);
     }
+    if (this.gameButton.getNode().textContent === 'CONTINUE')
+      this.switchToCheckButton();
+    if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.autocompleteButton.removeClass('disabled');
     this.appendNextCardsRow();
   }
@@ -328,6 +339,9 @@ export default class MainPage extends Component {
       this.sourceBlock.removeClassFromChildren('off');
       this.changeButton();
       if (!this.hintToggler.getCheckboxState()) this.infoBlock.addClass('on');
+      this.sourceBlock
+        .getChildren()
+        .forEach((child) => child.removeClass('wrong'));
       if (!this.speakerToggler.getCheckboxState())
         this.spokenButton.removeClass('off');
     }
@@ -339,7 +353,18 @@ export default class MainPage extends Component {
     this.gameButton = new Button(() => this.continue(), '', '', 'CONTINUE');
     this.gameButton.addClass('game-button');
     this.appendChild(this.gameButton);
-    if (this.lineNumber === 10) this.autocompleteButton.addClass('disabled');
+    if (this.lineNumber === 10) {
+      this.autocompleteButton.addClass('disabled');
+      this.roundsOptions[this.level - 1][
+        +this.roundSelector.getValue() - 1
+      ].addClass('solved');
+      if (
+        this.roundsOptions[this.level - 1].every((option) =>
+          option.getNode().classList.contains('solved'),
+        )
+      )
+        this.levelSelector.getChildren()[this.level - 1].addClass('solved');
+    }
   }
 
   getTextExample() {
@@ -381,18 +406,24 @@ export default class MainPage extends Component {
     if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
     this.getCurrentRowNode().classList.add('solved');
     if (this.wordsLeft < 1 && this.lineNumber < 10) {
-      this.gameButton.removeNode();
-      this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
-      this.gameButton.addClass('game-button');
-      this.appendChild(this.gameButton);
+      this.switchToCheckButton();
       this.appendNextCardsRow();
-    } else if (+this.roundSelector.getValue() < this.getRoundsQty().length) {
+    } else if (
+      +this.roundSelector.getValue() < this.roundsOptions[this.level - 1].length
+    ) {
       this.roundSelector.setValue(String(+this.roundSelector.getValue() + 1));
       this.setRound();
     } else if (this.level < 6) {
       this.levelSelector.setValue(String(this.level + 1));
       this.selectLevel();
     }
+  }
+
+  switchToCheckButton() {
+    this.gameButton.removeNode();
+    this.gameButton = new Button(() => this.checkResult(), '', '', 'CHECK');
+    this.gameButton.addClass('game-button');
+    this.appendChild(this.gameButton);
   }
 
   checkResult() {
