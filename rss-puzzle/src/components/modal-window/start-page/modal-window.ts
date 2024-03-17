@@ -1,6 +1,7 @@
 import './modal-window.scss';
 import Component from '../../base-component';
 import Button from '../../button/button';
+import volumeIcon from '../../../../public/icons/volumeup24px.svg';
 
 export default class ModalWindow extends Component {
   protected override node: HTMLDialogElement;
@@ -36,15 +37,38 @@ export default class ModalWindow extends Component {
     this.node.close();
   }
 
-  setStats(iDoNotKnow: string[], iKnow: string[]) {
-    this.iDoNotKnowBlock.getNode().innerHTML += `<b>&nbsp;&nbsp;</b><span>&nbsp;${iDoNotKnow.length}&nbsp;</span><b>&nbsp;</b>:`;
-    iDoNotKnow.forEach((sentence) => {
+  setStats(
+    iDoNotKnowSentences: string[],
+    iKnowSentences: string[],
+    iDoNotKnowAudios: HTMLAudioElement[],
+    iKnowAudios: HTMLAudioElement[],
+  ) {
+    this.iDoNotKnowBlock.getNode().innerHTML += `<b>&nbsp;&nbsp;</b><span class="unknown">&nbsp;${iDoNotKnowSentences.length}&nbsp;</span><b>&nbsp;</b>:`;
+    iDoNotKnowSentences.forEach((sentence, index) => {
       const p = new Component('p', [], sentence);
+      const button = new Button(
+        () => {
+          iDoNotKnowAudios[index].play();
+        },
+        volumeIcon,
+        'say a sentence',
+      );
+      button.addClass('audio-button');
+      p.appendChild(button);
       this.iDoNotKnowBlock.appendChild(p);
     });
-    this.iKnowBlock.getNode().innerHTML += `<b>&nbsp;&nbsp;</b><span>&nbsp;${iKnow.length}&nbsp;</span><b>&nbsp;</b>:`;
-    iKnow.forEach((sentence) => {
+    this.iKnowBlock.getNode().innerHTML += `<b>&nbsp;&nbsp;</b><span class="known">&nbsp;${iKnowSentences.length}&nbsp;</span><b>&nbsp;</b>:`;
+    iKnowSentences.forEach((sentence, index) => {
       const p = new Component('p', [], sentence);
+      const button = new Button(
+        () => {
+          iKnowAudios[index].play();
+        },
+        volumeIcon,
+        'say a sentence',
+      );
+      button.addClass('audio-button');
+      p.appendChild(button);
       this.iKnowBlock.appendChild(p);
     });
   }

@@ -18,12 +18,22 @@
 
   p {
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   span {
-    background-color: #fa5;
-    width: 16px;
     border-radius: 16px;
+    letter-spacing: 1px;
+  }
+
+  .known {
+    background-color: #6c6;
+  }
+
+  .unknown {
+    background-color: #f88;
   }
 
   &[open] {
@@ -37,6 +47,10 @@
     backdrop-filter: blur(8px);
   }
 
+  hr {
+    margin-bottom: 16px;
+  }
+
   .modal-button {
     display: flex;
     background-color: #598958;
@@ -45,5 +59,12 @@
     width: 160px;
     margin: 32px auto 0;
     align-self: center;
+  }
+
+  .audio-button {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    margin-left: 16px;
   }
 }

@@ -88,10 +88,16 @@ export default class MainPage extends Component {
 
   private iDoNotKnowSentences: string[];
 
+  private iKnowAudios: HTMLAudioElement[];
+
+  private iDoNotKnowAudios: HTMLAudioElement[];
+
   constructor() {
     super('main', ['main-page']);
     this.iKnowSentences = [];
     this.iDoNotKnowSentences = [];
+    this.iKnowAudios = [];
+    this.iDoNotKnowAudios = [];
     this.modalWindow = new ModalWindow(() => this.closeModalAndContinue());
     document.body.appendChild(this.modalWindow.getNode());
     this.imageWidth = 0;
@@ -212,7 +218,12 @@ export default class MainPage extends Component {
   }
 
   showModal() {
-    this.modalWindow.setStats(this.iDoNotKnowSentences, this.iKnowSentences);
+    this.modalWindow.setStats(
+      this.iDoNotKnowSentences,
+      this.iKnowSentences,
+      this.iDoNotKnowAudios,
+      this.iKnowAudios,
+    );
     this.modalWindow.openMe();
   }
 
@@ -260,14 +271,10 @@ export default class MainPage extends Component {
     this.level = level;
     this.roundSelector.appendOptions(this.roundsOptions[level - 1]);
     this.setRound();
-    this.iKnowSentences.length = 0;
-    this.iDoNotKnowSentences.length = 0;
   };
 
   selectRound = () => {
     this.setRound();
-    this.iKnowSentences.length = 0;
-    this.iDoNotKnowSentences.length = 0;
   };
 
   getRoundsQtyArr(level: number) {
@@ -304,6 +311,10 @@ export default class MainPage extends Component {
   }
 
   setRound() {
+    this.iKnowSentences.length = 0;
+    this.iDoNotKnowSentences.length = 0;
+    this.iKnowAudios.length = 0;
+    this.iDoNotKnowAudios.length = 0;
     const round = +this.roundSelector.getValue() - 1;
     switch (this.level) {
       case 1:
@@ -436,6 +447,10 @@ export default class MainPage extends Component {
   finishSentence() {
     if (this.checkSequence()) {
       this.iKnowSentences.push(this.getTextExample());
+      const pre = '../../../public/';
+      const path = pre + this.data.getAudioExample(this.lineNumber - 1);
+      const audio = new Audio(path);
+      this.iKnowAudios.push(audio);
       this.sourceBlock.removeClassFromChildren('off');
       this.changeButton();
       if (!this.hintToggler.getCheckboxState()) this.infoBlock.addClass('on');
@@ -514,8 +529,6 @@ export default class MainPage extends Component {
   closeModalAndContinue() {
     this.modalWindow.closeMe();
     this.modalWindow.clearStats();
-    this.iKnowSentences.length = 0;
-    this.iDoNotKnowSentences.length = 0;
     this.continue();
   }
 
@@ -563,6 +576,10 @@ export default class MainPage extends Component {
     this.getCurrentRowNode().innerHTML = '';
     const textExample = this.getTextExample();
     this.iDoNotKnowSentences.push(textExample);
+    const pre = '../../../public/';
+    const pathAudio = pre + this.data.getAudioExample(this.lineNumber - 1);
+    const audio = new Audio(pathAudio);
+    this.iDoNotKnowAudios.push(audio);
     const textExampleArr = textExample.split(' ');
     let wordOrder = 0;
     const xRelativeOffsets = textExampleArr.map(
