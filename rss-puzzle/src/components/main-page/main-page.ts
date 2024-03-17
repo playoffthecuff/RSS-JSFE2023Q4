@@ -66,8 +66,6 @@ export default class MainPage extends Component {
 
   private resultsButton;
 
-  private modalContinueButton;
-
   private padding;
 
   private level: number;
@@ -86,9 +84,15 @@ export default class MainPage extends Component {
 
   private yStartOffset: number;
 
+  private iKnowSentences: string[];
+
+  private iDoNotKnowSentences: string[];
+
   constructor() {
     super('main', ['main-page']);
-    this.modalWindow = new ModalWindow();
+    this.iKnowSentences = [];
+    this.iDoNotKnowSentences = [];
+    this.modalWindow = new ModalWindow(() => this.closeModalAndContinue());
     document.body.appendChild(this.modalWindow.getNode());
     this.imageWidth = 0;
     this.xStartOffset = 0;
@@ -187,14 +191,6 @@ export default class MainPage extends Component {
     this.resultsButton = new Button(() => this.showModal(), '', '', 'RESULTS');
     this.resultsButton.addClass('game-button');
     this.resultsButton.addClass('hidden');
-    this.modalContinueButton = new Button(
-      () => this.continue(),
-      '',
-      '',
-      'CONTINUE',
-    );
-    this.modalContinueButton.addClass('modal-button');
-    this.modalWindow.appendChild(this.modalContinueButton);
     this.appendChildren([
       this.controlPanel,
       infoPanel,
@@ -213,10 +209,10 @@ export default class MainPage extends Component {
     this.dragNode = null;
     this.dragElement = null;
     this.setRound();
-    // this.appendNextCardsRow();
   }
 
   showModal() {
+    this.modalWindow.setStats(this.iDoNotKnowSentences, this.iKnowSentences);
     this.modalWindow.openMe();
   }
 
@@ -264,10 +260,14 @@ export default class MainPage extends Component {
     this.level = level;
     this.roundSelector.appendOptions(this.roundsOptions[level - 1]);
     this.setRound();
+    this.iKnowSentences.length = 0;
+    this.iDoNotKnowSentences.length = 0;
   };
 
   selectRound = () => {
     this.setRound();
+    this.iKnowSentences.length = 0;
+    this.iDoNotKnowSentences.length = 0;
   };
 
   getRoundsQtyArr(level: number) {
@@ -435,6 +435,7 @@ export default class MainPage extends Component {
 
   finishSentence() {
     if (this.checkSequence()) {
+      this.iKnowSentences.push(this.getTextExample());
       this.sourceBlock.removeClassFromChildren('off');
       this.changeButton();
       if (!this.hintToggler.getCheckboxState()) this.infoBlock.addClass('on');
@@ -510,8 +511,15 @@ export default class MainPage extends Component {
     return false;
   }
 
-  continue() {
+  closeModalAndContinue() {
     this.modalWindow.closeMe();
+    this.modalWindow.clearStats();
+    this.iKnowSentences.length = 0;
+    this.iDoNotKnowSentences.length = 0;
+    this.continue();
+  }
+
+  continue() {
     this.resultsButton.addClass('hidden');
     this.descriptionBlock.addClass('hidden');
     this.resultBlock.removeClass('hidden');
@@ -554,6 +562,7 @@ export default class MainPage extends Component {
     this.sourceBlock.removeChildren();
     this.getCurrentRowNode().innerHTML = '';
     const textExample = this.getTextExample();
+    this.iDoNotKnowSentences.push(textExample);
     const textExampleArr = textExample.split(' ');
     let wordOrder = 0;
     const xRelativeOffsets = textExampleArr.map(
