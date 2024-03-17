@@ -8,6 +8,10 @@
   border-radius: 8px;
   background-color: #eee;
 
+  &.hidden {
+    visibility: hidden;
+  }
+
   &:hover {
     background-color: #ccc;
   }

@@ -16,6 +16,7 @@ import Toggler from '../toggler/toggler';
 import volumeIcon from '../../../public/icons/volumemute24px.svg';
 import imageIcon from '../../../public/icons/image24px.svg';
 import Dropdown from '../dropdown/dropdown';
+import ModalWindow from '../modal-window/start-page/modal-window';
 
 const ROW_WIDTH = 768;
 const IMG_HEIGHT = 369;
@@ -25,6 +26,8 @@ const ANIMATION_DURATION = 800;
 const LEVELS = 6;
 
 export default class MainPage extends Component {
+  private modalWindow;
+
   private controlPanel;
 
   private levelSelector;
@@ -61,6 +64,8 @@ export default class MainPage extends Component {
 
   private autocompleteButton;
 
+  private resultsButton;
+
   private padding;
 
   private level: number;
@@ -81,6 +86,8 @@ export default class MainPage extends Component {
 
   constructor() {
     super('main', ['main-page']);
+    this.modalWindow = new ModalWindow();
+    document.body.appendChild(this.modalWindow.getNode());
     this.imageWidth = 0;
     this.xStartOffset = 0;
     this.yStartOffset = 0;
@@ -175,6 +182,9 @@ export default class MainPage extends Component {
       'AUTOCOMPLETE',
     );
     this.autocompleteButton.addClass('game-button');
+    this.resultsButton = new Button(() => this.showModal(), '', '', 'RESULTS');
+    this.resultsButton.addClass('game-button');
+    this.resultsButton.addClass('hidden');
     this.appendChildren([
       this.controlPanel,
       infoPanel,
@@ -182,6 +192,7 @@ export default class MainPage extends Component {
       this.descriptionBlock,
       this.sourceBlock,
       this.autocompleteButton,
+      this.resultsButton,
       this.gameButton,
     ]);
     this.data = new GetData(level1DataSet, 0);
@@ -193,6 +204,10 @@ export default class MainPage extends Component {
     this.dragElement = null;
     this.setRound();
     // this.appendNextCardsRow();
+  }
+
+  showModal() {
+    this.modalWindow.openMe();
   }
 
   setImgInfo() {
@@ -212,13 +227,6 @@ export default class MainPage extends Component {
         this.xStartOffset = 0;
         this.yStartOffset = (height * ROW_WIDTH) / 2 / width - IMG_HEIGHT / 2;
       }
-      console.log(
-        width,
-        height,
-        this.imageWidth,
-        this.xStartOffset,
-        this.yStartOffset,
-      );
     };
   }
 
@@ -435,6 +443,7 @@ export default class MainPage extends Component {
     this.gameButton.addClass('game-button');
     this.appendChild(this.gameButton);
     if (this.lineNumber === 10) {
+      this.resultsButton.removeClass('hidden');
       this.descriptionBlock.removeClass('hidden');
       this.resultBlock.addClass('hidden');
       this.autocompleteButton.addClass('disabled');
@@ -492,6 +501,7 @@ export default class MainPage extends Component {
   }
 
   continue() {
+    this.resultsButton.addClass('hidden');
     this.descriptionBlock.addClass('hidden');
     this.resultBlock.removeClass('hidden');
     if (!this.hintToggler.getCheckboxState()) this.infoBlock.removeClass('on');
