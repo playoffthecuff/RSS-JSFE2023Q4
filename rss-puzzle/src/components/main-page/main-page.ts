@@ -66,6 +66,8 @@ export default class MainPage extends Component {
 
   private resultsButton;
 
+  private modalContinueButton;
+
   private padding;
 
   private level: number;
@@ -185,6 +187,14 @@ export default class MainPage extends Component {
     this.resultsButton = new Button(() => this.showModal(), '', '', 'RESULTS');
     this.resultsButton.addClass('game-button');
     this.resultsButton.addClass('hidden');
+    this.modalContinueButton = new Button(
+      () => this.continue(),
+      '',
+      '',
+      'CONTINUE',
+    );
+    this.modalContinueButton.addClass('modal-button');
+    this.modalWindow.appendChild(this.modalContinueButton);
     this.appendChildren([
       this.controlPanel,
       infoPanel,
@@ -501,6 +511,7 @@ export default class MainPage extends Component {
   }
 
   continue() {
+    this.modalWindow.closeMe();
     this.resultsButton.addClass('hidden');
     this.descriptionBlock.addClass('hidden');
     this.resultBlock.removeClass('hidden');

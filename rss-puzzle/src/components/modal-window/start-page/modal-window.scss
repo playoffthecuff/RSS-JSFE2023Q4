@@ -3,7 +3,6 @@
   border-radius: 16px;
   padding: 32px;
   min-width: 256px;
-  min-height: 256px;
   display: block;
   transform: scale(0);
   opacity: 0;
@@ -25,5 +24,15 @@
   &::backdrop {
     background-color: rgba(32, 32, 32, 75%);
     backdrop-filter: blur(8px);
+  }
+
+  .modal-button {
+    display: flex;
+    background-color: #598958;
+    color: white;
+    transition: background-color 0.3s;
+    width: 160px;
+    margin: 0 auto;
+    align-self: center;
   }
 }
