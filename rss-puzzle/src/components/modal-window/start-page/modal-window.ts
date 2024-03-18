@@ -12,8 +12,17 @@ export default class ModalWindow extends Component {
 
   private iDoNotKnowBlock;
 
+  private thumbNail: Component | null;
+
+  private description: Component | null;
+
+  private separator: Component | null;
+
   constructor(callback: () => void) {
     super();
+    this.thumbNail = null;
+    this.description = null;
+    this.separator = null;
     this.node = document.createElement('dialog');
     this.addClass('modal-window');
     this.continueButton = new Button(callback, '', '', 'CONTINUE');
@@ -42,7 +51,25 @@ export default class ModalWindow extends Component {
     iKnowSentences: string[],
     iDoNotKnowAudios: HTMLAudioElement[],
     iKnowAudios: HTMLAudioElement[],
+    thumbnailPath: string,
+    description: string,
   ) {
+    this.thumbNail = new Component('img', ['thumbnail']);
+    this.thumbNail.setAttribute('src', thumbnailPath);
+    this.description = new Component('p', ['description'], description);
+    this.separator = new Component('hr', []);
+    this.getNode().insertBefore(
+      this.thumbNail.getNode(),
+      this.iDoNotKnowBlock.getNode(),
+    );
+    this.getNode().insertBefore(
+      this.description.getNode(),
+      this.iDoNotKnowBlock.getNode(),
+    );
+    this.getNode().insertBefore(
+      this.separator.getNode(),
+      this.iDoNotKnowBlock.getNode(),
+    );
     this.iDoNotKnowBlock.getNode().innerHTML += `<b>&nbsp;&nbsp;</b><span class="unknown">&nbsp;${iDoNotKnowSentences.length}&nbsp;</span><b>&nbsp;</b>:`;
     iDoNotKnowSentences.forEach((sentence, index) => {
       const p = new Component('p', [], sentence);
@@ -74,6 +101,9 @@ export default class ModalWindow extends Component {
   }
 
   clearStats() {
+    this.thumbNail?.removeNode();
+    this.description?.removeNode();
+    this.separator?.removeNode();
     this.iDoNotKnowBlock.getNode().innerHTML = `I don't know`;
     this.iKnowBlock.getNode().innerHTML = `I know`;
   }

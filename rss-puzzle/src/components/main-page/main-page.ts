@@ -28,6 +28,10 @@ const LEVELS = 6;
 export default class MainPage extends Component {
   private modalWindow;
 
+  private thumbnailPath;
+
+  private description;
+
   private controlPanel;
 
   private levelSelector;
@@ -94,6 +98,8 @@ export default class MainPage extends Component {
 
   constructor() {
     super('main', ['main-page']);
+    this.thumbnailPath = '';
+    this.description = '';
     this.iKnowSentences = [];
     this.iDoNotKnowSentences = [];
     this.iKnowAudios = [];
@@ -223,6 +229,8 @@ export default class MainPage extends Component {
       this.iKnowSentences,
       this.iDoNotKnowAudios,
       this.iKnowAudios,
+      this.thumbnailPath,
+      this.description,
     );
     this.modalWindow.openMe();
   }
@@ -354,12 +362,12 @@ export default class MainPage extends Component {
     this.descriptionBlock.addClass('hidden');
     this.resultBlock.removeClass('hidden');
     this.appendNextCardsRow();
+    this.thumbnailPath = this.getThumbnailSrc();
   }
 
   setDescription() {
-    this.descriptionBlock.setTextContent(
-      `${this.data.getAuthor()} - ${this.data.getName()} (${this.data.getYear()} A.D.)`,
-    );
+    this.description = `${this.data.getAuthor()} - ${this.data.getName()} (${this.data.getYear()} A.D.)`;
+    this.descriptionBlock.setTextContent(this.description);
   }
 
   toggleImage = () => {
@@ -697,6 +705,11 @@ export default class MainPage extends Component {
   getImageSrc() {
     const pre = '../../../public/images/';
     return pre + this.data.getImgSrc();
+  }
+
+  getThumbnailSrc() {
+    const pre = '../../../public/images/';
+    return pre + this.data.getCutSrc();
   }
 
   getTranslation() {

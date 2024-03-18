@@ -58,7 +58,10 @@
     transition: background-color 0.3s;
     width: 160px;
     margin: 32px auto 0;
-    align-self: center;
+
+    &:hover {
+      background-color: #40703e;
+    }
   }
 
   .audio-button {
@@ -66,5 +69,17 @@
     width: 24px;
     height: 24px;
     margin-left: 16px;
+  }
+
+  .thumbnail {
+    width: 160px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .description {
+    justify-content: center;
+    margin: 8px 0 16px;
   }
 }
