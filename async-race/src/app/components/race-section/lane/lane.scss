@@ -1,0 +1,13 @@
+.lane .control-panel {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 24px;
+  color: hsl(283, 32%, 64%);
+}
+
+.track {
+  text-align: right;
+  border-bottom: 2px dashed hsl(283, 32%, 64%);
+  height: 48px;
+}
