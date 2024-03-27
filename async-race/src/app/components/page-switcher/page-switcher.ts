@@ -7,10 +7,10 @@ export default class PageSwitcher extends Component {
 
   private nextButton;
 
-  constructor() {
+  constructor(callbackPrev: () => void, callbackNext: () => void) {
     super('section', 'page-switcher');
-    this.prevButton = new Button('PREV', () => {});
-    this.nextButton = new Button('NEXT', () => {});
+    this.prevButton = new Button('PREV', callbackPrev);
+    this.nextButton = new Button('NEXT', callbackNext);
     this.appendChildren(this.prevButton, this.nextButton);
   }
 }

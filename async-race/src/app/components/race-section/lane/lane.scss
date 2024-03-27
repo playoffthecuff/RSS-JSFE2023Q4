@@ -1,13 +1,27 @@
-.lane .control-panel {
+.lane {
+  margin: 8px 0;
+  .control-panel {
   display: flex;
   gap: 16px;
   align-items: center;
   font-size: 24px;
-  color: hsl(283, 32%, 64%);
+  justify-content: right;
+
+  .button {
+    width: 80px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: hsl(288, 64%, 48%);
+
+    &:hover {
+      background-color: hsl(288, 64%, 72%);
+    }
+  }
+}
 }
 
 .track {
   text-align: right;
-  border-bottom: 2px dashed hsl(283, 32%, 64%);
+  border-bottom: 2px dashed hsl(288, 0%, 64%);
   height: 48px;
 }
