@@ -35,3 +35,7 @@ export async function fetchHeader(header: string) {
   const response = await fetch(getQueryUrl(GARAGE_ROUTE, 0, 1));
   return response.headers.get(header);
 }
+
+export async function deleteCar(id: number) {
+  await fetch(getResourceUrl(GARAGE_ROUTE, id), { method: 'DELETE' });
+}

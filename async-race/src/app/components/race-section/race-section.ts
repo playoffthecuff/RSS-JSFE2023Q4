@@ -3,7 +3,7 @@ import Component from '../base-component';
 import Heading from '../heading/heading';
 import Lane from './lane/lane';
 import PageSwitcher from '../page-switcher/page-switcher';
-import { fetchCars, fetchHeader } from '../../services/fetchLib';
+import { fetchCars, fetchHeader, deleteCar } from '../../services/fetchLib';
 
 const COUNT_HEADER = 'X-Total-Count';
 
@@ -42,9 +42,14 @@ export default class Race extends Component {
   async renderPage(page: number) {
     const cars = await fetchCars(page);
     if (cars.length && page > 0) {
-      this.lanesWrapper.removeChildren();
+      this.lanesWrapper.removeChildren();;
       cars.forEach((car) => {
-        const lane = new Lane(car.name, car.color, car.id);
+        const lane = new Lane(car.name, car.color, car.id, async () => {
+          await deleteCar(car.id);
+          this.renderPage(this.pageNumber);
+          this.getCarsNumber();
+        });
+        lane.setId(`lane-${car.id}`);
         this.lanesWrapper.appendChild(lane);
       });
       this.pageNumber = page;
@@ -58,5 +63,10 @@ export default class Race extends Component {
 
   switchToNextPage = () => {
     this.renderPage((this.pageNumber + 1));
+  };
+
+  deleteLane = (id: number) => {
+    deleteCar(id);
+    this.renderPage(this.pageNumber);
   };
 }

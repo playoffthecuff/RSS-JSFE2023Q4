@@ -10,7 +10,7 @@ export default class Lane extends Component {
 
   private selectButton;
 
-  private removeButton;
+  protected removeButton;
 
   private startButton;
 
@@ -20,13 +20,13 @@ export default class Lane extends Component {
 
   private id;
 
-  constructor(model: string, color: string, id: number) {
+  constructor(model: string, color: string, id: number, callbackToRemove: () => void) {
     super('div', 'lane');
     this.model = model;
     this.id = id;
     const controlPanel = new Component('div', 'control-panel', model);
     this.selectButton = new Button('SELECT', () => {});
-    this.removeButton = new Button('REMOVE', this.deleteCar);
+    this.removeButton = new Button('REMOVE', callbackToRemove);
     this.startButton = new Button('START', () => {});
     this.stopButton = new Button('STOP', () => {});
     const track = new Component('div', 'track');
