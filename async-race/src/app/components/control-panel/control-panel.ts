@@ -14,11 +14,15 @@ export default class ControlPanel extends Component {
 
   private updateInput;
 
-  constructor(className: string, callbackToCreate: () => void) {
+  constructor(
+    className: string,
+    callbackToCreate: () => void,
+    callbackToGenerate: () => void,
+  ) {
     super('section', className);
     this.createInput = new InputRow('CREATE', callbackToCreate);
     this.updateInput = new InputRow('UPDATE', () => {});
-    this.generateButton = new Button('GENERATE CARS', () => {});
+    this.generateButton = new Button('GENERATE CARS', callbackToGenerate);
     this.raceButton = new Button('RACE', () => {});
     this.resetButton = new Button('RESET', () => {});
     const buttonsRow = new Component('div', 'row');

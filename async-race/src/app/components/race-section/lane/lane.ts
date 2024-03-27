@@ -20,10 +20,16 @@ export default class Lane extends Component {
 
   private id;
 
-  constructor(model: string, color: string, id: number, callbackToRemove: () => void) {
+  constructor(
+    model: string,
+    color: string,
+    id: number,
+    callbackToRemove: () => void,
+  ) {
     super('div', 'lane');
     this.model = model;
     this.id = id;
+    this.setAttribute('style', `color: ${color}`);
     const controlPanel = new Component('div', 'control-panel', model);
     this.selectButton = new Button('SELECT', () => {});
     this.removeButton = new Button('REMOVE', callbackToRemove);

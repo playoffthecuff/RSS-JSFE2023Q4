@@ -8,7 +8,7 @@ import {
   fetchHeader,
   deleteCar,
   createCar,
-} from '../../services/fetchLib';
+} from '../../services/fetch-lib';
 
 const COUNT_HEADER = 'X-Total-Count';
 
