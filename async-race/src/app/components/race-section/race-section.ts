@@ -3,7 +3,12 @@ import Component from '../base-component';
 import Heading from '../heading/heading';
 import Lane from './lane/lane';
 import PageSwitcher from '../page-switcher/page-switcher';
-import { fetchCars, fetchHeader, deleteCar } from '../../services/fetchLib';
+import {
+  fetchCars,
+  fetchHeader,
+  deleteCar,
+  createCar,
+} from '../../services/fetchLib';
 
 const COUNT_HEADER = 'X-Total-Count';
 
@@ -12,7 +17,9 @@ export default class Race extends Component {
 
   private pageIndicator;
 
-  private pageNumber;
+  pageNumber;
+
+  carsNumber;
 
   private lanesWrapper;
 
@@ -21,11 +28,15 @@ export default class Race extends Component {
     this.garageStats = new Heading('h1');
     this.pageIndicator = new Heading('h2');
     this.pageNumber = 1;
-    this.getCarsNumber();
+    this.carsNumber = 0;
+    this.updateCarsNumber();
     this.pageIndicator.setTextContent(`Page #${this.pageNumber}`);
     this.lanesWrapper = new Component('div', 'lanes');
     this.renderPage(this.pageNumber);
-    const pageSwitcher = new PageSwitcher(this.switchToPrevPage, this.switchToNextPage);
+    const pageSwitcher = new PageSwitcher(
+      this.switchToPrevPage,
+      this.switchToNextPage,
+    );
     this.appendChildren(
       this.garageStats,
       this.pageIndicator,
@@ -34,20 +45,21 @@ export default class Race extends Component {
     );
   }
 
-  async getCarsNumber() {
+  async updateCarsNumber() {
     const totalCars = await fetchHeader(COUNT_HEADER);
     this.garageStats.setTextContent(`Garage (${totalCars})`);
+    if (totalCars) this.carsNumber = +totalCars;
   }
 
   async renderPage(page: number) {
     const cars = await fetchCars(page);
+    this.lanesWrapper.removeChildren();
     if (cars.length && page > 0) {
-      this.lanesWrapper.removeChildren();;
       cars.forEach((car) => {
         const lane = new Lane(car.name, car.color, car.id, async () => {
           await deleteCar(car.id);
-          this.renderPage(this.pageNumber);
-          this.getCarsNumber();
+          await this.renderPage(this.pageNumber);
+          this.updateCarsNumber();
         });
         lane.setId(`lane-${car.id}`);
         this.lanesWrapper.appendChild(lane);
@@ -58,15 +70,22 @@ export default class Race extends Component {
   }
 
   switchToPrevPage = () => {
-    this.renderPage((this.pageNumber - 1));
+    if (this.pageNumber > 1) this.renderPage(this.pageNumber - 1);
   };
 
   switchToNextPage = () => {
-    this.renderPage((this.pageNumber + 1));
+    if (this.carsNumber / 7 > this.pageNumber) {
+      this.renderPage(this.pageNumber + 1);
+    }
   };
 
   deleteLane = (id: number) => {
     deleteCar(id);
     this.renderPage(this.pageNumber);
+  };
+
+  createCar = (name: string, color: string) => {
+    createCar(name, color);
+    this.updateCarsNumber();
   };
 }

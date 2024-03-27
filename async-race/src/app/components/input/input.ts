@@ -10,10 +10,10 @@ export default class Input extends Component {
   }
 
   getValue() {
-    return this.node.value;
+    return this.element.value;
   }
 
   setValue(value: string) {
-    this.node.value = value;
+    this.element.value = value;
   }
 }

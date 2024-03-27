@@ -3,8 +3,6 @@ export default class Component {
 
   private children: Component[];
 
-  private parent: Component | null;
-
   constructor(
     tag: keyof HTMLElementTagNameMap = 'div',
     className?: string,
@@ -14,7 +12,6 @@ export default class Component {
     if (className) this.addClass(className);
     if (textContent) this.setTextContent(textContent);
     this.children = [];
-    this.parent = null;
   }
 
   get node() {
@@ -26,14 +23,12 @@ export default class Component {
   }
 
   appendChild(child: Component) {
-    child.setParent(this);
     this.children.push(child);
     this.node.appendChild(child.node);
   }
 
   appendChildren(...children: Component[]) {
     children.forEach((child) => {
-      child.setParent(this);
       this.appendChild(child);
     });
   }
@@ -41,14 +36,6 @@ export default class Component {
   removeChildren() {
     this.children.length = 0;
     this.node.innerHTML = '';
-  }
-
-  setParent(parent: Component) {
-    this.parent = parent;
-  }
-
-  getParent() {
-    return this.parent;
   }
 
   removeNode() {
@@ -107,10 +94,5 @@ export default class Component {
     callback: (event: HTMLElementEventMap[T]) => void,
   ) {
     this.node.removeEventListener(event, callback);
-  }
-
-  removeSelf() {
-    this.removeChildren();
-    this.node.remove();
   }
 }

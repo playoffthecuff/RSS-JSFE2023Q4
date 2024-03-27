@@ -3,9 +3,9 @@ import { Car } from '../../types';
 const IP = 'http://127.0.0.1';
 const PORT = '3000';
 const GARAGE_ROUTE = 'garage';
-const ENGINE_ROUTE = 'engine';
-const WINNERS_ROUTE = 'winners';
-const LIMIT = 7;
+// const ENGINE_ROUTE = 'engine';
+// const WINNERS_ROUTE = 'winners';
+export const LIMIT = 7;
 
 const serverAddress = `${IP}:${PORT}/`;
 
@@ -38,4 +38,21 @@ export async function fetchHeader(header: string) {
 
 export async function deleteCar(id: number) {
   await fetch(getResourceUrl(GARAGE_ROUTE, id), { method: 'DELETE' });
+}
+
+export async function createCar<Car>(
+  name: string,
+  color: string,
+): Promise<Car> {
+  const requestData = {
+    name,
+    color,
+  };
+  const response = await fetch(getResourceUrl(GARAGE_ROUTE), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestData),
+  });
+  const responseData = await response.json();
+  return responseData;
 }

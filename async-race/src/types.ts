@@ -3,3 +3,5 @@ export interface Car {
   id: number;
   name: string;
 }
+
+export type Callback = () => void | ((...args: string[]) => void);

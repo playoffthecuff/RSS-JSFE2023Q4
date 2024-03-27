@@ -10,23 +10,23 @@ export default class ControlPanel extends Component {
 
   private resetButton;
 
-  private createInput;
+  createInput;
 
   private updateInput;
 
-  constructor(className: string) {
+  constructor(className: string, callbackToCreate: () => void) {
     super('section', className);
-    this.createInput = new InputRow('CREATE');
-    this.updateInput = new InputRow('UPDATE');
+    this.createInput = new InputRow('CREATE', callbackToCreate);
+    this.updateInput = new InputRow('UPDATE', () => {});
     this.generateButton = new Button('GENERATE CARS', () => {});
     this.raceButton = new Button('RACE', () => {});
     this.resetButton = new Button('RESET', () => {});
     const buttonsRow = new Component('div', 'row');
-    buttonsRow.appendChildren(this.raceButton, this.resetButton, this.generateButton);
-    this.appendChildren(
-      this.createInput,
-      this.updateInput,
-      buttonsRow,
+    buttonsRow.appendChildren(
+      this.raceButton,
+      this.resetButton,
+      this.generateButton,
     );
+    this.appendChildren(this.createInput, this.updateInput, buttonsRow);
   }
 }
