@@ -95,4 +95,9 @@ export default class Component {
   ) {
     this.node.removeEventListener(event, callback);
   }
+
+  setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
+    const propName = styleName as string;
+    this.node.style.setProperty(propName, style);
+  }
 }

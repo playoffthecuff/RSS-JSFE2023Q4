@@ -10,13 +10,13 @@ export default class Lane extends Component {
 
   selectButton;
 
-  protected removeButton;
+  removeButton;
 
-  private startButton;
+  startButton;
 
-  private stopButton;
+  stopButton;
 
-  private car;
+  car;
 
   private id;
 
@@ -32,6 +32,7 @@ export default class Lane extends Component {
     id: number,
     callbackToRemove: () => void,
     callbackToSelect: () => void,
+    callbackToStart: () => void,
   ) {
     super('div', 'lane');
     this.model = model;
@@ -45,8 +46,9 @@ export default class Lane extends Component {
       this.selectButton.setAttribute('disabled', '');
     });
     this.removeButton = new Button('REMOVE', callbackToRemove);
-    this.startButton = new Button('START', () => {});
+    this.startButton = new Button('START', callbackToStart);
     this.stopButton = new Button('STOP', () => {});
+    this.stopButton.setAttribute('disabled', '');
     const track = new Component('div', 'track');
     this.car = new Car(color);
     const flag = new SVG(finish, 'finish');

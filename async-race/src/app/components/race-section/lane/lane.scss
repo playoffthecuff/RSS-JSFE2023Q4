@@ -19,7 +19,7 @@
 
       &:disabled {
         background-color: hsl(288, 0%, 24%);
-        cursor: auto;
+        pointer-events: none;
       }
     }
   }

@@ -4,4 +4,11 @@ export interface Car {
   name: string;
 }
 
-export type Callback = () => void | ((...args: string[]) => void);
+export interface Engine {
+  velocity: number;
+  distance: number;
+}
+
+export type Callback = (
+  event: MouseEvent,
+) => void | void | (() => void) | ((...args: string[]) => void);

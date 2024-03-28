@@ -8,6 +8,7 @@ import {
   fetchHeader,
   deleteCar,
   createCar,
+  controlEngine,
 } from '../../services/fetch-lib';
 import { Car } from '../../../types';
 import ControlPanel from '../control-panel/control-panel';
@@ -86,6 +87,21 @@ export default class Race extends Component {
             );
             this.controlPanel.updateInput.setTextValue(car.name);
             this.controlPanel.updateInput.setColorValue(hslToRgb(car.color));
+          },
+          async () => {
+            lane.removeButton.setAttribute('disabled', '');
+            lane.selectButton.setAttribute('disabled', '');
+            lane.startButton.setAttribute('disabled', '');
+            lane.stopButton.removeAttribute('disabled');
+            const engineStatus = await controlEngine(car.id, 'started');
+            const animationTime: number =
+              engineStatus.distance / engineStatus.velocity;
+            // lane.car.setStyle('color', 'red');
+            lane.car.setStyle(
+              'transition',
+              `left ${animationTime}ms ease-in-out`,
+            );
+            lane.car.setStyle('left', `${lane.node.offsetWidth - 80}px`);
           },
         );
         lane.setId(`lane-${car.id}`);
