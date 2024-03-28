@@ -96,12 +96,19 @@ export default class Race extends Component {
             const engineStatus = await controlEngine(car.id, 'started');
             const animationTime: number =
               engineStatus.distance / engineStatus.velocity;
-            // lane.car.setStyle('color', 'red');
             lane.car.setStyle(
               'transition',
               `left ${animationTime}ms ease-in-out`,
             );
             lane.car.setStyle('left', `${lane.node.offsetWidth - 80}px`);
+          },
+          async () => {
+            const engineStatus = await controlEngine(car.id, 'stopped');
+            lane.car.setStyle('left', `${engineStatus.velocity}`);
+            lane.removeButton.removeAttribute('disabled');
+            lane.selectButton.removeAttribute('disabled');
+            lane.startButton.removeAttribute('disabled');
+            lane.stopButton.setAttribute('disabled', '');
           },
         );
         lane.setId(`lane-${car.id}`);

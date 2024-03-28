@@ -33,6 +33,7 @@ export default class Lane extends Component {
     callbackToRemove: () => void,
     callbackToSelect: () => void,
     callbackToStart: () => void,
+    callbackToStop: () => void,
   ) {
     super('div', 'lane');
     this.model = model;
@@ -47,7 +48,7 @@ export default class Lane extends Component {
     });
     this.removeButton = new Button('REMOVE', callbackToRemove);
     this.startButton = new Button('START', callbackToStart);
-    this.stopButton = new Button('STOP', () => {});
+    this.stopButton = new Button('STOP', callbackToStop);
     this.stopButton.setAttribute('disabled', '');
     const track = new Component('div', 'track');
     this.car = new Car(color);
