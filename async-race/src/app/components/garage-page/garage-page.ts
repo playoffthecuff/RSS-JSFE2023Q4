@@ -2,9 +2,10 @@ import './garage-page.scss';
 import Component from '../base-component';
 import ControlPanel from '../control-panel/control-panel';
 import Race from '../race-section/race-section';
-import { createCar, LIMIT } from '../../services/fetch-lib';
+import { createCar, LIMIT, updateCar } from '../../services/fetch-lib';
 import carModels from '../../services/car-models';
 import { Car } from '../../../types';
+import Lane from '../race-section/lane/lane';
 
 const GENERATED_CARS = 100;
 
@@ -36,8 +37,30 @@ export default class Garage extends Component {
         this.raceSection.updateCarsNumber();
         this.updateViewRaceSection();
       },
+      async () => {
+        if (
+          this.controlPanel.updateInput.getTextValue() &&
+          this.raceSection.selectedCar.id
+        ) {
+          await updateCar(
+            this.raceSection.selectedCar.id,
+            this.controlPanel.updateInput.getTextValue(),
+            this.controlPanel.updateInput.getColorValue(),
+          );
+          let selectedLane = this.raceSection.selectedLane as Lane | null;
+          selectedLane!.updateCar(
+            this.controlPanel.updateInput.getTextValue(),
+            this.controlPanel.updateInput.getColorValue(),
+          );
+          this.controlPanel.updateInput.setTextValue('');
+          this.controlPanel.updateInput.setColorValue('#808080');
+          selectedLane?.selectButton.removeAttribute('disabled');
+          selectedLane = null;
+          this.raceSection.selectedCar.id = 0;
+        }
+      },
     );
-    this.raceSection = new Race();
+    this.raceSection = new Race(this.controlPanel);
     this.appendChildren(this.controlPanel, this.raceSection);
   }
 

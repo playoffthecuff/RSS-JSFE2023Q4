@@ -47,7 +47,7 @@ export default class Component {
   }
 
   setTextContent(textContent: string) {
-    this.node.textContent = textContent;
+    this.element.textContent = textContent;
   }
 
   setAttribute(attribute: string, value: string) {

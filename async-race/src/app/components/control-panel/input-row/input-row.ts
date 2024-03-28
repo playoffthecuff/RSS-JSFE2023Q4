@@ -26,4 +26,12 @@ export default class InputRow extends Component {
   getColorValue() {
     return this.colorPicker.getValue();
   }
+
+  setTextValue(value: string) {
+    this.textInput.setValue(value);
+  }
+
+  setColorValue(color: string) {
+    this.colorPicker.setValue(color);
+  }
 }

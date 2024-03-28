@@ -56,3 +56,23 @@ export async function createCar<Car>(
   const responseData = await response.json();
   return responseData;
 }
+
+export async function updateCar(
+  id: number,
+  name: string,
+  color: string,
+): Promise<Car> {
+  const requestData = {
+    name,
+    color,
+  };
+
+  const response = await fetch(getResourceUrl(GARAGE_ROUTE, id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestData),
+  });
+
+  const responseData = await response.json();
+  return responseData;
+}
