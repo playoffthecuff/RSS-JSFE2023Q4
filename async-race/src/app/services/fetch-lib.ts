@@ -82,7 +82,7 @@ export async function updateCar(
 function getQueryEngineUrl(
   route: string,
   id: number,
-  status: 'started' | 'stopped',
+  status: 'started' | 'stopped' | 'drive',
 ) {
   return `${serverAddress}${route}?id=${id}&status=${status}`;
 }
@@ -93,4 +93,12 @@ export async function controlEngine(id: number, status: 'started' | 'stopped') {
   });
   const responseData = await response.json();
   return responseData;
+}
+
+export async function switchEngine(id: number, status: 'drive') {
+  const response = await fetch(getQueryEngineUrl(ENGINE_ROUTE, id, status), {
+    method: 'PATCH',
+  });
+  const responseCode = response.status;
+  return responseCode;
 }

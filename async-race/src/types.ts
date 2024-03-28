@@ -9,6 +9,10 @@ export interface Engine {
   distance: number;
 }
 
+export interface SwitchEngine {
+  success: boolean;
+}
+
 export type Callback = (
   event: MouseEvent,
 ) => void | void | (() => void) | ((...args: string[]) => void);

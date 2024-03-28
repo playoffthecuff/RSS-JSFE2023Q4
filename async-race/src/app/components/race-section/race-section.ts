@@ -9,6 +9,8 @@ import {
   deleteCar,
   createCar,
   controlEngine,
+  LIMIT,
+  switchEngine,
 } from '../../services/fetch-lib';
 import { Car } from '../../../types';
 import ControlPanel from '../control-panel/control-panel';
@@ -94,6 +96,13 @@ export default class Race extends Component {
             lane.startButton.setAttribute('disabled', '');
             lane.stopButton.removeAttribute('disabled');
             const engineStatus = await controlEngine(car.id, 'started');
+            const switchEngineStatus = switchEngine(car.id, 'drive');
+            switchEngineStatus.then((status) => {
+              const currentLeftValue = window.getComputedStyle(
+                lane.car.node,
+              ).left;
+              if (status === 500) lane.car.setStyle('left', currentLeftValue);
+            });
             const animationTime: number =
               engineStatus.distance / engineStatus.velocity;
             lane.car.setStyle(
@@ -104,7 +113,7 @@ export default class Race extends Component {
           },
           async () => {
             const engineStatus = await controlEngine(car.id, 'stopped');
-            lane.car.setStyle('left', `${engineStatus.velocity}`);
+            lane.car.setStyle('left', `${engineStatus.velocity}px`);
             lane.removeButton.removeAttribute('disabled');
             lane.selectButton.removeAttribute('disabled');
             lane.startButton.removeAttribute('disabled');
@@ -124,7 +133,7 @@ export default class Race extends Component {
   };
 
   switchToNextPage = () => {
-    if (this.carsNumber / 7 > this.pageNumber) {
+    if (this.carsNumber / LIMIT > this.pageNumber) {
       this.renderPage(this.pageNumber + 1);
     }
   };

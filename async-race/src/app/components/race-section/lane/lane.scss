@@ -2,13 +2,15 @@
   margin: 8px 0;
   .control-panel {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
-    font-size: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
     justify-content: right;
 
     .button {
-      width: 80px;
+      width: 72px;
       height: 32px;
       border-radius: 8px;
       background-color: hsl(288, 0%, 48%);
