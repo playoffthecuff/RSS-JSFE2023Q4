@@ -16,4 +16,9 @@
   &:hover {
     background-color: hsl(96, 64%, 72%);
   }
+
+  &:disabled {
+    background-color: hsl(288, 0%, 24%);
+    pointer-events: none;
+  }
 }

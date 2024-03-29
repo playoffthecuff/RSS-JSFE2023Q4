@@ -59,6 +59,16 @@ export default class Garage extends Component {
           this.raceSection.selectedCar.id = 0;
         }
       },
+      () => {
+        this.raceSection.startRace();
+        this.controlPanel.resetButton.removeAttribute('disabled');
+        this.controlPanel.raceButton.setAttribute('disabled', '');
+      },
+      () => {
+        this.raceSection.stopRace();
+        this.controlPanel.resetButton.setAttribute('disabled', '');
+        this.controlPanel.raceButton.removeAttribute('disabled');
+      },
     );
     this.raceSection = new Race(this.controlPanel);
     this.appendChildren(this.controlPanel, this.raceSection);

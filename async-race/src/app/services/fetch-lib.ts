@@ -1,10 +1,10 @@
-import { Car } from '../../types';
+import { Car, Winner } from '../../types';
 
 const IP = 'http://127.0.0.1';
 const PORT = '3000';
 const GARAGE_ROUTE = 'garage';
 const ENGINE_ROUTE = 'engine';
-// const WINNERS_ROUTE = 'winners';
+const WINNERS_ROUTE = 'winners';
 export const LIMIT = 7;
 
 const serverAddress = `${IP}:${PORT}/`;
@@ -42,10 +42,7 @@ export async function deleteCar(id: number) {
   await fetch(getResourceUrl(GARAGE_ROUTE, id), { method: 'DELETE' });
 }
 
-export async function createCar<Car>(
-  name: string,
-  color: string,
-): Promise<Car> {
+export async function createCar(name: string, color: string): Promise<Car> {
   const requestData = {
     name,
     color,
@@ -101,4 +98,23 @@ export async function switchEngine(id: number, status: 'drive') {
   });
   const responseCode = response.status;
   return responseCode;
+}
+
+export async function createWinner(
+  id: number,
+  wins: number,
+  time: number,
+): Promise<Winner> {
+  const requestData = {
+    id,
+    wins,
+    time,
+  };
+  const response = await fetch(getQueryCarsUrl(WINNERS_ROUTE), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestData),
+  });
+  const responseData = await response.json();
+  return responseData;
 }

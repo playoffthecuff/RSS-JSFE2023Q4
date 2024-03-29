@@ -1,0 +1,20 @@
+.modal-window {
+  display: block;
+  transform: scale(0);
+  opacity: 0;
+  transition: all 0.4s;
+  visibility: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  font-weight: 600;
+
+  &[open] {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+}

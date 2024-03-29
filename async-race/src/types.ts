@@ -13,6 +13,12 @@ export interface SwitchEngine {
   success: boolean;
 }
 
+export interface Winner {
+  id: number;
+  wins: number;
+  time: number;
+}
+
 export type Callback = (
   event: MouseEvent,
-) => void | void | (() => void) | ((...args: string[]) => void);
+) => Promise<void> | void | Promise<boolean>;

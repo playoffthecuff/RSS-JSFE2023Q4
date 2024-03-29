@@ -4,17 +4,18 @@ import Button from '../../button/button';
 import Car from '../../car/car';
 import SVG from '../../svg/svg';
 import finish from '../../../../assets/icons/icon-sprite.svg';
+import { controlEngine, switchEngine } from '../../../services/fetch-lib';
 
 export default class Lane extends Component {
   private model;
 
   selectButton;
 
-  removeButton;
+  private removeButton;
 
-  startButton;
+  private startButton;
 
-  stopButton;
+  private stopButton;
 
   car;
 
@@ -26,16 +27,17 @@ export default class Lane extends Component {
 
   private nameBlock;
 
+  private time;
+
   constructor(
     model: string,
     color: string,
     id: number,
     callbackToRemove: () => void,
     callbackToSelect: () => void,
-    callbackToStart: () => void,
-    callbackToStop: () => void,
   ) {
     super('div', 'lane');
+    this.time = 0;
     this.model = model;
     this.id = id;
     this.color = color;
@@ -47,8 +49,8 @@ export default class Lane extends Component {
       this.selectButton.setAttribute('disabled', '');
     });
     this.removeButton = new Button('REMOVE', callbackToRemove);
-    this.startButton = new Button('START', callbackToStart);
-    this.stopButton = new Button('STOP', callbackToStop);
+    this.startButton = new Button('START', this.startCar);
+    this.stopButton = new Button('STOP', this.stopCar);
     this.stopButton.setAttribute('disabled', '');
     const track = new Component('div', 'track');
     this.car = new Car(color);
@@ -79,5 +81,50 @@ export default class Lane extends Component {
   updateCar(name: string, color: string) {
     this.changeCarColor(color);
     this.changeCarName(name, color);
+  }
+
+  stopCar = async () => {
+    const engineStatus = await controlEngine(this.id, 'stopped');
+    this.car.setStyle('left', `${engineStatus.velocity}px`);
+    this.removeButton.removeAttribute('disabled');
+    this.selectButton.removeAttribute('disabled');
+    this.startButton.removeAttribute('disabled');
+    this.stopButton.setAttribute('disabled', '');
+    this.time = 0;
+  };
+
+  startCar = async () => {
+    this.removeButton.setAttribute('disabled', '');
+    this.selectButton.setAttribute('disabled', '');
+    this.startButton.setAttribute('disabled', '');
+    this.stopButton.removeAttribute('disabled');
+    const engineStatus = await controlEngine(this.id, 'started');
+    const switchEngineStatus = switchEngine(this.id, 'drive');
+    const animationTime: number = engineStatus.distance / engineStatus.velocity;
+    this.car.setStyle('transition', `left ${animationTime}ms ease-in-out`);
+    let result = false;
+    this.car.setStyle('left', `${this.node.offsetWidth - 80}px`);
+    await switchEngineStatus.then((status) => {
+      const currentLeftValue = window.getComputedStyle(this.car.node).left;
+      if (status === 500) {
+        this.car.setStyle('left', currentLeftValue);
+      } else {
+        result = true;
+        this.time = Math.round(animationTime / 10) / 100;
+      }
+    });
+    return result;
+  };
+
+  getWinnerStr() {
+    return `Winner is ${this.model} with a ${this.time}s`;
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getTime() {
+    return this.time;
   }
 }

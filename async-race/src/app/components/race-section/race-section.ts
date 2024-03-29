@@ -8,13 +8,13 @@ import {
   fetchHeader,
   deleteCar,
   createCar,
-  controlEngine,
+  createWinner,
   LIMIT,
-  switchEngine,
 } from '../../services/fetch-lib';
 import { Car } from '../../../types';
 import ControlPanel from '../control-panel/control-panel';
 import hslToRgb from '../../services/hsl-to-rgb';
+import ModalWindow from '../modal-window/modal-window';
 
 const COUNT_HEADER = 'X-Total-Count';
 
@@ -35,8 +35,19 @@ export default class Race extends Component {
 
   private controlPanel;
 
+  private modalWinner;
+
+  private winnerId: number | null;
+
+  private winnerTime: number | null;
+
+  private isRaceStarted: boolean;
+
   constructor(controlPanel: ControlPanel) {
     super('section', 'race-section');
+    this.winnerId = null;
+    this.winnerTime = null;
+    this.isRaceStarted = false;
     this.controlPanel = controlPanel;
     this.garageStats = new Heading('h1');
     this.pageIndicator = new Heading('h2');
@@ -47,6 +58,10 @@ export default class Race extends Component {
     this.lanesWrapper = new Component('div', 'lanes');
     this.renderPage(this.pageNumber);
     this.selectedLane = null;
+    this.modalWinner = new ModalWindow();
+    this.modalWinner.addListener('click', () => {
+      this.modalWinner.closeMe();
+    });
     const pageSwitcher = new PageSwitcher(
       this.switchToPrevPage,
       this.switchToNextPage,
@@ -56,6 +71,7 @@ export default class Race extends Component {
       this.pageIndicator,
       this.lanesWrapper,
       pageSwitcher,
+      this.modalWinner,
     );
     this.selectedCar = { id: 0, name: '', color: '' };
   }
@@ -90,35 +106,6 @@ export default class Race extends Component {
             this.controlPanel.updateInput.setTextValue(car.name);
             this.controlPanel.updateInput.setColorValue(hslToRgb(car.color));
           },
-          async () => {
-            lane.removeButton.setAttribute('disabled', '');
-            lane.selectButton.setAttribute('disabled', '');
-            lane.startButton.setAttribute('disabled', '');
-            lane.stopButton.removeAttribute('disabled');
-            const engineStatus = await controlEngine(car.id, 'started');
-            const switchEngineStatus = switchEngine(car.id, 'drive');
-            switchEngineStatus.then((status) => {
-              const currentLeftValue = window.getComputedStyle(
-                lane.car.node,
-              ).left;
-              if (status === 500) lane.car.setStyle('left', currentLeftValue);
-            });
-            const animationTime: number =
-              engineStatus.distance / engineStatus.velocity;
-            lane.car.setStyle(
-              'transition',
-              `left ${animationTime}ms ease-in-out`,
-            );
-            lane.car.setStyle('left', `${lane.node.offsetWidth - 80}px`);
-          },
-          async () => {
-            const engineStatus = await controlEngine(car.id, 'stopped');
-            lane.car.setStyle('left', `${engineStatus.velocity}px`);
-            lane.removeButton.removeAttribute('disabled');
-            lane.selectButton.removeAttribute('disabled');
-            lane.startButton.removeAttribute('disabled');
-            lane.stopButton.setAttribute('disabled', '');
-          },
         );
         lane.setId(`lane-${car.id}`);
         this.lanesWrapper.appendChild(lane);
@@ -146,5 +133,31 @@ export default class Race extends Component {
   createCar = (name: string, color: string) => {
     createCar(name, color);
     this.updateCarsNumber();
+  };
+
+  startRace = () => {
+    const lanes = this.lanesWrapper.getChildren() as Lane[];
+    this.isRaceStarted = true;
+    lanes.forEach((lane) => {
+      const finish = lane.startCar();
+      finish.then((result) => {
+        if (!this.winnerId && result) {
+          this.winnerId = lane.getId();
+          this.winnerTime = lane.getTime();
+          createWinner(this.winnerId, 1, this.winnerTime); // замени единицу на инкремент q из winnerTable
+          this.modalWinner.setTextContent(lane.getWinnerStr());
+          this.modalWinner.openMe();
+        }
+      });
+    });
+  };
+
+  stopRace = () => {
+    const lanes = this.lanesWrapper.getChildren() as Lane[];
+    lanes.forEach((lane) => {
+      lane.stopCar();
+    });
+    this.winnerId = null;
+    this.winnerTime = null;
   };
 }
