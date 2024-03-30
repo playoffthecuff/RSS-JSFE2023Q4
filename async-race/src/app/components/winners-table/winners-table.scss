@@ -23,9 +23,11 @@
 
   &:nth-child(1) {
     width: 32px;
+    border-left: 2px solid hsl(96, 64%, 48%);
   }
 
   &:nth-child(2) {
+    justify-content: center;
     width: 88px;
   }
 
@@ -39,6 +41,7 @@
 
   &:nth-child(5) {
     width: 84px;
+    border-right: 2px solid hsl(96, 64%, 48%);
   }
 }
 
@@ -48,6 +51,10 @@
 
 .table-row {
   display: flex;
+
+  &:last-child {
+    border-bottom: 1px solid hsl(96, 64%, 48%);
+  }
 }
 
 .table-cell {
@@ -59,6 +66,7 @@
   &:nth-child(1) {
     width: 32px;
     justify-content: center;
+    border-left: 2px solid hsl(96, 64%, 48%);
   }
 
   &:nth-child(2) {
@@ -81,5 +89,6 @@
   &:nth-child(5) {
     width: 84px;
     text-indent: 8px;
+    border-right: 2px solid hsl(96, 64%, 48%);
   }
 }

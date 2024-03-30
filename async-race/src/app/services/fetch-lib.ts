@@ -164,3 +164,8 @@ export async function getWinnersTotal(header: string) {
   const response = await fetch(getQueryCarsUrl(WINNERS_ROUTE, 0, 1));
   return response.headers.get(header);
 }
+
+export async function getAllWinners() {
+  const winners = await fetchData<Winner[]>(getQueryCarsUrl(WINNERS_ROUTE));
+  return winners;
+}

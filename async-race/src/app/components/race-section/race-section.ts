@@ -11,6 +11,8 @@ import {
   createWinner,
   LIMIT,
   deleteWinner,
+  updateWinner,
+  getAllWinners,
 } from '../../services/fetch-lib';
 import { Car } from '../../../types';
 import ControlPanel from '../control-panel/control-panel';
@@ -44,10 +46,16 @@ export default class Race extends Component {
 
   private isRaceStarted: boolean;
 
+  private winners: (number | undefined)[];
+
+  private times: (number | undefined)[];
+
   constructor(controlPanel: ControlPanel) {
     super('section', 'race-section');
     this.winnerId = null;
     this.winnerTime = null;
+    this.winners = [];
+    this.times = [];
     this.isRaceStarted = false;
     this.controlPanel = controlPanel;
     this.garageStats = new Heading('h1');
@@ -75,6 +83,7 @@ export default class Race extends Component {
       this.modalWinner,
     );
     this.selectedCar = { id: 0, name: '', color: '' };
+    this.updateStats();
   }
 
   async updateCarsNumber() {
@@ -94,6 +103,9 @@ export default class Race extends Component {
           car.id,
           async () => {
             await deleteCar(car.id);
+            await deleteWinner(car.id);
+            this.winners[car.id] = undefined;
+            this.times[car.id] = undefined;
             await this.renderPage(this.pageNumber);
             this.updateCarsNumber();
           },
@@ -126,12 +138,6 @@ export default class Race extends Component {
     }
   };
 
-  deleteLane = (id: number) => {
-    deleteCar(id);
-    deleteWinner(id);
-    this.renderPage(this.pageNumber);
-  };
-
   createCar = (name: string, color: string) => {
     createCar(name, color);
     this.updateCarsNumber();
@@ -146,7 +152,24 @@ export default class Race extends Component {
         if (!this.winnerId && result) {
           this.winnerId = lane.getId();
           this.winnerTime = lane.getTime();
-          createWinner(this.winnerId, 1, this.winnerTime); // замени единицу на инкремент q из winnerTable
+          if (this.winners[this.winnerId]) {
+            this.winners[this.winnerId]! += 1;
+            let timeToRecord = this.winnerTime;
+            if (this.winnerTime > this.times[this.winnerId]!)
+              timeToRecord = this.times[this.winnerId] as number;
+            updateWinner(
+              this.winnerId,
+              this.winners[this.winnerId]!,
+              timeToRecord,
+            );
+          } else {
+            this.winners[this.winnerId] = 1;
+            createWinner(
+              this.winnerId,
+              this.winners[this.winnerId]!,
+              this.winnerTime,
+            );
+          }
           this.modalWinner.setTextContent(lane.getWinnerStr());
           this.modalWinner.openMe();
         }
@@ -162,4 +185,12 @@ export default class Race extends Component {
     this.winnerId = null;
     this.winnerTime = null;
   };
+
+  async updateStats() {
+    const winners = await getAllWinners();
+    winners.forEach((winner) => {
+      this.winners[winner.id] = winner.wins;
+      this.times[winner.id] = winner.time;
+    });
+  }
 }
