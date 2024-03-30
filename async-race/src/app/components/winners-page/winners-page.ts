@@ -66,6 +66,8 @@ export default class WinnerPage extends Component {
     this.tableWrapper.removeChildren();
     this.winnersTable = new WinnersTable(page);
     this.tableWrapper.appendChild(this.winnersTable);
+    this.pageNumber = page;
+    this.pageIndicator.setTextContent(`Page #${this.pageNumber}`);
   }
 
   getCurrentPageNumber() {
