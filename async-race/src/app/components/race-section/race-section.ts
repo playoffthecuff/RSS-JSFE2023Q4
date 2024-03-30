@@ -4,12 +4,13 @@ import Heading from '../heading/heading';
 import Lane from './lane/lane';
 import PageSwitcher from '../page-switcher/page-switcher';
 import {
-  fetchCars,
+  getCars,
   fetchHeader,
   deleteCar,
   createCar,
   createWinner,
   LIMIT,
+  deleteWinner,
 } from '../../services/fetch-lib';
 import { Car } from '../../../types';
 import ControlPanel from '../control-panel/control-panel';
@@ -83,7 +84,7 @@ export default class Race extends Component {
   }
 
   async renderPage(page: number) {
-    const cars = await fetchCars(page);
+    const cars = await getCars(page);
     this.lanesWrapper.removeChildren();
     if (cars.length && page > 0) {
       cars.forEach((car) => {
@@ -127,6 +128,7 @@ export default class Race extends Component {
 
   deleteLane = (id: number) => {
     deleteCar(id);
+    deleteWinner(id);
     this.renderPage(this.pageNumber);
   };
 

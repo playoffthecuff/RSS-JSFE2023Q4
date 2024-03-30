@@ -26,11 +26,16 @@ export async function fetchData<T>(url: string): Promise<T> {
   return data;
 }
 
-export async function fetchCars(page: number) {
+export async function getCars(page: number) {
   const cars = await fetchData<Car[]>(
     getQueryCarsUrl(GARAGE_ROUTE, page, LIMIT),
   );
   return cars;
+}
+
+export async function getCar(id: number) {
+  const car = await fetchData<Car>(getResourceUrl(GARAGE_ROUTE, id));
+  return car;
 }
 
 export async function fetchHeader(header: string) {
@@ -117,4 +122,45 @@ export async function createWinner(
   });
   const responseData = await response.json();
   return responseData;
+}
+
+export async function updateWinner(
+  id: number,
+  wins: number,
+  time: number,
+): Promise<Winner> {
+  const requestData = { wins, time };
+  const response = await fetch(getResourceUrl(WINNERS_ROUTE, id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestData),
+  });
+  const responseData = await response.json();
+  return responseData;
+}
+
+export async function deleteWinner(id: number) {
+  await fetch(getResourceUrl(WINNERS_ROUTE, id), { method: 'DELETE' });
+}
+
+export async function getWinners(
+  page: number,
+  limit: number,
+  sort: 'id' | 'wins' | 'time',
+  order: 'ASC' | 'DESC',
+) {
+  const winners = await fetchData<Winner[]>(
+    `${getQueryCarsUrl(WINNERS_ROUTE, page, limit)}&_sort=${sort}&_order=${order}`,
+  );
+  return winners;
+}
+
+export async function getWinner(id: number) {
+  const winner = await fetchData<Winner>(getResourceUrl(WINNERS_ROUTE, id));
+  return winner;
+}
+
+export async function getWinnersTotal(header: string) {
+  const response = await fetch(getQueryCarsUrl(WINNERS_ROUTE, 0, 1));
+  return response.headers.get(header);
 }

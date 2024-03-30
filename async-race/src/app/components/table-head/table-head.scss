@@ -1,0 +1,15 @@
+.table-head {
+  cursor: pointer;
+  user-select: none;
+
+  .sort-block {
+    visibility: hidden;
+    transition: visibility 2s;
+  }
+
+  &.active {
+    .sort-block {
+      visibility: visible;
+    }
+  }
+}
