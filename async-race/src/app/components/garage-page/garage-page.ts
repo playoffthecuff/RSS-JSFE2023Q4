@@ -6,6 +6,7 @@ import { createCar, LIMIT, updateCar } from '../../services/fetch-lib';
 import carModels from '../../services/car-models';
 import { Car } from '../../../types';
 import Lane from '../race-section/lane/lane';
+import carBrands from '../../services/car-brands';
 
 const GENERATED_CARS = 100;
 
@@ -31,7 +32,9 @@ export default class Garage extends Component {
       async () => {
         const promises: Promise<Car>[] = [];
         for (let i = 0; i < GENERATED_CARS; i += 1) {
-          const name = carModels[Math.floor(Math.random() * carModels.length)];
+          const brand = carBrands[Math.floor(Math.random() * carBrands.length)];
+          const model = carModels[Math.floor(Math.random() * carModels.length)];
+          const name = `${brand} ${model}`;
           const color = `hsl(${Math.floor(Math.random() * 360)}, ${64 + Math.ceil(Math.random() * 36)}%, 72%)`;
           promises.push(createCar(name, color));
         }
