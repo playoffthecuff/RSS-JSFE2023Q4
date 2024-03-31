@@ -19,7 +19,7 @@ export default class WinnerPage extends Component {
 
   private pageSwitcher;
 
-  private winnersTable: WinnersTable | null;
+  private winnersTable;
 
   private tableWrapper;
 
@@ -30,9 +30,9 @@ export default class WinnerPage extends Component {
     this.pageIndicator = new Heading('h2');
     this.pageNumber = 1;
     this.pageIndicator.setTextContent(`Page #${this.pageNumber}`);
-    this.winnersTable = null;
+    this.winnersTable = new WinnersTable(this.pageNumber);
     this.tableWrapper = new Component();
-    this.renderTable(this.pageNumber);
+    this.tableWrapper.appendChild(this.winnersTable);
     this.winnersNumber = 0;
     this.pageSwitcher = new PageSwitcher(
       this.switchToPrevPage,
@@ -63,10 +63,13 @@ export default class WinnerPage extends Component {
   };
 
   renderTable(page: number) {
-    this.tableWrapper.removeChildren();
-    this.winnersTable = new WinnersTable(page);
-    this.tableWrapper.appendChild(this.winnersTable);
+    this.winnersTable?.renderTable(
+      page,
+      this.winnersTable.getSort(),
+      this.winnersTable.getOrder(),
+    );
     this.pageNumber = page;
+    this.winnersTable.setPageNumber(page);
     this.pageIndicator.setTextContent(`Page #${this.pageNumber}`);
   }
 

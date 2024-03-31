@@ -44,8 +44,6 @@ export default class Race extends Component {
 
   private winnerTime: number | null;
 
-  private isRaceStarted: boolean;
-
   private winners: (number | undefined)[];
 
   private times: (number | undefined)[];
@@ -56,7 +54,6 @@ export default class Race extends Component {
     this.winnerTime = null;
     this.winners = [];
     this.times = [];
-    this.isRaceStarted = false;
     this.controlPanel = controlPanel;
     this.garageStats = new Heading('h1');
     this.pageIndicator = new Heading('h2');
@@ -145,7 +142,7 @@ export default class Race extends Component {
 
   startRace = () => {
     const lanes = this.lanesWrapper.getChildren() as Lane[];
-    this.isRaceStarted = true;
+    let finishedCarCounter = 0;
     lanes.forEach((lane) => {
       const finish = lane.startCar();
       finish.then((result) => {
@@ -170,8 +167,13 @@ export default class Race extends Component {
               this.winnerTime,
             );
           }
+          finishedCarCounter += 1;
           this.modalWinner.setTextContent(lane.getWinnerStr());
           this.modalWinner.openMe();
+        } else {
+          finishedCarCounter += 1;
+          if (finishedCarCounter === lanes.length)
+            this.controlPanel.resetButton.removeAttribute('disabled');
         }
       });
     });

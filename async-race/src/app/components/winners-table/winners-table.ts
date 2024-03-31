@@ -23,7 +23,15 @@ export default class WinnersTable extends Component {
 
   private pageNumber;
 
-  constructor(page: number) {
+  private order: 'ASC' | 'DESC';
+
+  private sort: 'wins' | 'time' | 'id';
+
+  constructor(
+    page: number,
+    order?: 'ASC' | 'DESC',
+    sort?: 'wins' | 'time' | 'id',
+  ) {
     super('div', 'winner-table');
     this.tableHeader = new Component('div', 'table-header');
     this.idHead = new TableHead('#');
@@ -41,7 +49,9 @@ export default class WinnersTable extends Component {
     this.tableBody = new Component('div', 'table-body');
     this.appendChildren(this.tableHeader, this.tableBody);
     this.pageNumber = page;
-    this.renderTable(page, 'id', 'ASC');
+    this.order = order || 'ASC';
+    this.sort = sort || 'id';
+    this.renderTable(page, this.sort, this.order);
   }
 
   async renderTable(
@@ -49,7 +59,10 @@ export default class WinnersTable extends Component {
     sort: 'time' | 'id' | 'wins',
     order: 'ASC' | 'DESC',
   ) {
+    this.sort = sort;
+    this.order = order;
     const winners = await getWinners(page, LIMIT, sort, order);
+    this.tableBody.removeChildren();
     winners.forEach((winner) => {
       this.appendRow(winner.id, winner.wins, winner.time);
     });
@@ -76,7 +89,7 @@ export default class WinnersTable extends Component {
     this.winsHead.deactivate();
   }
 
-  sortByWins() {
+  sortByWins = () => {
     this.deactivateTableHeads();
     const state = this.winsHead.getState();
     if (state === 'ASC') {
@@ -84,10 +97,10 @@ export default class WinnersTable extends Component {
     } else {
       this.winsHead.switchToAscSort();
     }
-    this.renderTable(this.pageNumber, 'id', this.winsHead.getState());
-  }
+    this.renderTable(this.pageNumber, 'wins', this.winsHead.getState());
+  };
 
-  sortByTime() {
+  sortByTime = () => {
     this.deactivateTableHeads();
     const state = this.timeHead.getState();
     if (state === 'ASC') {
@@ -95,6 +108,18 @@ export default class WinnersTable extends Component {
     } else {
       this.timeHead.switchToAscSort();
     }
-    this.renderTable(this.pageNumber, 'id', this.timeHead.getState());
+    this.renderTable(this.pageNumber, 'time', this.timeHead.getState());
+  };
+
+  getOrder() {
+    return this.order;
+  }
+
+  getSort() {
+    return this.sort;
+  }
+
+  setPageNumber(page: number) {
+    this.pageNumber = page;
   }
 }

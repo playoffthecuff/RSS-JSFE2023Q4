@@ -25,6 +25,8 @@ export default class Garage extends Component {
         );
         this.raceSection.updateCarsNumber();
         this.updateViewRaceSection();
+        this.controlPanel.createInput.setTextValue('');
+        this.controlPanel.createInput.setColorValue('#808080');
       },
       async () => {
         const promises: Promise<Car>[] = [];
@@ -61,7 +63,7 @@ export default class Garage extends Component {
       },
       () => {
         this.raceSection.startRace();
-        this.controlPanel.resetButton.removeAttribute('disabled');
+        // this.controlPanel.resetButton.removeAttribute('disabled');
         this.controlPanel.raceButton.setAttribute('disabled', '');
       },
       () => {

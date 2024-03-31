@@ -85,6 +85,7 @@ export default class Lane extends Component {
 
   stopCar = async () => {
     const engineStatus = await controlEngine(this.id, 'stopped');
+    this.car.setStyle('transition', `left 200ms ease-in-out`);
     this.car.setStyle('left', `${engineStatus.velocity}px`);
     this.removeButton.removeAttribute('disabled');
     this.selectButton.removeAttribute('disabled');

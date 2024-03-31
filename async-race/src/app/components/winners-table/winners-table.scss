@@ -11,6 +11,7 @@
 
 .table-head {
   display: flex;
+  gap: 8px;
   box-sizing: border-box;
   padding: 8px;
   font-weight: 600;
@@ -18,7 +19,7 @@
 
   &.active {
     background-color: hsl(96, 64%, 8%);
-    color: hsl(96, 64%, 64%);
+    color: hsl(96, 64%, 84%);
   }
 
   &:nth-child(1) {
@@ -43,10 +44,6 @@
     width: 84px;
     border-right: 2px solid hsl(96, 64%, 48%);
   }
-}
-
-.sort-block {
-  max-width: 16px;
 }
 
 .table-row {
