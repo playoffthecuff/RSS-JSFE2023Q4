@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint **/*.ts",
     "prepare": "cd .. && husky async-race/.husky",
     "ci:format": "prettier --check .",
     "lint": "eslint **/*.ts"
