@@ -66,13 +66,13 @@ export default class Lane extends Component {
 
   changeCarColor(color: string) {
     this.car.tuneCar(color);
-    this.color = color;
   }
 
   changeCarName(name: string, color: string) {
     this.nameBlock.setTextContent(name);
     this.removeAttribute('style');
     this.setAttribute('style', `color: ${color}`);
+    this.model = name;
   }
 
   updateCar(name: string, color: string) {

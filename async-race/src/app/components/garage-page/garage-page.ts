@@ -66,7 +66,6 @@ export default class Garage extends Component {
       },
       () => {
         this.raceSection.startRace();
-        // this.controlPanel.resetButton.removeAttribute('disabled');
         this.controlPanel.raceButton.setAttribute('disabled', '');
       },
       () => {
