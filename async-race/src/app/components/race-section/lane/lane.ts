@@ -21,8 +21,6 @@ export default class Lane extends Component {
 
   private id;
 
-  private color;
-
   private controlPanel;
 
   private nameBlock;
@@ -40,7 +38,6 @@ export default class Lane extends Component {
     this.time = 0;
     this.model = model;
     this.id = id;
-    this.color = color;
     this.setAttribute('style', `color: ${color}`);
     this.controlPanel = new Component('div', 'control-panel');
     this.nameBlock = new Component('div', 'name-block', model);
