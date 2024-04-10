@@ -1,0 +1,11 @@
+{
+  "linterOptions": {
+    "noInlineConfig": true,
+  },
+  "plugins": ["prettier"],
+  "extends": ["airbnb-base", "airbnb-typescript/base"],
+  "parserOptions": {
+  "project": "./tsconfig.json",
+  "prettier"
+  }
+}
