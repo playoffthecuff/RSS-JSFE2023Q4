@@ -1,0 +1,11 @@
+.text-input {
+  height: 32px;
+  width: 200px;
+  border-radius: 8px;
+  text-indent: 4px;
+  background-color: hsl(96, 64%, 88%);
+
+  &:focus {
+    outline: 2px solid hsl(96, 64%, 48%);
+  }
+}

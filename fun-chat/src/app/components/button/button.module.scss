@@ -1,0 +1,18 @@
+.button {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: hsl(96, 64%, 88%);
+
+  &.hidden {
+    visibility: hidden;
+  }
+
+  &:hover {
+    background-color: hsl(96, 64%, 92%);
+  }
+}

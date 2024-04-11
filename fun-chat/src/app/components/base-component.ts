@@ -1,25 +1,25 @@
 export default class Component {
-  protected element: HTMLElement;
+  protected readonly element: HTMLElement;
 
-  private children: Component[];
+  private childrenArr: Component[];
 
   constructor(
-    tag: keyof HTMLElementTagNameMap = 'div',
     className?: string,
+    tag: keyof HTMLElementTagNameMap = 'div',
     textContent?: string,
   ) {
     this.element = document.createElement(tag);
     if (className) this.addClass(className);
-    if (textContent) this.setTextContent(textContent);
-    this.children = [];
+    if (textContent) this.textContent = textContent;
+    this.childrenArr = [];
   }
 
   get node() {
     return this.element;
   }
 
-  getChildren() {
-    return this.children;
+  get children() {
+    return this.childrenArr;
   }
 
   appendChild(child: Component) {
@@ -42,12 +42,17 @@ export default class Component {
     this.node.remove();
   }
 
-  setId(id: string) {
-    this.node.id = id;
+  set textContent(textContent: string) {
+    this.element.textContent = textContent;
   }
 
-  setTextContent(textContent: string) {
-    this.element.textContent = textContent;
+  setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
+    const propName = styleName as string;
+    this.node.style.setProperty(propName, style);
+  }
+
+  set id(id: string) {
+    this.node.id = id;
   }
 
   setAttribute(attribute: string, value: string) {
@@ -66,20 +71,20 @@ export default class Component {
     }
   }
 
-  addClassToChildren(className: string) {
-    this.getChildren().forEach((child) => child.addClass(className));
+  toggleClass(className: string) {
+    this.node.classList.toggle(className);
   }
 
   removeClass(className: string) {
     this.node.classList.remove(className);
   }
 
-  removeClassFromChildren(className: string) {
-    this.getChildren().forEach((child) => child.removeClass(className));
+  addClassToChildren(className: string) {
+    this.children.forEach((child) => child.addClass(className));
   }
 
-  toggleClass(className: string) {
-    this.node.classList.toggle(className);
+  removeClassFromChildren(className: string) {
+    this.children.forEach((child) => child.removeClass(className));
   }
 
   addListener<T extends keyof HTMLElementEventMap>(
@@ -94,10 +99,5 @@ export default class Component {
     callback: (event: HTMLElementEventMap[T]) => void,
   ) {
     this.node.removeEventListener(event, callback);
-  }
-
-  setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
-    const propName = styleName as string;
-    this.node.style.setProperty(propName, style);
   }
 }
