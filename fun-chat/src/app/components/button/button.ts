@@ -8,7 +8,9 @@ export default class Button extends Component {
 
   constructor(
     callback: () => void,
+    type: 'button' | 'menu' | 'submit' | 'reset' = 'button',
     iconSrc?: string,
+    id?: string,
     iconAlt?: string,
     textContent?: string,
   ) {
@@ -16,6 +18,8 @@ export default class Button extends Component {
     this.element = document.createElement('button');
     this.addClass(styles.button);
     this.addListener('click', callback);
+    if (type) this.setAttribute('type', type);
+    if (id) this.node.id = id;
     if (textContent) this.node.textContent = textContent;
     if (iconSrc) {
       const icon = new Icon(iconSrc, iconAlt || '');

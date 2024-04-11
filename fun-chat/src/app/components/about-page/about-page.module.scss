@@ -1,0 +1,49 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  button {
+    margin: 16px auto;
+  }
+}
+
+.about-wrapper {
+  max-width: 320px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: hsl(0, 0%, 8%);
+}
+
+h1 {
+  text-align: center;
+  // transform: rotate(0.5turn);
+  transform: skew(24deg, 16deg);
+  background: linear-gradient(to left,
+  hsl(0, 64%, 72%),
+  hsl(300, 64%, 72%),
+  hsl(240, 64%, 72%),
+  hsl(180, 64%, 72%),
+  hsl(120, 64%, 72%),
+  hsl(60, 64%, 72%));
+-webkit-background-clip: text;
+color: transparent;
+}
+
+.article {
+  line-height: 2.4;
+  text-align: center;
+
+  .inline-icon {
+    width: 16px;
+    height: 16px;
+    display: inline;
+    margin-left:  4px;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

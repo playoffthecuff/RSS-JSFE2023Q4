@@ -1,6 +1,27 @@
 .login-form {
-  width: 352px;
+  width: 368px;
+  padding: 4px 8px;
   margin: auto;
+  background-color: hsl(0, 0%, 8%);
+  border-radius: 8px;
+}
+
+.about-link {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: hsl(96, 64%, 88%);
+
+  &.hidden {
+    visibility: hidden;
+  }
+
+  &:hover {
+    background-color: hsl(96, 64%, 92%);
+  }
 }
 
 .tooltip {

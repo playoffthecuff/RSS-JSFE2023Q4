@@ -5,6 +5,7 @@ import LabeledTextInput from "../labeled-text-input/labeled-text-input";
 import Button from "../button/button";
 import loginIcon from "../../../assets/icons/login24px.svg";
 import infoIcon from "../../../assets/icons/info24px.svg";
+import IconLink from "../icon-link/icon-link";
 
 export default class LoginForm extends Component {
   protected override readonly element: HTMLFormElement;
@@ -27,9 +28,9 @@ export default class LoginForm extends Component {
 
   private secondRulePasswordTooltip = new Component(styles.tooltip);
 
-  private loginButton = new Button(() => {}, loginIcon);
+  private loginButton = new Button(() => {}, 'button', loginIcon, 'login-button');
 
-  private infoButton = new Button(() => {}, infoIcon);
+  private infoLink = new IconLink('#/about', infoIcon, '', '', null, false);
 
   constructor() {
     super();
@@ -48,7 +49,7 @@ export default class LoginForm extends Component {
       this.secondRulePasswordTooltip,
     );
     const buttonsWrapper = new Component(styles.buttonsWrapper);
-    buttonsWrapper.appendChildren(this.loginButton, this.infoButton);
+    buttonsWrapper.appendChildren(this.loginButton, this.infoLink);
     this.appendChildren(this.fieldset, buttonsWrapper);
   }
 }
