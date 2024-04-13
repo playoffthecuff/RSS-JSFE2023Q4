@@ -7,12 +7,14 @@ import loginIcon from "../../../assets/icons/login24px.svg";
 import infoIcon from "../../../assets/icons/info24px.svg";
 import IconLink from "../icon-link/icon-link";
 
-const FIRST_RULE_NAME_VALIDATION_MSG = 'The name must be in English letters, starting with capital.';
-const SECOND_RULE_NAME_VALIDATION_MSG = 'Minimum name length - 2 characters.';
+const FIRST_RULE_NAME_VALIDATION_MSG =
+  "The name must be in English letters, starting with capital.";
+const SECOND_RULE_NAME_VALIDATION_MSG = "Minimum name length - 2 characters.";
 
-const FIRST_RULE_PASSWORD_VALIDATION_MSG = 'Minimum password length - 4 characters.';
-const SECOND_RULE_PASSWORD_VALIDATION_MSG = 'Must contain at least 1 English letter and 1 number.';
-
+const FIRST_RULE_PASSWORD_VALIDATION_MSG =
+  "Minimum password length - 4 characters.";
+const SECOND_RULE_PASSWORD_VALIDATION_MSG =
+  "Must contain at least 1 English letter and 1 number.";
 
 export default class LoginForm extends Component {
   private fieldset = new Fieldset("Authorization");
@@ -22,7 +24,7 @@ export default class LoginForm extends Component {
   private passwordInput = new LabeledTextInput(
     "Password",
     "Enter password",
-    "password"
+    "password",
   );
 
   private firstRuleNameTooltip = new Component(styles.tooltip);
@@ -33,9 +35,14 @@ export default class LoginForm extends Component {
 
   private secondRulePasswordTooltip = new Component(styles.tooltip);
 
-  private loginButton = new Button(() => {}, 'submit', loginIcon, 'login-button');
+  private loginButton = new Button(
+    () => {},
+    "submit",
+    loginIcon,
+    "login-button",
+  );
 
-  private infoLink = new IconLink('#/about', infoIcon, '', '', null, false);
+  private infoLink = new IconLink("#/about", infoIcon, "", "", null, false);
 
   private isNameValid = false;
 
@@ -66,20 +73,24 @@ export default class LoginForm extends Component {
   }
 
   private init() {
-    this.addListener('submit', (event) => {
+    this.addListener("submit", (event) => {
       event.preventDefault();
-      window.location.hash = '#/chat';
-    })
+      window.location.hash = "#/chat";
+    });
     this.loginButton.disable();
-    this.addListener('input', () => {
+    this.addListener("input", () => {
       if (this.isNameValid && this.isPasswordValid) {
         this.loginButton.enable();
       } else {
         this.loginButton.disable();
       }
     });
-    this.nameInput.addListener('input', () => {this.validateName()});
-    this.passwordInput.addListener('input', () => {this.validatePassword()});
+    this.nameInput.addListener("input", () => {
+      this.validateName();
+    });
+    this.passwordInput.addListener("input", () => {
+      this.validatePassword();
+    });
   }
 
   private validateName() {
@@ -89,46 +100,48 @@ export default class LoginForm extends Component {
       this.nameInput.setInvalid();
       this.loginButton.disable();
     } else {
-      this.firstRuleNameTooltip.textContent = '';
+      this.firstRuleNameTooltip.textContent = "";
       isValid = true;
-    };
+    }
     if (!/.{2,}/.test(this.nameInput.value)) {
       this.secondRuleNameTooltip.textContent = SECOND_RULE_NAME_VALIDATION_MSG;
       this.nameInput.setInvalid();
       this.loginButton.disable();
       isValid = false;
     } else {
-      this.secondRuleNameTooltip.textContent = '';
+      this.secondRuleNameTooltip.textContent = "";
       isValid &&= true;
-    };
+    }
     if (isValid) {
       this.nameInput.setValid();
       this.isNameValid = true;
-    };
+    }
   }
 
   private validatePassword() {
     let isValid = false;
     if (!/.{4,}/.test(this.passwordInput.value)) {
-      this.firstRulePasswordTooltip.textContent = FIRST_RULE_PASSWORD_VALIDATION_MSG;
+      this.firstRulePasswordTooltip.textContent =
+        FIRST_RULE_PASSWORD_VALIDATION_MSG;
       this.passwordInput.setInvalid();
       this.loginButton.disable();
     } else {
-      this.firstRulePasswordTooltip.textContent = '';
+      this.firstRulePasswordTooltip.textContent = "";
       isValid = true;
-    };
+    }
     if (!/^(?=.*[a-zA-Z])(?=.*\d).+/.test(this.passwordInput.value)) {
-      this.secondRulePasswordTooltip.textContent = SECOND_RULE_PASSWORD_VALIDATION_MSG;
+      this.secondRulePasswordTooltip.textContent =
+        SECOND_RULE_PASSWORD_VALIDATION_MSG;
       this.passwordInput.setInvalid();
       this.loginButton.disable();
       isValid = false;
     } else {
-      this.secondRulePasswordTooltip.textContent = '';
+      this.secondRulePasswordTooltip.textContent = "";
       isValid &&= true;
-    };
+    }
     if (isValid) {
       this.passwordInput.setValid();
       this.isPasswordValid = true;
-    };
+    }
   }
 }
