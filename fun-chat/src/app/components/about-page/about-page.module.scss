@@ -16,9 +16,8 @@
   background-color: hsl(0, 0%, 8%);
 }
 
-h1 {
+.app-name {
   text-align: center;
-  // transform: rotate(0.5turn);
   transform: skew(24deg, 16deg);
   background: linear-gradient(to left,
   hsl(0, 64%, 72%),

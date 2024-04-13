@@ -26,4 +26,12 @@ export default class Button extends Component {
       this.appendChild(icon);
     }
   }
+
+  disable() {
+    this.setAttribute('disabled');
+  }
+
+  enable() {
+    this.removeAttribute('disabled');
+  }
 }

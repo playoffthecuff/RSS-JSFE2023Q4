@@ -1,7 +1,7 @@
 export default class Component {
-  protected readonly element: HTMLElement;
-
   private childrenArr: Component[];
+
+  protected readonly element: HTMLElement;
 
   constructor(
     className?: string,
@@ -55,9 +55,9 @@ export default class Component {
     this.node.id = id;
   }
 
-  setAttribute(attribute: string, value: string) {
+  setAttribute(attribute: string, value?: string) {
     if (!this.node.hasAttribute(attribute)) {
-      this.node.setAttribute(attribute, value);
+    this.node.setAttribute(attribute, value || '');
     }
   }
 

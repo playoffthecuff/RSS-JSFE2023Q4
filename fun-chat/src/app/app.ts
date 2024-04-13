@@ -1,8 +1,10 @@
+import Page404 from './components/404-page/404-page';
 import AboutPage from './components/about-page/about-page';
 import Component from './components/base-component';
+import ChatPage from './components/chat-page/chat-page';
 import LoginPage from './components/login-page/login-page';
 
-const ROUTES = ['login', 'main','about', ''];
+const ROUTES = ['login', 'main','about', 'chat', ''];
 
 export default class App extends Component {
 
@@ -21,15 +23,12 @@ export default class App extends Component {
     }
     window.onhashchange = () => {
       hash = window.location.hash.slice(2);
-      ROUTES.forEach(route => {
-        if (hash === route) this.renderNewPage(route);
-      });
+      this.renderNewPage(hash);
     };
   }
 
   private renderNewPage(route: typeof ROUTES[number]) {
     this.removeChildren();
-    console.log(route);
     switch (route) {
       case '':
         this.appendChild(new LoginPage());
@@ -37,10 +36,14 @@ export default class App extends Component {
       case 'login':
         this.appendChild(new LoginPage());
         break;
+      case 'chat':
+        this.appendChild(new ChatPage);
+        break;
       case 'about':
         this.appendChild(new AboutPage());
         break;
       default:
+        this.appendChild(new Page404());
         break;
     }
   }

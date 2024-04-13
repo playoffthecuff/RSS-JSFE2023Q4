@@ -1,21 +1,19 @@
-import styles from './labeled-text-input.module.scss';
+import styles from './labeled-input.module.scss';
 import Component from '../base-component';
 import TextInput from '../input/text-input/text-input';
+import PasswordInput from '../input/password-input/password-input';
 
 export default class LabeledTextInput extends Component {
-  protected override readonly element: HTMLLabelElement;
-
   private input;
 
-  private tooltip;
+  protected override readonly element: HTMLLabelElement;
 
-  constructor(text: string, placeholder?: string, tooltip?: boolean) {
+  constructor(text: string, placeholder?: string, type: 'text' | 'password') {
     super();
     this.element = document.createElement('label');
     this.textContent = text;
     this.addClass(styles.label);
-    this.input = new TextInput(placeholder);
-    if (tooltip) this.tooltip = new Component(styles.tooltip);
+    this.input = type === 'text' ? new TextInput(placeholder) : new PasswordInput(placeholder);
     this.appendChild(this.input);
   }
 
@@ -27,7 +25,11 @@ export default class LabeledTextInput extends Component {
     this.input.value = value;
   }
 
-  setTooltipText(text: string) {
-    if (this.tooltip) this.tooltip.textContent = text;
+  setInvalid() {
+    this.input.setInvalid();
+  }
+
+  setValid() {
+    this.input.setValid();
   }
 }

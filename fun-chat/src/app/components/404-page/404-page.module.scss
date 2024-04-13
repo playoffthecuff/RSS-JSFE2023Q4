@@ -1,0 +1,20 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  button {
+    margin: 16px auto;
+  }
+
+}
+
+.error-msg {
+  color: hsl(0, 100%, 72%);
+}
+
+.no-page-msg {
+  color: hsl(0, 100%, 72%);
+}

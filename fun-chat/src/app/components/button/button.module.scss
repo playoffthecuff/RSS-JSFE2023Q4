@@ -6,9 +6,10 @@
   justify-content: center;
   align-items: center;
   border-radius: 8px;
+  border: 0;
   background-color: hsl(96, 64%, 72%);
   opacity: 0.9;
-  transition: opacity 0.1s;
+  transition: opacity 0.1s, background-color 0.1s;
 
   &.hidden {
     visibility: hidden;
@@ -16,5 +17,10 @@
 
   &:hover {
     opacity: 1;
+  }
+
+  &:disabled {
+    background-color: hsl(96, 16%, 48%);
+    pointer-events: none;
   }
 }

@@ -17,7 +17,7 @@ export default class AboutPage extends Component {
 
   render() {
     const wrapper = new Component(styles.aboutWrapper);
-    const heading = new Heading('h1', 'Fun Chat');
+    const heading = new Heading('h1', 'Fun Chat', styles.appName);
     const article = new Component(styles.article, 'article');
     const ghLink = new IconLink(GH_LINK_SRC, ghIcon, undefined, undefined, styles.inlineIcon);
     const prevPageButton = new Button(() => {window.history.back()}, 'button', backIcon);

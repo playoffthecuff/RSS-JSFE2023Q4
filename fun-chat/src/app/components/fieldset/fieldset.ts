@@ -3,10 +3,10 @@ import styles from './fieldset.module.scss';
 import Component from '../base-component';
 
 export default class Fieldset extends Component {
+  private legend;
+
   protected override readonly element: HTMLFieldSetElement;
 
-  private legend;
-  
   constructor(legend?: string) {
     super();
     this.element = document.createElement('fieldset');

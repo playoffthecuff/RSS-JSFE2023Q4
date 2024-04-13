@@ -1,10 +1,10 @@
-import styles from './text-input.module.scss';
+import styles from './password-input.module.scss';
 import Input from '../input';
 
-export default class TextInput extends Input {
+export default class PasswordInput extends Input {
   constructor(placeholder?: string) {
-    super(styles.textInput);
-    this.setAttribute('type', 'text');
+    super(styles.passwordInput);
+    this.setAttribute('type', 'password');
     if (placeholder) this.setAttribute('placeholder', placeholder);
   }
 
