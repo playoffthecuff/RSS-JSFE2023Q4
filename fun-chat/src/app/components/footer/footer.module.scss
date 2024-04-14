@@ -1,9 +1,15 @@
 footer {
+  width: 100%;
+  max-width: 1440px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
   gap: 16px;
+  position: absolute;
+  bottom: 0;
+  padding: 8px;
 }
 
 .user-block {
@@ -37,4 +43,5 @@ footer {
   font-weight: 400;
   width: 132px;
   text-align: center;
+  margin: 0;
 }

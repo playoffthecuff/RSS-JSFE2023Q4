@@ -4,6 +4,7 @@ header {
   justify-content: space-between;
   flex-grow: 1;
   gap: 16px;
+  padding: 8px;
 }
 
 .user-block {
@@ -25,6 +26,7 @@ header {
 .user-name {
   font-weight: 400;
   line-height: 1.2;
+  margin: 0;
 }
 
 .control-panel {
@@ -36,13 +38,15 @@ header {
 
 .app-name {
   text-align: center;
-  background: linear-gradient(to left,
-  hsl(0, 64%, 72%),
-  hsl(300, 64%, 72%),
-  hsl(240, 64%, 72%),
-  hsl(180, 64%, 72%),
-  hsl(120, 64%, 72%),
-  hsl(60, 64%, 72%));
+  background: linear-gradient(
+    to left,
+    hsl(0, 64%, 72%),
+    hsl(300, 64%, 72%),
+    hsl(240, 64%, 72%),
+    hsl(180, 64%, 72%),
+    hsl(120, 64%, 72%),
+    hsl(60, 64%, 72%)
+  );
   -webkit-background-clip: text;
   color: transparent;
   margin: 0;

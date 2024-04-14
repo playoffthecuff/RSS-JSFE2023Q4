@@ -42,6 +42,10 @@ export default class Component {
     this.node.remove();
   }
 
+  get textContent() {
+    return this.element.textContent || '';
+  }
+
   set textContent(textContent: string) {
     this.element.textContent = textContent;
   }
@@ -57,7 +61,7 @@ export default class Component {
 
   setAttribute(attribute: string, value?: string) {
     if (!this.node.hasAttribute(attribute)) {
-    this.node.setAttribute(attribute, value || '');
+      this.node.setAttribute(attribute, value || '');
     }
   }
 
@@ -85,6 +89,14 @@ export default class Component {
 
   removeClassFromChildren(className: string) {
     this.children.forEach((child) => child.removeClass(className));
+  }
+
+  addClassToChild(id: number, className: string) {
+    if (this.children[id]) this.children[id].addClass(className);
+  }
+
+  removeClassFromChild(id: number, className: string) {
+    if (this.children[id]) this.children[id].removeClass(className);
   }
 
   addListener<T extends keyof HTMLElementEventMap>(
