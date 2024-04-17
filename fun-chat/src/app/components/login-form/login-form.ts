@@ -39,10 +39,11 @@ export default class LoginForm extends Component {
     () => {},
     'submit',
     loginIcon,
+    '',
     'login-button',
   );
 
-  private infoLink = new IconLink('#/about', infoIcon, '', '', null, false);
+  private infoLink = new IconLink('#/about', infoIcon, '', '', '', false);
 
   private isNameValid = false;
 

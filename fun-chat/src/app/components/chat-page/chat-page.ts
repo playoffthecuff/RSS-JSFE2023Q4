@@ -1,10 +1,12 @@
 import styles from './chat-page.module.scss';
+import sendIcon from '../../../assets/icons/send24px.svg';
 import Component from '../base-component';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import TextInput from '../input/text-input/text-input';
 import UList from '../u-list/u-list';
 import ChatMessage from './chat-message/chat-message';
+import Button from '../button/button';
 
 export default class ChatPage extends Component {
   constructor() {
@@ -47,12 +49,19 @@ export default class ChatPage extends Component {
       'div',
       'Unknown user',
     ); // привязать переменную
-    const chattererStateBlock = new Component(
-      styles.chattererStateBlock,
-      'div',
-      'online',
-    ); // привязать переменную
-    chatTitle.appendChildren(nickNameBlock, chattererStateBlock);
+    const sendMessageBlock = new Component(styles.sendMessageBlock);
+    const sendMessageInput = new TextInput(
+      'Message...',
+      styles.sendMessageInput,
+    );
+    const sendMessageButton = new Button(
+      null,
+      'button',
+      sendIcon,
+      styles.sendMessageButton,
+    );
+    sendMessageBlock.appendChildren(sendMessageInput, sendMessageButton);
+    chatTitle.appendChild(nickNameBlock);
     const message = new ChatMessage(
       'John Doe',
       new Date(),
@@ -62,7 +71,7 @@ export default class ChatPage extends Component {
     message.setReadState();
     message2.setDeliveredState();
     chatWrapper.appendChildren(message, message2);
-    chatSection.appendChildren(chatTitle, chatWrapper);
+    chatSection.appendChildren(sendMessageBlock, chatTitle, chatWrapper);
     main.appendChildren(aside, chatSection);
     const footer = new Footer();
     this.appendChildren(header, main, footer);

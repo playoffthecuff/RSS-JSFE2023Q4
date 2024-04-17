@@ -10,6 +10,7 @@ export default class Button extends Component {
     callback: (() => void) | null,
     type: 'button' | 'menu' | 'submit' | 'reset' = 'button',
     iconSrc?: string,
+    className?: string,
     id?: string,
     iconAlt?: string,
     textContent?: string,
@@ -19,6 +20,7 @@ export default class Button extends Component {
     this.addClass(styles.button);
     if (callback) this.addListener('click', callback);
     if (type) this.setAttribute('type', type);
+    if (className) this.addClass(className);
     if (id) this.node.id = id;
     if (textContent) this.node.textContent = textContent;
     if (iconSrc) {

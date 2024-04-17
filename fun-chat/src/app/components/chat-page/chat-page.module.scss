@@ -9,6 +9,7 @@
 
 .chat-section {
   display: flex;
+  position: relative;
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
@@ -21,6 +22,7 @@
 
 .chat-wrapper {
   display: flex;
+  height: calc(100% - 92px);
   flex-direction: column;
   gap: 8px;
   overflow-y: scroll;
@@ -59,6 +61,26 @@
 
 .chatterer-state-block {
   flex-grow: 1;
+}
+
+.send-message-block {
+  display: flex;
+  width: calc(100% - 20px);
+  gap: 12px;
+  align-items: center;
+  padding: 2px;
+  position: absolute;
+  bottom: 8px;
+}
+
+.send-message-input {
+  flex-grow: 1;
+  height: 28px;
+}
+
+.send-message-button {
+  width: 32px;
+  height: 32px;
 }
 
 .users-list {
