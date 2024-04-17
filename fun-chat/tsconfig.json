@@ -20,8 +20,8 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
-    "plugins": [{"name": "ts-css-modules-vite-plugin", "root": "./"}]
+    "plugins": [{ "name": "ts-css-modules-vite-plugin", "root": "./" }]
   },
 
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }

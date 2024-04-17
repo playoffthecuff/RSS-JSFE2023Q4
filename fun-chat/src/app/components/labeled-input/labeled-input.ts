@@ -8,12 +8,15 @@ export default class LabeledTextInput extends Component {
 
   protected override readonly element: HTMLLabelElement;
 
-  constructor(text: string, placeholder?: string, type: 'text' | 'password') {
+  constructor(text: string, type: 'text' | 'password', placeholder?: string) {
     super();
     this.element = document.createElement('label');
     this.textContent = text;
     this.addClass(styles.label);
-    this.input = type === 'text' ? new TextInput(placeholder) : new PasswordInput(placeholder);
+    this.input =
+      type === 'text'
+        ? new TextInput(placeholder)
+        : new PasswordInput(placeholder);
     this.appendChild(this.input);
   }
 

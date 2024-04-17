@@ -4,6 +4,7 @@ import Header from '../header/header';
 import Footer from '../footer/footer';
 import TextInput from '../input/text-input/text-input';
 import UList from '../u-list/u-list';
+import ChatMessage from './chat-message/chat-message';
 
 export default class ChatPage extends Component {
   constructor() {
@@ -39,6 +40,29 @@ export default class ChatPage extends Component {
     });
     aside.appendChildren(searchInput, usersList);
     const chatSection = new Component(styles.chatSection, 'section');
+    const chatWrapper = new Component(styles.chatWrapper);
+    const chatTitle = new Component(styles.chatTitle);
+    const nickNameBlock = new Component(
+      styles.nickNameBlock,
+      'div',
+      'Unknown user',
+    ); // привязать переменную
+    const chattererStateBlock = new Component(
+      styles.chattererStateBlock,
+      'div',
+      'online',
+    ); // привязать переменную
+    chatTitle.appendChildren(nickNameBlock, chattererStateBlock);
+    const message = new ChatMessage(
+      'John Doe',
+      new Date(),
+      'hi, dude! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum accusamus nam architecto libero dignissimos? Blanditiis quas velit saepe veritatis eum.',
+    );
+    const message2 = new ChatMessage('you', new Date(), 'hi, buddy!');
+    message.setReadState();
+    message2.setDeliveredState();
+    chatWrapper.appendChildren(message, message2);
+    chatSection.appendChildren(chatTitle, chatWrapper);
     main.appendChildren(aside, chatSection);
     const footer = new Footer();
     this.appendChildren(header, main, footer);

@@ -1,0 +1,48 @@
+.message-wrapper {
+  margin-top: 8px;
+  background-color: hsl(0, 0%, 16%);
+  padding: 4px;
+  border-radius: 8px;
+  width: 72%;
+}
+
+.title {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: hsl(96, 16%, 64%);
+  margin-bottom: 4px;
+}
+
+.nick-name-block {
+  line-height: 1.5;
+}
+
+.date-block {
+  line-height: 1.5;
+}
+
+.message-block {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: hsl(0, 64%, 0%);
+}
+
+.state-icon {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
+
+.state-block {
+  text-align: center;
+  align-items: center;
+}
+
+.you {
+  align-self: flex-end;
+}
+
+.chatterer {
+  align-self: flex-start;
+}

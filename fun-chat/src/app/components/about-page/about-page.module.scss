@@ -19,15 +19,17 @@
 .app-name {
   text-align: center;
   transform: skew(24deg, 16deg);
-  background: linear-gradient(to left,
-  hsl(0, 64%, 72%),
-  hsl(300, 64%, 72%),
-  hsl(240, 64%, 72%),
-  hsl(180, 64%, 72%),
-  hsl(120, 64%, 72%),
-  hsl(60, 64%, 72%));
--webkit-background-clip: text;
-color: transparent;
+  background: linear-gradient(
+    to left,
+    hsl(0, 64%, 72%),
+    hsl(300, 64%, 72%),
+    hsl(240, 64%, 72%),
+    hsl(180, 64%, 72%),
+    hsl(120, 64%, 72%),
+    hsl(60, 64%, 72%)
+  );
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .article {
@@ -38,7 +40,8 @@ color: transparent;
     width: 16px;
     height: 16px;
     display: inline;
-    margin-left:  4px;
+    margin-left: 4px;
+    background-color: transparent;
 
     img {
       width: 16px;

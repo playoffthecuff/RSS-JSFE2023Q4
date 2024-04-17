@@ -8,6 +8,8 @@
 }
 
 .chat-section {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   height: 100%;
   flex-basis: 66%;
@@ -15,6 +17,48 @@
   border-radius: 16px;
   margin: 8px;
   padding: 8px;
+}
+
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: scroll;
+  padding-right: 8px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+  }
+  &::-webkit-scrollbar-track {
+    background: hsl(0, 0%, 32%);
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(40, 96%, 72%);
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-button {
+    height: 0;
+  }
+}
+
+.chat-title {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  text-align: center;
+  border-bottom: 2px solid hsl(0, 0%, 32%);
+  margin-bottom: 12px;
+}
+
+.nick-name-block {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.chatterer-state-block {
+  flex-grow: 1;
 }
 
 .users-list {

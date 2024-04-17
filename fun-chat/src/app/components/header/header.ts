@@ -8,12 +8,24 @@ import Button from '../button/button';
 import Icon from '../icon/icon';
 
 export default class Header extends Component {
-  private infoButton = new Button(() => {window.location.hash = '/about'}, "button", infoIcon);
+  private infoButton = new Button(
+    () => {
+      window.location.hash = '/about';
+    },
+    'button',
+    infoIcon,
+  );
 
-  private logoutButton = new Button(() => {window.location.hash = '/login'}, "button", logoutIcon);
+  private logoutButton = new Button(
+    () => {
+      window.location.hash = '/login';
+    },
+    'button',
+    logoutIcon,
+  );
 
   constructor(username: string) {
-    super(undefined, 'header');
+    super(styles.header, 'header');
     this.render(username);
   }
 
