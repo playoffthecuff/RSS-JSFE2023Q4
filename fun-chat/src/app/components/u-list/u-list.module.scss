@@ -1,2 +1,9 @@
 .list {
 }
+
+.offline {
+  color: hsl(0, 0%, 56%);
+  &::marker {
+    color: hsl(0, 0%, 56%);
+  }
+}

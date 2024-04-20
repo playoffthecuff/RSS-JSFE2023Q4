@@ -33,6 +33,11 @@ export default class Component {
     });
   }
 
+  prepend(child: Component) {
+    this.children.push(child);
+    this.node.prepend(child.node);
+  }
+
   removeChildren() {
     this.children.length = 0;
     this.node.innerHTML = '';

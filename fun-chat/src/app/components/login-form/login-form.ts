@@ -5,7 +5,11 @@ import LabeledTextInput from '../labeled-input/labeled-input';
 import Button from '../button/button';
 import loginIcon from '../../../assets/icons/login24px.svg';
 import infoIcon from '../../../assets/icons/info24px.svg';
-import IconLink from '../icon-link/icon-link';
+import { ServerResponse } from '../../../types';
+import ModalWindow from '../modal-window/modal-window';
+import WS from '../../utils/ws';
+import Session from '../../utils/session';
+import counter from '../../utils/counter';
 
 const FIRST_RULE_NAME_VALIDATION_MSG =
   'The name must be in English letters, starting with capital.';
@@ -36,18 +40,28 @@ export default class LoginForm extends Component {
   private secondRulePasswordTooltip = new Component(styles.tooltip);
 
   private loginButton = new Button(
-    () => {},
+    null,
     'submit',
     loginIcon,
     '',
     'login-button',
   );
 
-  private infoLink = new IconLink('#/about', infoIcon, '', '', '', false);
+  private infoButton = new Button(
+    () => {
+      window.location.hash = '/about';
+    },
+    'button',
+    infoIcon,
+  );
 
   private isNameValid = false;
 
   private isPasswordValid = false;
+
+  private user = Session.getSession().user;
+
+  private ws = WS.getWS().ws;
 
   protected override readonly element: HTMLFormElement;
 
@@ -55,8 +69,8 @@ export default class LoginForm extends Component {
     super();
     this.element = document.createElement('form');
     this.addClass(styles.loginForm);
-    this.render();
     this.init();
+    this.render();
   }
 
   private render() {
@@ -69,28 +83,57 @@ export default class LoginForm extends Component {
       this.secondRulePasswordTooltip,
     );
     const buttonsWrapper = new Component(styles.buttonsWrapper);
-    buttonsWrapper.appendChildren(this.loginButton, this.infoLink);
+    buttonsWrapper.appendChildren(this.loginButton, this.infoButton);
     this.appendChildren(this.fieldset, buttonsWrapper);
   }
 
   private init() {
     this.addListener('submit', (event) => {
       event.preventDefault();
-      window.location.hash = '#/chat';
+      this.ws.onmessage = (e) => {
+        const data: ServerResponse = JSON.parse(e.data);
+        if (data.type === 'USER_LOGIN') {
+          this.user.login = data.payload.user.login;
+          if (data.payload.user.isLogined) {
+            this.user.isLogined = true;
+            window.location.hash = '/chat';
+          }
+        }
+        if (data.type === 'ERROR') {
+          this.appendChild(
+            new ModalWindow(`Error: ${data.payload.error}`, true),
+          );
+        }
+      };
     });
     this.loginButton.disable();
-    this.addListener('input', () => {
-      if (this.isNameValid && this.isPasswordValid) {
-        this.loginButton.enable();
-      } else {
-        this.loginButton.disable();
-      }
+    this.loginButton.addListener('click', () => {
+      this.user.password = this.passwordInput.value;
+      this.ws.send(
+        JSON.stringify({
+          id: String(counter()),
+          type: 'USER_LOGIN',
+          payload: {
+            user: {
+              login: `${this.nameInput.value}`,
+              password: `${this.passwordInput.value}`,
+            },
+          },
+        }),
+      );
     });
     this.nameInput.addListener('input', () => {
       this.validateName();
     });
     this.passwordInput.addListener('input', () => {
       this.validatePassword();
+    });
+    this.addListener('input', () => {
+      if (this.isNameValid && this.isPasswordValid) {
+        this.loginButton.enable();
+      } else {
+        this.loginButton.disable();
+      }
     });
   }
 
@@ -117,6 +160,7 @@ export default class LoginForm extends Component {
       this.nameInput.setValid();
       this.isNameValid = true;
     }
+    this.isNameValid = isValid;
   }
 
   private validatePassword() {
@@ -142,7 +186,7 @@ export default class LoginForm extends Component {
     }
     if (isValid) {
       this.passwordInput.setValid();
-      this.isPasswordValid = true;
     }
+    this.isPasswordValid = isValid;
   }
 }

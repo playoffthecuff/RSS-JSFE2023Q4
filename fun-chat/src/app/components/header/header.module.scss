@@ -9,10 +9,10 @@ header {
 
 .user-block {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 120px;
-  gap: 8px;
+  gap: 12px;
 }
 
 .user-icon {
@@ -51,4 +51,5 @@ header {
   color: transparent;
   margin: 0;
   line-height: 1.2;
+  font-size: clamp(1rem, 6vw, 2rem);
 }

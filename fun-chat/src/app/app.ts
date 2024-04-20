@@ -3,10 +3,14 @@ import AboutPage from './components/about-page/about-page';
 import Component from './components/base-component';
 import ChatPage from './components/chat-page/chat-page';
 import LoginPage from './components/login-page/login-page';
+import Session from './utils/session';
+import WS from './utils/ws';
 
-const ROUTES = ['login', 'main','about', 'chat', ''];
+const ROUTES = ['login', 'main', 'about', 'chat', ''];
+const WS_SERVER_URL = 'ws://127.0.0.1:4000/';
 
 export default class App extends Component {
+  private user = Session.getSession().user;
 
   constructor(className: string) {
     super(className);
@@ -14,6 +18,7 @@ export default class App extends Component {
   }
 
   private init() {
+    WS.getWS(WS_SERVER_URL);
     let hash = window.location.hash.slice(2);
     if (!hash) {
       window.location.hash = '#/';
@@ -27,7 +32,7 @@ export default class App extends Component {
     };
   }
 
-  private renderNewPage(route: typeof ROUTES[number]) {
+  private renderNewPage(route: (typeof ROUTES)[number]) {
     this.removeChildren();
     switch (route) {
       case '':
@@ -37,7 +42,11 @@ export default class App extends Component {
         this.appendChild(new LoginPage());
         break;
       case 'chat':
-        this.appendChild(new ChatPage);
+        if (this.user.isLogined) {
+          this.appendChild(new ChatPage());
+        } else {
+          window.location.hash = '#/login';
+        }
         break;
       case 'about':
         this.appendChild(new AboutPage());

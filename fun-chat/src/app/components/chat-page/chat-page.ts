@@ -7,40 +7,31 @@ import TextInput from '../input/text-input/text-input';
 import UList from '../u-list/u-list';
 import ChatMessage from './chat-message/chat-message';
 import Button from '../button/button';
+import Session from '../../utils/session';
+import WS from '../../utils/ws';
+import counter from '../../utils/counter';
+import { ServerResponse } from '../../../types';
 
 export default class ChatPage extends Component {
+  private ws = WS.getWS().ws;
+
+  private user = Session.getSession().user;
+
+  private userList: UList | null = null;
+
+  private sideBar = new Component(styles.aside, 'aside');
+
+  private searchInput = new TextInput('Find user...', styles.searchInput);
+
   constructor() {
     super(styles.ChatPage);
-    this.render();
-    // this.init();
+    this.init();
+    this.render(this.user.login);
   }
 
-  private render() {
-    const header = new Header('john doe');
+  private render(username: string) {
+    const header = new Header(username);
     const main = new Component(styles.chat, 'main');
-    const aside = new Component(styles.aside, 'aside');
-    const searchInput = new TextInput('Find user...', styles.searchInput);
-    const usersList = new UList(
-      [
-        'User1',
-        'User2',
-        'User3',
-        'User4',
-        'User5',
-        'User6',
-        'User7',
-        'User8',
-        'User9',
-        'User10',
-        'User11',
-        'User12',
-      ],
-      styles.usersList,
-    );
-    searchInput.addListener('input', () => {
-      usersList.filter(searchInput.value);
-    });
-    aside.appendChildren(searchInput, usersList);
     const chatSection = new Component(styles.chatSection, 'section');
     const chatWrapper = new Component(styles.chatWrapper);
     const chatTitle = new Component(styles.chatTitle);
@@ -72,26 +63,49 @@ export default class ChatPage extends Component {
     message2.setDeliveredState();
     chatWrapper.appendChildren(message, message2);
     chatSection.appendChildren(sendMessageBlock, chatTitle, chatWrapper);
-    main.appendChildren(aside, chatSection);
+    main.appendChildren(this.sideBar, chatSection);
     const footer = new Footer();
     this.appendChildren(header, main, footer);
   }
 
-  // private init() {
-  //   const ws = new WebSocket('ws://127.0.0.1:4000/');
-  //   ws.onopen = function() {
-  //     console.log('open');
-  //     ws.send(JSON.stringify({
-  //       id: '1',
-  //       type: "USER_LOGIN",
-  //       payload: {
-  //         user: {
-  //           login: 'Z',
-  //           password: 'Z',
-  //         },
-  //       },
-  //     }))
-  //   };
-  //   ws.onmessage = (e) => console.log(e.data);
-  // }
+  init() {
+    this.ws.send(
+      JSON.stringify({
+        id: String(counter()),
+        type: 'USER_ACTIVE',
+        payload: null,
+      }),
+    );
+    this.ws.onmessage = (e) => {
+      let data: ServerResponse = JSON.parse(e.data);
+      let users = data.payload.users.map((user) => user.login);
+      this.userList = new UList(users, styles.userList);
+
+      this.searchInput.addListener('input', () => {
+        this.userList!.filter(this.searchInput.value);
+      });
+      this.ws.send(
+        JSON.stringify({
+          id: String(counter()),
+          type: 'USER_INACTIVE',
+          payload: null,
+        }),
+      );
+      this.ws.onmessage = (ev) => {
+        data = JSON.parse(ev.data);
+        users = data.payload.users.map((user) => user.login);
+        this.userList!.addOfflineUsers(users);
+        this.sideBar.appendChildren(this.searchInput, this.userList!);
+        this.searchInput.addListener('input', () => {
+          this.userList!.filter(this.searchInput.value);
+        });
+        this.ws.onmessage = (event) => {
+          const msgData: ServerResponse = JSON.parse(event.data);
+          if (msgData.type === 'USER_EXTERNAL_LOGIN') {
+            this.userList?.setOnlineUser(msgData.payload.user.login);
+          }
+        };
+      };
+    };
+  }
 }

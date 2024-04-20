@@ -1,14 +1,16 @@
+.chat {
+  display: flex;
+  height: calc(100dvh - 140px);
+  position: relative;
+}
+
 .chat-page {
   padding: 8px;
 }
 
-.chat {
-  display: flex;
-  height: calc(100dvh - 140px);
-}
-
 .chat-section {
   display: flex;
+  flex-grow: 1;
   position: relative;
   flex-direction: column;
   box-sizing: border-box;
@@ -75,15 +77,15 @@
 
 .send-message-input {
   flex-grow: 1;
-  height: 28px;
+  height: 26px;
 }
 
 .send-message-button {
-  width: 32px;
+  width: 48px;
   height: 32px;
 }
 
-.users-list {
+.user-list {
   list-style-type: disc;
   line-height: 1.5;
   padding-inline-start: 32px;
@@ -104,19 +106,12 @@
   &::-webkit-scrollbar-button {
     height: 0;
   }
+}
 
-  li::marker {
-    color: hsl(96, 64%, 72%);
-    font-size: 24px;
-    line-height: 0.9;
-  }
-
-  .offline {
-    color: hsl(0, 0%, 56%);
-    &::marker {
-      color: hsl(0, 0%, 56%);
-    }
-  }
+li::marker {
+  color: hsl(96, 64%, 72%);
+  font-size: 24px;
+  line-height: 0.9;
 }
 
 .aside {
@@ -129,6 +124,11 @@
   border-radius: 16px;
   flex-basis: 34%;
   box-sizing: border-box;
+
+  @media (max-width: 640px) {
+    position: absolute;
+    left: 0px;
+  }
 }
 
 .search-input {

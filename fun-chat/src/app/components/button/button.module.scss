@@ -6,10 +6,19 @@
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  border: 0;
-  background-color: hsl(96, 64%, 72%);
-  opacity: 0.9;
-  transition: opacity 0.1s, background-color 0.1s;
+  border: none;
+  box-shadow:
+    inset 2px 2px 3px 0px hsl(96, 64%, 96%),
+    inset -2px -2px 3px 0px hsl(96, 64%, 24%);
+  background: linear-gradient(
+    180deg,
+    hsl(96, 64%, 48%) 10%,
+    hsl(96, 64%, 32%) 100%
+  );
+  opacity: 0.84;
+  transition:
+    opacity 0.1s,
+    background-color 0.1s;
 
   &.hidden {
     visibility: hidden;
@@ -19,8 +28,21 @@
     opacity: 1;
   }
 
+  &:focus {
+    box-shadow:
+      inset 1px 1px 2px 0px hsl(96, 64%, 16%),
+      inset -1px -1px 2px 0px hsl(96, 64%, 72%);
+  }
+
   &:disabled {
-    background-color: hsl(96, 16%, 48%);
+    box-shadow:
+      inset 1px 1px 2px 0px hsl(96, 16%, 12%),
+      inset -1px -1px 2px 0px hsl(96, 16%, 48%);
+    background: linear-gradient(
+      180deg,
+      hsl(96, 16%, 40%) 10%,
+      hsl(96, 16%, 24%) 100%
+    );
     pointer-events: none;
   }
 }
