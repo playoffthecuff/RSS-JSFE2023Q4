@@ -6,12 +6,28 @@ type MessageType =
   | 'USER_INACTIVE'
   | 'USER_EXTERNAL_LOGIN'
   | 'USER_EXTERNAL_LOGOUT'
-  | 'MSG_FROM_USER';
+  | 'MSG_FROM_USER'
+  | 'MSG_SEND';
 
 export type User = {
   login: string;
   password: string;
   isLogined: boolean;
+};
+
+export type Status = {
+  isDelivered: boolean;
+  isReaded: boolean;
+  isEdited: boolean;
+};
+
+export type Message = {
+  id: string;
+  from: string;
+  to: string;
+  text: string;
+  datetime: number;
+  status: Status;
 };
 
 export interface ServerResponse {
@@ -21,6 +37,7 @@ export interface ServerResponse {
     user: User;
     error: string;
     users: User[];
-    messages: string[];
+    message: Message;
+    messages: Message[];
   };
 }

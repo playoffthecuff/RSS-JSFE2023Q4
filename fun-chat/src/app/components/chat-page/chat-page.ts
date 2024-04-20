@@ -6,12 +6,12 @@ import Header from '../header/header';
 import Footer from '../footer/footer';
 import TextInput from '../input/text-input/text-input';
 import UList from '../u-list/u-list';
-// import ChatMessage from './chat-message/chat-message';
+import ChatMessage from './chat-message/chat-message';
 import Button from '../button/button';
 import Session from '../../utils/session';
 import WS from '../../utils/ws';
 import counter from '../../utils/counter';
-import { ServerResponse } from '../../../types';
+import { Message, ServerResponse } from '../../../types';
 import ModalWindow from '../modal-window/modal-window';
 
 const HINT_SELECT_USER = 'Select a user in the side bar to send a message...';
@@ -38,6 +38,24 @@ export default class ChatPage extends Component {
 
   private chattererStatusBlock = new Component(styles.chattererStatus);
 
+  private sendMessageInput = new TextInput(
+    'Message...',
+    styles.sendMessageInput,
+  );
+
+  private sendMessageButton = new Button(
+    () => {
+      this.sendMessage();
+    },
+    'button',
+    sendIcon,
+    styles.lowButton,
+  );
+
+  private chattererName = '';
+
+  private chatWrapper = new Component(styles.chatWrapper);
+
   constructor() {
     super(styles.ChatPage);
     this.init();
@@ -48,7 +66,6 @@ export default class ChatPage extends Component {
     const header = new Header(username);
     const main = new Component(styles.chat, 'main');
     const chatSection = new Component(styles.chatSection, 'section');
-    const chatWrapper = new Component(styles.chatWrapper);
 
     const chatTitle = new Component(styles.chatTitle);
     const returnButton = new Button(
@@ -61,18 +78,11 @@ export default class ChatPage extends Component {
       styles.returnButton,
     );
     const sendMessageBlock = new Component(styles.sendMessage);
-    const sendMessageInput = new TextInput(
-      'Message...',
-      styles.sendMessageInput,
-    );
-    const sendMessageButton = new Button(
-      null,
-      'button',
-      sendIcon,
-      styles.lowButton,
-    );
 
-    sendMessageBlock.appendChildren(sendMessageInput, sendMessageButton);
+    sendMessageBlock.appendChildren(
+      this.sendMessageInput,
+      this.sendMessageButton,
+    );
     chatTitle.appendChildren(
       this.nickNameBlock,
       this.chattererStatusBlock,
@@ -89,8 +99,8 @@ export default class ChatPage extends Component {
     // message2.setDeliveredState();
 
     // chatWrapper.appendChildren(message, message2);
-    chatWrapper.appendChildren(this.hintMessage);
-    chatSection.appendChildren(sendMessageBlock, chatTitle, chatWrapper);
+    this.chatWrapper.appendChildren(this.hintMessage);
+    chatSection.appendChildren(sendMessageBlock, chatTitle, this.chatWrapper);
     main.appendChildren(this.sideBar, chatSection);
 
     const footer = new Footer();
@@ -118,9 +128,9 @@ export default class ChatPage extends Component {
         this.createMessageHistory(data.payload.messages);
       if (data.type === 'USER_EXTERNAL_LOGIN')
         this.userList?.setUserOnline(data.payload.user.login);
-      if (data.type === 'USER_EXTERNAL_LOGOUT') {
+      if (data.type === 'USER_EXTERNAL_LOGOUT')
         this.userList?.setUserOffline(data.payload.user.login);
-      }
+      if (data.type === 'MSG_SEND') this.createMessage(data.payload.message);
     };
   }
 
@@ -136,8 +146,8 @@ export default class ChatPage extends Component {
     this.userList.addListener('click', (event) => {
       const target = event.target as Element;
       const innerText = target.closest('li')?.innerText || '';
-      const userName = innerText.slice(0, innerText.indexOf('\n'));
-      this.nickNameBlock.textContent = userName;
+      this.chattererName = innerText.slice(0, innerText.indexOf('\n'));
+      this.nickNameBlock.textContent = this.chattererName;
       this.chattererStatusBlock.textContent = target
         .closest('li')
         ?.classList.value.includes('offline')
@@ -149,7 +159,7 @@ export default class ChatPage extends Component {
           type: 'MSG_FROM_USER',
           payload: {
             user: {
-              login: userName,
+              login: this.chattererName,
             },
           },
         }),
@@ -165,11 +175,39 @@ export default class ChatPage extends Component {
     );
   }
 
-  private createMessageHistory(messages: string[]) {
+  private createMessageHistory(messages: Message[]) {
     if (messages.length) {
-      // console.log(messages);
+      messages.forEach((message) => this.createMessage(message));
     } else {
       this.hintMessage.textContent = START_CHAT;
+    }
+  }
+
+  private sendMessage() {
+    if (
+      this.sendMessageInput.value.length > 0 &&
+      this.chattererName.length > 0
+    ) {
+      this.ws.send(
+        JSON.stringify({
+          id: String(counter()),
+          type: 'MSG_SEND',
+          payload: {
+            message: {
+              to: this.chattererName,
+              text: this.sendMessageInput.value,
+            },
+          },
+        }),
+      );
+    }
+  }
+
+  private createMessage(message: Message) {
+    const isOwn = this.user.login === message.from;
+    if (message.from === this.chattererName || isOwn) {
+      this.hintMessage.addClass(styles.hidden);
+      this.chatWrapper.appendChild(new ChatMessage(message, isOwn));
     }
   }
 }
