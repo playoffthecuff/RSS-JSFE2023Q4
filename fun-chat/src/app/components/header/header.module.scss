@@ -27,6 +27,7 @@ header {
   font-weight: 400;
   line-height: 1.2;
   margin: 0;
+  word-break: break-all;
 }
 
 .control-panel {
@@ -51,5 +52,5 @@ header {
   color: transparent;
   margin: 0;
   line-height: 1.2;
-  font-size: clamp(1rem, 6vw, 2rem);
+  font-size: clamp(1rem, 5.7vw, 2rem);
 }

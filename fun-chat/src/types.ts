@@ -1,8 +1,12 @@
 type MessageType =
-  | 'USER_LOGIN'
   | 'ERROR'
+  | 'USER_LOGIN'
   | 'USER_LOGOUT'
-  | 'USER_EXTERNAL_LOGIN';
+  | 'USER_ACTIVE'
+  | 'USER_INACTIVE'
+  | 'USER_EXTERNAL_LOGIN'
+  | 'USER_EXTERNAL_LOGOUT'
+  | 'MSG_FROM_USER';
 
 export type User = {
   login: string;
@@ -17,5 +21,6 @@ export interface ServerResponse {
     user: User;
     error: string;
     users: User[];
+    messages: string[];
   };
 }

@@ -1,7 +1,9 @@
 import styles from './u-list.module.scss';
+import messageIcon from '../../../assets/icons/message24px.svg';
 import Component from '../base-component';
 import ListItem from '../list-item/list-item';
 import Session from '../../utils/session';
+import Icon from '../icon/icon';
 
 export default class UList extends Component {
   protected override element: HTMLUListElement;
@@ -20,6 +22,10 @@ export default class UList extends Component {
 
   private createNewItem(text: string, isOffline?: boolean) {
     const item = new ListItem(text);
+    const unreadMessages = new Component(styles.unreadMessages);
+    unreadMessages.textContent = '1';
+    unreadMessages.appendChild(new Icon(messageIcon));
+    item.appendChild(unreadMessages);
     if (isOffline) {
       item.addClass(styles.offline);
       this.appendChild(item);
@@ -52,14 +58,29 @@ export default class UList extends Component {
     });
   }
 
-  setOnlineUser(user: string) {
+  setUserOnline(user: string) {
     let isUserUnlisted = true;
     this.children.forEach((child) => {
-      if (child.textContent === user) {
+      const { innerText } = child.node;
+      const endPosition = innerText.indexOf('\n');
+      if (innerText.slice(0, endPosition) === user) {
         child.removeClass(styles.offline);
         isUserUnlisted = false;
       }
     });
     if (isUserUnlisted) this.createNewItem(user);
+  }
+
+  setUserOffline(user: string) {
+    let isUserUnlisted = true;
+    this.children.forEach((child) => {
+      const { innerText } = child.node;
+      const endPosition = innerText.indexOf('\n');
+      if (innerText.slice(0, endPosition) === user) {
+        child.addClass(styles.offline);
+        isUserUnlisted = false;
+      }
+    });
+    if (isUserUnlisted) this.createNewItem(user, true);
   }
 }

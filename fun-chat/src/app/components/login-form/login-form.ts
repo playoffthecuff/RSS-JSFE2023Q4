@@ -13,7 +13,8 @@ import counter from '../../utils/counter';
 
 const FIRST_RULE_NAME_VALIDATION_MSG =
   'The name must be in English letters, starting with capital.';
-const SECOND_RULE_NAME_VALIDATION_MSG = 'Minimum name length - 2 characters.';
+const SECOND_RULE_NAME_VALIDATION_MSG =
+  'Minimum name length - 2 and maximum - 12 characters.';
 
 const FIRST_RULE_PASSWORD_VALIDATION_MSG =
   'Minimum password length - 4 characters.';
@@ -147,7 +148,7 @@ export default class LoginForm extends Component {
       this.firstRuleNameTooltip.textContent = '';
       isValid = true;
     }
-    if (!/.{2,}/.test(this.nameInput.value)) {
+    if (!/.{2,12}/.test(this.nameInput.value)) {
       this.secondRuleNameTooltip.textContent = SECOND_RULE_NAME_VALIDATION_MSG;
       this.nameInput.setInvalid();
       this.loginButton.disable();
