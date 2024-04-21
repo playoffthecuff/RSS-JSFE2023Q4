@@ -212,6 +212,7 @@ export default class ChatPage extends Component {
         }),
       );
     }
+    this.sendMessageInput.value = '';
   }
 
   private createMessage(message: Message) {
