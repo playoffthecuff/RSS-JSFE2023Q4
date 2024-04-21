@@ -17,4 +17,8 @@
       outline: 2px solid hsl(0, 100%, 48%);
     }
   }
+
+  &:disabled {
+    background-color: hsl(0, 0%, 64%);
+  }
 }

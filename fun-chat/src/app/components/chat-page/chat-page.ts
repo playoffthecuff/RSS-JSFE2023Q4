@@ -40,15 +40,15 @@ export default class ChatPage extends Component {
 
   private chattererStatusBlock = new Component(styles.chattererStatus);
 
+  private sendMessageForm = new Component(styles.sendMessage, 'form');
+
   private sendMessageInput = new TextInput(
     'Message...',
     styles.sendMessageInput,
   );
 
   private sendMessageButton = new Button(
-    () => {
-      this.sendMessage();
-    },
+    null,
     'button',
     sendIcon,
     styles.lowButton,
@@ -81,9 +81,7 @@ export default class ChatPage extends Component {
       styles.lowButton,
       styles.returnButton,
     );
-    const sendMessageBlock = new Component(styles.sendMessage);
-
-    sendMessageBlock.appendChildren(
+    this.sendMessageForm.appendChildren(
       this.sendMessageInput,
       this.sendMessageButton,
     );
@@ -94,7 +92,11 @@ export default class ChatPage extends Component {
     );
 
     this.chatWrapper.appendChildren(this.hintMessage);
-    chatSection.appendChildren(sendMessageBlock, chatTitle, this.chatWrapper);
+    chatSection.appendChildren(
+      this.sendMessageForm,
+      chatTitle,
+      this.chatWrapper,
+    );
     main.appendChildren(this.sideBar, chatSection);
 
     const footer = new Footer();
@@ -157,6 +159,11 @@ export default class ChatPage extends Component {
         message.isVisibleIn(this.chatWrapper),
       );
     });
+    this.sendMessageButton.setAttribute('disabled');
+    this.sendMessageInput.setAttribute('disabled');
+    this.sendMessageForm.addListener('submit', () => {
+      this.sendMessage();
+    });
   }
 
   private errorResponseHandler(error: string) {
@@ -169,6 +176,8 @@ export default class ChatPage extends Component {
       this.userList!.filter(this.searchInput.value);
     });
     this.userList.addListener('click', (event) => {
+      this.sendMessageButton.removeAttribute('disabled');
+      this.sendMessageInput.removeAttribute('disabled');
       this.session.clearMessages();
       this.chatWrapper.removeChildren();
       const target = event.target as Element;
