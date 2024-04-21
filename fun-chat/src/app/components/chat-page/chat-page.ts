@@ -222,7 +222,11 @@ export default class ChatPage extends Component {
       const chatMessage = new ChatMessage(message, isOwn);
       this.session.putMessage(message.id, chatMessage);
       this.chatWrapper.appendChild(chatMessage);
-      this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
+      this.scrollMessages();
     }
+  }
+
+  scrollMessages() {
+    this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
   }
 }

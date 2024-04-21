@@ -12,6 +12,8 @@ const WS_SERVER_URL = 'ws://127.0.0.1:4000/';
 export default class App extends Component {
   private user = Session.getSession().user;
 
+  private chatPage: ChatPage | null = null;
+
   constructor(className: string) {
     super(className);
     this.init();
@@ -47,7 +49,9 @@ export default class App extends Component {
         break;
       case 'main':
         if (this.user.isLogined) {
-          this.appendChild(new ChatPage());
+          if (!this.chatPage) this.chatPage = new ChatPage();
+          this.appendChild(this.chatPage);
+          this.chatPage.scrollMessages();
         } else {
           window.location.hash = '/login';
         }
