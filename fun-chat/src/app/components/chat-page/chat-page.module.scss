@@ -28,6 +28,7 @@
   flex-direction: column;
   gap: 8px;
   overflow-y: scroll;
+  scroll-behavior: smooth;
   padding-right: 8px;
 
   &::-webkit-scrollbar {

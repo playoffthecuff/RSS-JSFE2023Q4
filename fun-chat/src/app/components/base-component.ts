@@ -65,9 +65,7 @@ export default class Component {
   }
 
   setAttribute(attribute: string, value?: string) {
-    if (!this.node.hasAttribute(attribute)) {
-      this.node.setAttribute(attribute, value || '');
-    }
+    this.node.setAttribute(attribute, value || '');
   }
 
   removeAttribute(attribute: string) {

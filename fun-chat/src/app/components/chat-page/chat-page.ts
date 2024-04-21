@@ -20,7 +20,9 @@ const START_CHAT = 'Write and send your first message using the form below...';
 export default class ChatPage extends Component {
   private ws = WS.getWS().ws;
 
-  private user = Session.getSession().user;
+  private session = Session.getSession();
+
+  private user = this.session.user;
 
   private userList: UList | null = null;
 
@@ -118,6 +120,10 @@ export default class ChatPage extends Component {
     this.ws.onmessage = (event) => {
       const data: ServerResponse = JSON.parse(event.data);
       if (data.type === 'ERROR') this.errorResponseHandler(data.payload.error);
+      if (data.type === 'USER_LOGOUT') {
+        this.user.isLogined = false;
+        window.location.hash = '/login';
+      }
       if (data.type === 'USER_ACTIVE')
         this.createUsersList(data.payload.users.map((user) => user.login));
       if (data.type === 'USER_INACTIVE')
@@ -126,11 +132,19 @@ export default class ChatPage extends Component {
         );
       if (data.type === 'MSG_FROM_USER')
         this.createMessageHistory(data.payload.messages);
-      if (data.type === 'USER_EXTERNAL_LOGIN')
+      if (data.type === 'USER_EXTERNAL_LOGIN') {
         this.userList?.setUserOnline(data.payload.user.login);
-      if (data.type === 'USER_EXTERNAL_LOGOUT')
+        if (this.nickNameBlock.textContent === data.payload.user.login)
+          this.chattererStatusBlock.textContent = 'online';
+      }
+      if (data.type === 'USER_EXTERNAL_LOGOUT') {
         this.userList?.setUserOffline(data.payload.user.login);
+        if (this.nickNameBlock.textContent === data.payload.user.login)
+          this.chattererStatusBlock.textContent = 'offline';
+      }
       if (data.type === 'MSG_SEND') this.createMessage(data.payload.message);
+      if (data.type === 'MSG_DELIVER')
+        this.session.getMessage(data.payload.message.id).setDelivered();
     };
   }
 
@@ -184,10 +198,7 @@ export default class ChatPage extends Component {
   }
 
   private sendMessage() {
-    if (
-      this.sendMessageInput.value.length > 0 &&
-      this.chattererName.length > 0
-    ) {
+    if (this.sendMessageInput.value.length && this.chattererName.length) {
       this.ws.send(
         JSON.stringify({
           id: String(counter()),
@@ -207,7 +218,10 @@ export default class ChatPage extends Component {
     const isOwn = this.user.login === message.from;
     if (message.from === this.chattererName || isOwn) {
       this.hintMessage.addClass(styles.hidden);
-      this.chatWrapper.appendChild(new ChatMessage(message, isOwn));
+      const chatMessage = new ChatMessage(message, isOwn);
+      this.session.putMessage(message.id, chatMessage);
+      this.chatWrapper.appendChild(chatMessage);
+      this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
     }
   }
 }

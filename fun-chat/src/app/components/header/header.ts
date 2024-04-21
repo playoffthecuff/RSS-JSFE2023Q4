@@ -5,10 +5,8 @@ import logoutIcon from '../../../assets/icons/logout24px.svg';
 import Component from '../base-component';
 import Heading from '../heading/heading';
 import Button from '../button/button';
-import ModalWindow from '../modal-window/modal-window';
 import Icon from '../icon/icon';
 import WS from '../../utils/ws';
-import { ServerResponse } from '../../../types';
 import Session from '../../utils/session';
 import counter from '../../utils/counter';
 
@@ -39,14 +37,6 @@ export default class Header extends Component {
           },
         }),
       );
-      this.ws.onmessage = (e) => {
-        const data: ServerResponse = JSON.parse(e.data);
-        if (data.type === 'USER_LOGOUT') window.location.hash = '/login';
-        if (data.type === 'ERROR')
-          this.appendChild(
-            new ModalWindow(`Error: ${data.payload.error}`, true),
-          );
-      };
     },
     'button',
     logoutIcon,

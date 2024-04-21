@@ -6,7 +6,7 @@ import LoginPage from './components/login-page/login-page';
 import Session from './utils/session';
 import WS from './utils/ws';
 
-const ROUTES = ['login', 'main', 'about', 'chat', ''];
+const ROUTES = ['login', 'main', 'about', ''];
 const WS_SERVER_URL = 'ws://127.0.0.1:4000/';
 
 export default class App extends Component {
@@ -39,13 +39,17 @@ export default class App extends Component {
         this.appendChild(new LoginPage());
         break;
       case 'login':
-        this.appendChild(new LoginPage());
+        if (this.user.isLogined) {
+          window.location.hash = '/main';
+        } else {
+          this.appendChild(new LoginPage());
+        }
         break;
-      case 'chat':
+      case 'main':
         if (this.user.isLogined) {
           this.appendChild(new ChatPage());
         } else {
-          window.location.hash = '#/login';
+          window.location.hash = '/login';
         }
         break;
       case 'about':

@@ -97,7 +97,7 @@ export default class LoginForm extends Component {
           this.user.login = data.payload.user.login;
           if (data.payload.user.isLogined) {
             this.user.isLogined = true;
-            window.location.hash = '/chat';
+            window.location.hash = '/main';
           }
         }
         if (data.type === 'ERROR') {

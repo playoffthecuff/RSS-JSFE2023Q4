@@ -7,7 +7,9 @@ type MessageType =
   | 'USER_EXTERNAL_LOGIN'
   | 'USER_EXTERNAL_LOGOUT'
   | 'MSG_FROM_USER'
-  | 'MSG_SEND';
+  | 'MSG_SEND'
+  | 'MSG_DELIVER'
+  | 'MSG_READ';
 
 export type User = {
   login: string;
