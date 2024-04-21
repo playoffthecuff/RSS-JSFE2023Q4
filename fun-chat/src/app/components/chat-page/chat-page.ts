@@ -58,6 +58,8 @@ export default class ChatPage extends Component {
 
   private chatWrapper = new Component(styles.chatWrapper);
 
+  private divider = new Component(styles.divider);
+
   constructor() {
     super(styles.ChatPage);
     this.init();
@@ -91,16 +93,6 @@ export default class ChatPage extends Component {
       returnButton,
     );
 
-    // const message = new ChatMessage(
-    //   'John Doe',
-    //   new Date(),
-    //   'hi, dude! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum accusamus nam architecto libero dignissimos? Blanditiis quas velit saepe veritatis eum.',
-    // );
-    // const message2 = new ChatMessage('you', new Date(), 'hi, buddy!');
-    // message.setReadState();
-    // message2.setDeliveredState();
-
-    // chatWrapper.appendChildren(message, message2);
     this.chatWrapper.appendChildren(this.hintMessage);
     chatSection.appendChildren(sendMessageBlock, chatTitle, this.chatWrapper);
     main.appendChildren(this.sideBar, chatSection);
@@ -130,8 +122,14 @@ export default class ChatPage extends Component {
         this.userList!.addOfflineUsers(
           data.payload.users.map((user) => user.login),
         );
-      if (data.type === 'MSG_FROM_USER')
-        this.createMessageHistory(data.payload.messages);
+      if (data.type === 'MSG_FROM_USER') {
+        if (data.payload.messages.length) {
+          this.createMessageHistory(data.payload.messages);
+        } else {
+          this.hintMessage.textContent = START_CHAT;
+          this.chatWrapper.appendChild(this.hintMessage);
+        }
+      }
       if (data.type === 'USER_EXTERNAL_LOGIN') {
         this.userList?.setUserOnline(data.payload.user.login);
         if (this.nickNameBlock.textContent === data.payload.user.login)
@@ -144,8 +142,21 @@ export default class ChatPage extends Component {
       }
       if (data.type === 'MSG_SEND') this.createMessage(data.payload.message);
       if (data.type === 'MSG_DELIVER')
-        this.session.getMessage(data.payload.message.id).setDelivered();
+        this.session.getMessage(data.payload.message.id)!.setDelivered();
+      if (data.type === 'MSG_READ')
+        this.session.getMessage(data.payload.message.id)?.setReaded();
     };
+    const dividerText = new Component(
+      styles.dividerText,
+      'span',
+      'new messages',
+    );
+    this.divider.appendChild(dividerText);
+    this.chatWrapper.addListener('scroll', () => {
+      this.session.iterateMessages((message: ChatMessage) =>
+        message.isVisibleIn(this.chatWrapper),
+      );
+    });
   }
 
   private errorResponseHandler(error: string) {
@@ -158,6 +169,8 @@ export default class ChatPage extends Component {
       this.userList!.filter(this.searchInput.value);
     });
     this.userList.addListener('click', (event) => {
+      this.session.clearMessages();
+      this.chatWrapper.removeChildren();
       const target = event.target as Element;
       const innerText = target.closest('li')?.innerText || '';
       this.chattererName = innerText.slice(0, innerText.indexOf('\n'));
@@ -193,6 +206,7 @@ export default class ChatPage extends Component {
     if (messages.length) {
       messages.forEach((message) => this.createMessage(message));
     } else {
+      this.hintMessage.removeClass(styles.hidden);
       this.hintMessage.textContent = START_CHAT;
     }
   }
@@ -222,11 +236,24 @@ export default class ChatPage extends Component {
       const chatMessage = new ChatMessage(message, isOwn);
       this.session.putMessage(message.id, chatMessage);
       this.chatWrapper.appendChild(chatMessage);
-      this.scrollMessages();
+      if (!message.status.isReaded && !this.session.isThereUnread && !isOwn) {
+        this.session.isThereUnread = true;
+        this.chatWrapper.appendChild(this.divider);
+        this.scrollToDivider();
+      } else {
+        this.scrollToEnd();
+      }
     }
   }
 
-  scrollMessages() {
+  scrollToEnd() {
     this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
+  }
+
+  scrollToDivider() {
+    const wrapperRect = this.chatWrapper.node.getBoundingClientRect();
+    const dividerRect = this.divider.node.getBoundingClientRect();
+    const distanceToScroll = dividerRect.top - wrapperRect.top;
+    this.chatWrapper.node.scrollTop += distanceToScroll;
   }
 }

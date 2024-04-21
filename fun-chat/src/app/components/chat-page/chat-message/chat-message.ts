@@ -5,15 +5,20 @@ import readedStateIcon from '../../../../assets/icons/read24px.svg';
 import Component from '../../base-component';
 import Icon from '../../icon/icon';
 import { Message, Status } from '../../../../types';
+import WS from '../../../utils/ws';
+import counter from '../../../utils/counter';
 
 export default class ChatMessage extends Component {
   private messageBlock = new Component(styles.messageBlock, 'div');
 
   private stateIcon = new Icon(sentStateIcon, styles.stateIcon);
 
+  private ws = WS.getWS().ws;
+
   constructor(message: Message, isOwn: boolean = false) {
     super(styles.messageWrapper);
     this.addClass(isOwn ? styles.own : styles.chatterer);
+    this.id = message.id;
     const title = new Component(styles.title);
     const name = isOwn ? 'You' : message.from;
     const nickNameBlock = new Component(styles.nickNameBlock, 'div', name);
@@ -24,7 +29,7 @@ export default class ChatMessage extends Component {
       `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`,
     );
     this.messageBlock.textContent = message.text;
-    if (isOwn) this.appendChild(this.stateIcon);
+    if (isOwn) this.messageBlock.appendChild(this.stateIcon);
     this.setState(message.status, isOwn);
     this.stateIcon.setAttribute('align', 'right');
     title.appendChildren(nickNameBlock, dateBlock);
@@ -54,7 +59,31 @@ export default class ChatMessage extends Component {
   }
 
   setReaded() {
-    this.stateIcon.setAttribute('src', readedStateIcon);
-    this.messageBlock.appendChild(this.stateIcon);
+    if (this.node.classList.contains(styles.own)) {
+      this.stateIcon.setAttribute('src', readedStateIcon);
+      this.messageBlock.appendChild(this.stateIcon);
+    }
+  }
+
+  isVisibleIn(parent: Component) {
+    const parentRect = parent.node.getBoundingClientRect();
+    const rect = this.node.getBoundingClientRect();
+    const isVisibleIn =
+      rect.top >= parentRect.top &&
+      rect.left >= parentRect.left &&
+      rect.bottom <= parentRect.bottom &&
+      rect.right <= parentRect.right;
+    if (isVisibleIn && this.node.classList.contains(styles.chatterer)) {
+      const request = {
+        id: String(counter()),
+        type: 'MSG_READ',
+        payload: {
+          message: {
+            id: this.id,
+          },
+        },
+      };
+      this.ws.send(JSON.stringify(request));
+    }
   }
 }

@@ -51,8 +51,8 @@ export default class App extends Component {
         if (this.user.isLogined) {
           if (!this.chatPage) this.chatPage = new ChatPage();
           this.appendChild(this.chatPage);
-          this.chatPage.scrollMessages();
         } else {
+          this.chatPage = null;
           window.location.hash = '/login';
         }
         break;

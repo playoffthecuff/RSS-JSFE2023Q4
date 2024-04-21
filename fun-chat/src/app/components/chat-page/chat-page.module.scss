@@ -203,3 +203,26 @@ li::marker {
 .search-input {
   width: calc(100% - 8px);
 }
+
+.divider {
+  text-align: center;
+  position: relative;
+
+  &::before {
+    content: ' ';
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 13px;
+    border-bottom: 2px solid hsl(96, 16%, 56%);
+  }
+}
+
+.divider-text {
+  position: relative;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(96, 16%, 64%);
+  background-color: hsl(0, 0%, 8%);
+}

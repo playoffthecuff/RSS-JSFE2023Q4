@@ -22,6 +22,22 @@ export default class Component {
     return this.childrenArr;
   }
 
+  get textContent() {
+    return this.element.textContent || '';
+  }
+
+  set textContent(textContent: string) {
+    this.element.textContent = textContent;
+  }
+
+  get id() {
+    return this.node.id;
+  }
+
+  set id(id: string) {
+    this.node.id = id;
+  }
+
   appendChild(child: Component) {
     this.children.push(child);
     this.node.appendChild(child.node);
@@ -47,21 +63,9 @@ export default class Component {
     this.node.remove();
   }
 
-  get textContent() {
-    return this.element.textContent || '';
-  }
-
-  set textContent(textContent: string) {
-    this.element.textContent = textContent;
-  }
-
   setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
     const propName = styleName as string;
     this.node.style.setProperty(propName, style);
-  }
-
-  set id(id: string) {
-    this.node.id = id;
   }
 
   setAttribute(attribute: string, value?: string) {
