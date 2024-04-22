@@ -13,6 +13,8 @@ import counter from '../../../utils/counter';
 import Button from '../../button/button';
 
 export default class ChatMessage extends Component {
+  private from: string;
+
   private messageBlock = new Component(styles.messageBlock);
 
   private textBlock = new Component(styles.textBlock, 'span');
@@ -33,6 +35,7 @@ export default class ChatMessage extends Component {
 
   constructor(message: Message, isOwn: boolean = false) {
     super(styles.messageWrapper);
+    this.from = message.from;
     this.addClass(isOwn ? styles.own : styles.chatterer);
     this.id = message.id;
     const title = new Component(styles.title);
@@ -156,5 +159,9 @@ export default class ChatMessage extends Component {
 
   hideContextMenu() {
     this.contextMenu.addClass(styles.hidden);
+  }
+
+  getFrom() {
+    return this.from;
   }
 }

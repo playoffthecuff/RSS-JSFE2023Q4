@@ -24,6 +24,8 @@ export default class ChatPage extends Component {
 
   private session = Session.getSession();
 
+  private state = '';
+
   private user = this.session.user;
 
   private userList: UList | null = null;
@@ -125,8 +127,8 @@ export default class ChatPage extends Component {
       if (data.type === 'USER_LOGIN') {
         this.user.login = data.payload.user.login;
         if (data.payload.user.isLogined) {
-          this.user.isLogined = true;
           window.location.hash = '/main';
+          this.user.isLogined = true;
         }
       }
       if (data.type === 'ERROR') {
@@ -134,6 +136,7 @@ export default class ChatPage extends Component {
       }
       if (data.type === 'USER_LOGOUT') {
         this.user.isLogined = false;
+        this.state = 'logout';
         window.location.hash = '/login';
       }
       if (data.type === 'USER_ACTIVE')
@@ -143,15 +146,14 @@ export default class ChatPage extends Component {
           data.payload.users.map((user) => user.login),
         );
       if (data.type === 'MSG_FROM_USER') {
-        // console.log(data.)
-        // if (this.chattererName.length) {
-        // console.log(data.payload.messages.length, this.chattererName )
-        // } else
-        if (data.payload.messages.length) {
-          this.createСorrespondence(data.payload.messages);
-        } else {
+        if (data.payload.messages.length && this.state === 'startChat') {
+          this.createCorrespondence(data.payload.messages);
+          this.state = '';
+        } else if (this.state === 'startChat') {
           this.hintMessage.textContent = START_CHAT;
           this.chatWrapper.appendChild(this.hintMessage);
+        } else {
+          this.updateUnreadMessagesNumber(data.payload.messages);
         }
       }
       if (data.type === 'USER_EXTERNAL_LOGIN') {
@@ -167,8 +169,13 @@ export default class ChatPage extends Component {
       if (data.type === 'MSG_SEND') this.createMessage(data.payload.message);
       if (data.type === 'MSG_DELIVER')
         this.session.getMessage(data.payload.message.id)!.setDelivered();
-      if (data.type === 'MSG_READ')
-        this.session.getMessage(data.payload.message.id)?.setReaded();
+      if (data.type === 'MSG_READ') {
+        const message = this.session.getMessage(data.payload.message.id);
+        message?.setReaded();
+        const from = message?.getFrom() || '';
+        this.session.decrementUnreadMessagesNumber(from);
+        this.userList?.updateUnreadMessagesNumber(from);
+      }
       if (data.type === 'MSG_DELETE') {
         this.session.deleteMessage(data.payload.message.id);
       }
@@ -222,14 +229,14 @@ export default class ChatPage extends Component {
       this.session.clearMessages();
       this.chatWrapper.removeChildren();
       const target = event.target as Element;
-      const innerText = target.closest('li')?.innerText || '';
-      this.chattererName = innerText.slice(0, innerText.indexOf('\n'));
+      this.chattererName = target.closest('li')?.firstChild!.textContent || '';
       this.nickNameBlock.textContent = this.chattererName;
       this.chattererStatusBlock.textContent = target
         .closest('li')
         ?.classList.value.includes('offline')
         ? 'offline'
         : 'online';
+      this.state = 'startChat';
       this.ws.send(
         JSON.stringify({
           id: String(counter()),
@@ -252,7 +259,22 @@ export default class ChatPage extends Component {
     );
   }
 
-  private createСorrespondence(messages: Message[]) {
+  private updateUnreadMessagesNumber(messages: Message[]) {
+    if (messages.length) {
+      let login = '';
+      messages.forEach((message) => {
+        if (message.from !== this.user.login && !message.status.isReaded) {
+          this.session.incrementUnreadMessagesNumber(message.from);
+          login = message.from;
+        }
+      });
+      if (login) {
+        this.userList?.updateUnreadMessagesNumber(login);
+      }
+    }
+  }
+
+  private createCorrespondence(messages: Message[]) {
     if (messages.length) {
       messages.forEach((message) => this.createMessage(message));
     } else {
@@ -341,5 +363,9 @@ export default class ChatPage extends Component {
     const dividerRect = this.divider.node.getBoundingClientRect();
     const distanceToScroll = dividerRect.top - wrapperRect.top;
     this.chatWrapper.node.scrollTop += distanceToScroll;
+  }
+
+  getState() {
+    return this.state;
   }
 }

@@ -28,8 +28,8 @@ export default class App extends Component {
       if (data.type === 'USER_LOGIN') {
         this.user.login = data.payload.user.login;
         if (data.payload.user.isLogined) {
-          this.user.isLogined = true;
           window.location.hash = '/main';
+          this.user.isLogined = true;
         }
       }
       if (data.type === 'ERROR') {
@@ -64,6 +64,8 @@ export default class App extends Component {
         break;
       case 'main':
         if (this.user.isLogined) {
+          if (this.chatPage && this.chatPage.getState() === 'logout')
+            this.chatPage = null;
           if (!this.chatPage) this.chatPage = new ChatPage();
           this.appendChild(this.chatPage);
         } else {

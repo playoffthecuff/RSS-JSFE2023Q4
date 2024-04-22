@@ -6,7 +6,7 @@ export default class Session {
 
   private userData: User = { login: '', isLogined: false, password: '' };
 
-  private messagesNumber: Map<string, number> = new Map<string, number>();
+  private unreadMessagesNumber: Map<string, number> = new Map<string, number>();
 
   private messages: Map<string, ChatMessage> = new Map<string, ChatMessage>();
 
@@ -60,17 +60,23 @@ export default class Session {
     this.messages.forEach(callback);
   }
 
-  addEntryToMessagesNumber(login: string, messagesNumber: number) {
-    this.messagesNumber.set(login, messagesNumber);
+  addEntryToUnreadMessagesNumber(login: string) {
+    this.unreadMessagesNumber.set(login, 0);
   }
 
-  incrementMessagesNumber(login: string) {
-    const currentNumber = this.messagesNumber.get(login) || 0;
-    this.messagesNumber.set(login, currentNumber + 1);
+  incrementUnreadMessagesNumber(login: string) {
+    const currentNumber = this.unreadMessagesNumber.get(login) || 0;
+    this.unreadMessagesNumber.set(login, currentNumber + 1);
   }
 
-  decrementMessagesNumber(login: string) {
-    const currentNumber = this.messagesNumber.get(login) || 1;
-    this.messagesNumber.set(login, currentNumber - 1);
+  decrementUnreadMessagesNumber(login: string) {
+    if (login) {
+      const currentNumber = this.unreadMessagesNumber.get(login) || 1;
+      this.unreadMessagesNumber.set(login, currentNumber - 1);
+    }
+  }
+
+  getUnreadMessagesNumber(login: string) {
+    return this.unreadMessagesNumber.get(login);
   }
 }
