@@ -166,7 +166,15 @@ export default class ChatPage extends Component {
         if (this.nickNameBlock.textContent === data.payload.user.login)
           this.chattererStatusBlock.textContent = 'offline';
       }
-      if (data.type === 'MSG_SEND') this.createMessage(data.payload.message);
+      if (data.type === 'MSG_SEND') {
+        const { message } = data.payload;
+        this.createMessage(message);
+        if (message.from !== this.user.login) {
+          this.session.incrementUnreadMessagesNumber(message.from);
+          this.userList?.updateUnreadMessagesNumber(message.from);
+        }
+      }
+
       if (data.type === 'MSG_DELIVER')
         this.session.getMessage(data.payload.message.id)!.setDelivered();
       if (data.type === 'MSG_READ') {
@@ -185,6 +193,9 @@ export default class ChatPage extends Component {
         message?.setEdited();
       }
     };
+    this.sendMessageForm.addListener('submit', (event) => {
+      event.preventDefault();
+    });
     const dividerText = new Component(
       styles.dividerText,
       'span',

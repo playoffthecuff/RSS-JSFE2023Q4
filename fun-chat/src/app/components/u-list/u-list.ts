@@ -43,10 +43,11 @@ export default class UList extends Component {
   private createNewItem(text: string, isOffline?: boolean) {
     const item = new ListItem();
     item.id = text;
-    const unreadMessages = new Component(styles.unreadMessages);
     const textBlock = new Component(styles.textBlock, 'span', text);
+    const unreadMessages = new Component(styles.unreadMessages);
+    const messageCounter = new Component(styles.messageCounter);
     item.appendChild(textBlock);
-    unreadMessages.appendChild(new Icon(messageIcon));
+    unreadMessages.appendChildren(messageCounter, new Icon(messageIcon));
     unreadMessages.addClass(styles.hidden);
     item.appendChild(unreadMessages);
     if (isOffline) {
@@ -116,18 +117,16 @@ export default class UList extends Component {
 
   updateUnreadMessagesNumber(user: string) {
     const messagesNumber = this.session.getUnreadMessagesNumber(user) || 0;
-    if (messagesNumber) {
-      this.children.forEach((child) => {
-        const targetNode = child.node.lastElementChild as HTMLElement;
-        if (child.id === user) {
-          targetNode.classList.remove(styles.hidden);
-          if (targetNode) {
-            targetNode.textContent = messagesNumber.toString();
-          }
-        } else {
-          targetNode.classList.add(styles.hidden);
-        }
-      });
+    const targetItem = document.getElementById(user);
+    if (targetItem) {
+      const unreadMessagesNode = targetItem.lastElementChild as HTMLElement;
+      const targetNode = unreadMessagesNode.firstChild as HTMLElement;
+      targetNode.textContent = messagesNumber.toString();
+      if (messagesNumber) {
+        unreadMessagesNode.classList.remove(styles.hidden);
+      } else {
+        unreadMessagesNode.classList.add(styles.hidden);
+      }
     }
   }
 }

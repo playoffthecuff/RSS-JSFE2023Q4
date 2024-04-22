@@ -73,6 +73,7 @@ export default class Session {
     if (login) {
       const currentNumber = this.unreadMessagesNumber.get(login) || 1;
       this.unreadMessagesNumber.set(login, currentNumber - 1);
+      console.log('непрочитанных ', this.unreadMessagesNumber.get(login));
     }
   }
 
