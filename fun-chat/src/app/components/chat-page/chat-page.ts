@@ -1,6 +1,8 @@
 import styles from './chat-page.module.scss';
+import messageStyles from './chat-message/chat-message.module.scss';
 import sendIcon from '../../../assets/icons/send24px.svg';
 import backIcon from '../../../assets/icons/arrow-back-ios24px.svg';
+import closeIcon from '../../../assets/icons/highlight-off24px.svg';
 import Component from '../base-component';
 import Header from '../header/header';
 import Footer from '../footer/footer';
@@ -49,9 +51,16 @@ export default class ChatPage extends Component {
 
   private sendMessageButton = new Button(
     null,
-    'button',
+    'submit',
     sendIcon,
     styles.lowButton,
+  );
+
+  private cancelEditButton = new Button(
+    null,
+    'button',
+    closeIcon,
+    styles.cancelEditButton,
   );
 
   private chattererName = '';
@@ -113,7 +122,16 @@ export default class ChatPage extends Component {
     );
     this.ws.onmessage = (event) => {
       const data: ServerResponse = JSON.parse(event.data);
-      if (data.type === 'ERROR') this.errorResponseHandler(data.payload.error);
+      if (data.type === 'USER_LOGIN') {
+        this.user.login = data.payload.user.login;
+        if (data.payload.user.isLogined) {
+          this.user.isLogined = true;
+          window.location.hash = '/main';
+        }
+      }
+      if (data.type === 'ERROR') {
+        this.appendChild(new ModalWindow(`Error: ${data.payload.error}`, true));
+      }
       if (data.type === 'USER_LOGOUT') {
         this.user.isLogined = false;
         window.location.hash = '/login';
@@ -125,8 +143,12 @@ export default class ChatPage extends Component {
           data.payload.users.map((user) => user.login),
         );
       if (data.type === 'MSG_FROM_USER') {
+        // console.log(data.)
+        // if (this.chattererName.length) {
+        // console.log(data.payload.messages.length, this.chattererName )
+        // } else
         if (data.payload.messages.length) {
-          this.createMessageHistory(data.payload.messages);
+          this.createСorrespondence(data.payload.messages);
         } else {
           this.hintMessage.textContent = START_CHAT;
           this.chatWrapper.appendChild(this.hintMessage);
@@ -147,6 +169,14 @@ export default class ChatPage extends Component {
         this.session.getMessage(data.payload.message.id)!.setDelivered();
       if (data.type === 'MSG_READ')
         this.session.getMessage(data.payload.message.id)?.setReaded();
+      if (data.type === 'MSG_DELETE') {
+        this.session.deleteMessage(data.payload.message.id);
+      }
+      if (data.type === 'MSG_EDIT') {
+        const message = this.session.getMessage(data.payload.message.id);
+        message?.setMessage(data.payload.message.text);
+        message?.setEdited();
+      }
     };
     const dividerText = new Component(
       styles.dividerText,
@@ -156,18 +186,29 @@ export default class ChatPage extends Component {
     this.divider.appendChild(dividerText);
     this.chatWrapper.addListener('scroll', () => {
       this.session.iterateMessages((message: ChatMessage) =>
-        message.isVisibleIn(this.chatWrapper),
+        message.handleVisible(this.chatWrapper),
       );
+    });
+    this.chatWrapper.addListener('click', (event) => {
+      const target = event.target as Element;
+      if (target.closest('.edit-message')) {
+        const editedMessageButton = target.closest('.edit-message');
+        const contextMenu = editedMessageButton?.closest(
+          `.${messageStyles.contextMenu}`,
+        );
+        const wrapper = contextMenu?.closest(
+          `.${messageStyles.messageWrapper}`,
+        );
+        const id = wrapper?.id as string;
+        this.editMessage(id);
+      }
     });
     this.sendMessageButton.setAttribute('disabled');
     this.sendMessageInput.setAttribute('disabled');
-    this.sendMessageForm.addListener('submit', () => {
-      this.sendMessage();
-    });
-  }
-
-  private errorResponseHandler(error: string) {
-    this.appendChild(new ModalWindow(`Error: ${error}`, true));
+    this.cancelEditButton.addClass(styles.hidden);
+    this.cancelEditButton.node.onclick = this.finishEditMessage;
+    this.sendMessageButton.node.onclick = this.sendMessage;
+    this.sendMessageForm.appendChild(this.cancelEditButton);
   }
 
   private createUsersList(users: string[]) {
@@ -211,7 +252,7 @@ export default class ChatPage extends Component {
     );
   }
 
-  private createMessageHistory(messages: Message[]) {
+  private createСorrespondence(messages: Message[]) {
     if (messages.length) {
       messages.forEach((message) => this.createMessage(message));
     } else {
@@ -220,7 +261,7 @@ export default class ChatPage extends Component {
     }
   }
 
-  private sendMessage() {
+  private sendMessage = () => {
     if (this.sendMessageInput.value.length && this.chattererName.length) {
       this.ws.send(
         JSON.stringify({
@@ -236,7 +277,7 @@ export default class ChatPage extends Component {
       );
     }
     this.sendMessageInput.value = '';
-  }
+  };
 
   private createMessage(message: Message) {
     const isOwn = this.user.login === message.from;
@@ -254,6 +295,42 @@ export default class ChatPage extends Component {
       }
     }
   }
+
+  private editMessage(id: string) {
+    const message = this.session.getMessage(id);
+    const returnHandler = () => {
+      this.finishEditMessage();
+      message?.returnButton.removeListener('click', returnHandler);
+    };
+    message?.returnButton.addListener('click', returnHandler);
+    this.sendMessageInput.value = message?.getMessage() as string;
+    message?.hideContextMenu();
+    this.cancelEditButton.removeClass(styles.hidden);
+    this.sendMessageInput.node.focus();
+    this.sendMessageButton.node.onclick = () => {
+      if (this.sendMessageInput.value.length) {
+        this.ws.send(
+          JSON.stringify({
+            id: String(counter()),
+            type: 'MSG_EDIT',
+            payload: {
+              message: {
+                id,
+                text: this.sendMessageInput.value,
+              },
+            },
+          }),
+        );
+        this.finishEditMessage();
+      }
+    };
+  }
+
+  private finishEditMessage = () => {
+    this.cancelEditButton.addClass(styles.hidden);
+    this.sendMessageInput.value = '';
+    this.sendMessageButton.node.onclick = this.sendMessage;
+  };
 
   scrollToEnd() {
     this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;

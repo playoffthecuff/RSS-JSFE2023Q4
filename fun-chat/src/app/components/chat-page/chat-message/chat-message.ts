@@ -2,38 +2,98 @@ import styles from './chat-message.module.scss';
 import sentStateIcon from '../../../../assets/icons/sent24px.svg';
 import deliveredStateIcon from '../../../../assets/icons/delivered24px.svg';
 import readedStateIcon from '../../../../assets/icons/read24px.svg';
+import editIcon from '../../../../assets/icons/edit24px.svg';
+import deleteIcon from '../../../../assets/icons/delete24px.svg';
+import backIcon from '../../../../assets/icons/arrow-back-ios24px.svg';
 import Component from '../../base-component';
 import Icon from '../../icon/icon';
 import { Message, Status } from '../../../../types';
 import WS from '../../../utils/ws';
 import counter from '../../../utils/counter';
+import Button from '../../button/button';
 
 export default class ChatMessage extends Component {
-  private messageBlock = new Component(styles.messageBlock, 'div');
+  private messageBlock = new Component(styles.messageBlock);
+
+  private textBlock = new Component(styles.textBlock, 'span');
 
   private stateIcon = new Icon(sentStateIcon, styles.stateIcon);
 
+  private marker = new Component(styles.marker, 'span', '(edited)');
+
+  private contextMenu = new Component(styles.contextMenu);
+
+  private editButton = new Button(null, 'button', editIcon);
+
+  private deleteButton = new Button(null, 'button', deleteIcon);
+
   private ws = WS.getWS().ws;
+
+  returnButton = new Button(null, 'button', backIcon);
 
   constructor(message: Message, isOwn: boolean = false) {
     super(styles.messageWrapper);
     this.addClass(isOwn ? styles.own : styles.chatterer);
     this.id = message.id;
     const title = new Component(styles.title);
-    const name = isOwn ? 'You' : message.from;
-    const nickNameBlock = new Component(styles.nickNameBlock, 'div', name);
+    const nickNameBlock = new Component(
+      styles.nickNameBlock,
+      'div',
+      message.from,
+    );
     const date = new Date(message.datetime);
     const dateBlock = new Component(
       styles.dateBlock,
       'div',
       `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`,
     );
-    this.messageBlock.textContent = message.text;
+    this.textBlock.textContent = message.text;
     if (isOwn) this.messageBlock.appendChild(this.stateIcon);
     this.setState(message.status, isOwn);
-    this.stateIcon.setAttribute('align', 'right');
     title.appendChildren(nickNameBlock, dateBlock);
-    this.appendChildren(title, this.messageBlock);
+    this.appendChildren(title);
+
+    this.render(isOwn);
+    this.init(isOwn);
+  }
+
+  private render(isOwn: boolean) {
+    this.messageBlock.prepend(this.textBlock);
+    this.contextMenu.appendChildren(
+      this.editButton,
+      this.deleteButton,
+      this.returnButton,
+    );
+    this.appendChild(this.messageBlock);
+    if (isOwn) this.appendChild(this.contextMenu);
+  }
+
+  private init(isOwn: boolean) {
+    this.stateIcon.setAttribute('align', 'right');
+    this.contextMenu.addClass(styles.hidden);
+    if (isOwn) {
+      this.addListener('contextmenu', (event) => {
+        event.preventDefault();
+        this.contextMenu.removeClass(styles.hidden);
+        this.returnButton.addListener('click', () => {
+          this.contextMenu.addClass(styles.hidden);
+        });
+        this.editButton.addClass('edit-message');
+        this.deleteButton.addListener('click', () => {
+          this.ws.send(
+            JSON.stringify({
+              id: String(counter()),
+              type: 'MSG_DELETE',
+              payload: {
+                message: {
+                  id: this.id,
+                },
+              },
+            }),
+          );
+        });
+      });
+    }
   }
 
   setState(state: Status, isOwn: boolean) {
@@ -54,8 +114,7 @@ export default class ChatMessage extends Component {
   }
 
   setEdited() {
-    const marker = new Component(styles.marker, 'span', '(edited)');
-    this.messageBlock.appendChild(marker);
+    this.messageBlock.appendChild(this.marker);
   }
 
   setReaded() {
@@ -65,15 +124,15 @@ export default class ChatMessage extends Component {
     }
   }
 
-  isVisibleIn(parent: Component) {
+  handleVisible(parent: Component) {
     const parentRect = parent.node.getBoundingClientRect();
     const rect = this.node.getBoundingClientRect();
-    const isVisibleIn =
+    const isVisible =
       rect.top >= parentRect.top &&
       rect.left >= parentRect.left &&
-      rect.bottom <= parentRect.bottom &&
+      rect.bottom - 4 <= parentRect.bottom &&
       rect.right <= parentRect.right;
-    if (isVisibleIn && this.node.classList.contains(styles.chatterer)) {
+    if (isVisible && this.node.classList.contains(styles.chatterer)) {
       const request = {
         id: String(counter()),
         type: 'MSG_READ',
@@ -85,5 +144,17 @@ export default class ChatMessage extends Component {
       };
       this.ws.send(JSON.stringify(request));
     }
+  }
+
+  getMessage() {
+    return this.textBlock.textContent;
+  }
+
+  setMessage(message: string) {
+    this.textBlock.textContent = message;
+  }
+
+  hideContextMenu() {
+    this.contextMenu.addClass(styles.hidden);
   }
 }

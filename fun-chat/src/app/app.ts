@@ -1,8 +1,10 @@
+import { ServerResponse } from '../types';
 import Page404 from './components/404-page/404-page';
 import AboutPage from './components/about-page/about-page';
 import Component from './components/base-component';
 import ChatPage from './components/chat-page/chat-page';
 import LoginPage from './components/login-page/login-page';
+import ModalWindow from './components/modal-window/modal-window';
 import Session from './utils/session';
 import WS from './utils/ws';
 
@@ -20,7 +22,20 @@ export default class App extends Component {
   }
 
   private init() {
-    WS.getWS(WS_SERVER_URL);
+    const { ws } = WS.getWS(WS_SERVER_URL);
+    ws.onmessage = (event) => {
+      const data: ServerResponse = JSON.parse(event.data);
+      if (data.type === 'USER_LOGIN') {
+        this.user.login = data.payload.user.login;
+        if (data.payload.user.isLogined) {
+          this.user.isLogined = true;
+          window.location.hash = '/main';
+        }
+      }
+      if (data.type === 'ERROR') {
+        this.appendChild(new ModalWindow(`Error: ${data.payload.error}`, true));
+      }
+    };
     let hash = window.location.hash.slice(2);
     if (!hash) {
       window.location.hash = '#/';

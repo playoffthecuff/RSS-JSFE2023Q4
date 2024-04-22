@@ -226,3 +226,16 @@ li::marker {
   color: hsl(96, 16%, 64%);
   background-color: hsl(0, 0%, 8%);
 }
+
+.cancel-edit-button {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: none;
+  box-shadow: none;
+  right: 68px;
+
+  &.hidden {
+    visibility: hidden;
+  }
+}

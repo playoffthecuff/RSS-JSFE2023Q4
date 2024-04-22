@@ -6,6 +6,8 @@ export default class Session {
 
   private userData: User = { login: '', isLogined: false, password: '' };
 
+  private messagesNumber: Map<string, number> = new Map<string, number>();
+
   private messages: Map<string, ChatMessage> = new Map<string, ChatMessage>();
 
   private isThereUnreadMessage = false;
@@ -40,6 +42,7 @@ export default class Session {
   }
 
   deleteMessage(id: string) {
+    this.messages.get(id)?.removeSelf();
     this.messages.delete(id);
   }
 
@@ -55,5 +58,19 @@ export default class Session {
     ) => void,
   ) {
     this.messages.forEach(callback);
+  }
+
+  addEntryToMessagesNumber(login: string, messagesNumber: number) {
+    this.messagesNumber.set(login, messagesNumber);
+  }
+
+  incrementMessagesNumber(login: string) {
+    const currentNumber = this.messagesNumber.get(login) || 0;
+    this.messagesNumber.set(login, currentNumber + 1);
+  }
+
+  decrementMessagesNumber(login: string) {
+    const currentNumber = this.messagesNumber.get(login) || 1;
+    this.messagesNumber.set(login, currentNumber - 1);
   }
 }

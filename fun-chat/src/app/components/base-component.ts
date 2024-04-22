@@ -63,6 +63,11 @@ export default class Component {
     this.node.remove();
   }
 
+  removeSelf() {
+    this.removeChildren();
+    this.removeNode();
+  }
+
   setStyle(styleName: keyof CSSStyleDeclaration, style: string) {
     const propName = styleName as string;
     this.node.style.setProperty(propName, style);

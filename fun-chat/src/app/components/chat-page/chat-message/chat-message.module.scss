@@ -1,9 +1,30 @@
 .message-wrapper {
+  position: relative;
   margin-top: 8px;
   background-color: hsl(0, 0%, 16%);
   padding: 4px;
   border-radius: 8px;
   width: 72%;
+}
+
+.context-menu {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border-radius: 4px;
+  background-color: hsl(0, 0%, 0%);
+  opacity: 1;
+  transition: opacity 0.2s;
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .title {
@@ -27,6 +48,17 @@
   padding: 8px;
   border-radius: 6px;
   background-color: hsl(0, 64%, 0%);
+
+  .text-block {
+    color: inherit;
+    font-size: inherit;
+  }
+
+  span {
+    margin-left: 4px;
+    font-size: 0.75rem;
+    color: hsl(96, 16%, 64%);
+  }
 }
 
 .state-icon {

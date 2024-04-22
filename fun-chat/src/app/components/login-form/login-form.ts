@@ -5,8 +5,6 @@ import LabeledTextInput from '../labeled-input/labeled-input';
 import Button from '../button/button';
 import loginIcon from '../../../assets/icons/login24px.svg';
 import infoIcon from '../../../assets/icons/info24px.svg';
-import { ServerResponse } from '../../../types';
-import ModalWindow from '../modal-window/modal-window';
 import WS from '../../utils/ws';
 import Session from '../../utils/session';
 import counter from '../../utils/counter';
@@ -91,21 +89,6 @@ export default class LoginForm extends Component {
   private init() {
     this.addListener('submit', (event) => {
       event.preventDefault();
-      this.ws.onmessage = (e) => {
-        const data: ServerResponse = JSON.parse(e.data);
-        if (data.type === 'USER_LOGIN') {
-          this.user.login = data.payload.user.login;
-          if (data.payload.user.isLogined) {
-            this.user.isLogined = true;
-            window.location.hash = '/main';
-          }
-        }
-        if (data.type === 'ERROR') {
-          this.appendChild(
-            new ModalWindow(`Error: ${data.payload.error}`, true),
-          );
-        }
-      };
     });
     this.loginButton.disable();
     this.loginButton.addListener('click', () => {

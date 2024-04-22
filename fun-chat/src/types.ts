@@ -9,7 +9,9 @@ type MessageType =
   | 'MSG_FROM_USER'
   | 'MSG_SEND'
   | 'MSG_DELIVER'
-  | 'MSG_READ';
+  | 'MSG_READ'
+  | 'MSG_DELETE'
+  | 'MSG_EDIT';
 
 export type User = {
   login: string;
