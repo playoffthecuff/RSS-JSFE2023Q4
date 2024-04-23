@@ -48,7 +48,6 @@ export default class LoginForm extends Component {
 
   private infoButton = new Button(
     () => {
-      console.log('меняю хэш при клике инфо кнопки в логин форме');
       window.location.hash = '/about';
     },
     'button',

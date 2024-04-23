@@ -65,7 +65,6 @@ export default class Session {
   }
 
   incrementUnreadMessagesNumber(login: string) {
-    console.log('добавляю непрочитанное');
     const currentNumber = this.unreadMessagesNumber.get(login) || 0;
     this.unreadMessagesNumber.set(login, currentNumber + 1);
   }
@@ -82,7 +81,6 @@ export default class Session {
   }
 
   clearUnredMessagesNumber() {
-    console.log('очищаю непрочитанные');
     this.unreadMessagesNumber.clear();
   }
 }
