@@ -126,6 +126,7 @@ export default class UList extends Component {
         unreadMessagesNode.classList.remove(styles.hidden);
       } else {
         unreadMessagesNode.classList.add(styles.hidden);
+        this.session.isThereUnread = false;
       }
     }
   }

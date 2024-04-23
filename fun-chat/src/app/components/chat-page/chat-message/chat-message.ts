@@ -136,16 +136,17 @@ export default class ChatMessage extends Component {
       rect.bottom - 4 <= parentRect.bottom &&
       rect.right <= parentRect.right;
     if (isVisible && this.node.classList.contains(styles.chatterer)) {
-      const request = {
-        id: String(counter()),
-        type: 'MSG_READ',
-        payload: {
-          message: {
-            id: this.id,
+      this.ws.send(
+        JSON.stringify({
+          id: String(counter()),
+          type: 'MSG_READ',
+          payload: {
+            message: {
+              id: this.id,
+            },
           },
-        },
-      };
-      this.ws.send(JSON.stringify(request));
+        }),
+      );
     }
   }
 

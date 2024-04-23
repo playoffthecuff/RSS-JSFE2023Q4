@@ -12,6 +12,8 @@ export default class Session {
 
   private isThereUnreadMessage = false;
 
+  private scrollMode: 'manual' | 'auto' = 'manual';
+
   private constructor(login: string) {
     this.userData.login = login;
   }
@@ -80,7 +82,19 @@ export default class Session {
     return this.unreadMessagesNumber.get(login);
   }
 
-  clearUnredMessagesNumber() {
+  clearUnreadMessagesNumber() {
     this.unreadMessagesNumber.clear();
+  }
+
+  setScrollModeToAuto() {
+    this.scrollMode = 'auto';
+  }
+
+  setScrollModeToManual() {
+    this.scrollMode = 'manual';
+  }
+
+  getScrollMode() {
+    return this.scrollMode;
   }
 }

@@ -195,7 +195,7 @@ export default class ChatPage extends Component {
       }
     };
 
-    this.session.clearUnredMessagesNumber();
+    this.session.clearUnreadMessagesNumber();
 
     const dividerText = new Component(
       styles.dividerText,
@@ -208,9 +208,10 @@ export default class ChatPage extends Component {
       event.preventDefault();
     });
     this.chatWrapper.addListener('scroll', () => {
-      this.session.iterateMessages((message: ChatMessage) =>
-        message.handleVisible(this.chatWrapper),
-      );
+      this.session.iterateMessages((message: ChatMessage) => {
+        if (this.session.getScrollMode() === 'manual')
+          message.handleVisible(this.chatWrapper);
+      });
     });
     this.chatWrapper.addListener('click', (event) => {
       const target = event.target as Element;
@@ -321,10 +322,12 @@ export default class ChatPage extends Component {
       this.hintMessage.addClass(styles.hidden);
       const chatMessage = new ChatMessage(message, isOwn);
       this.session.putMessage(message.id, chatMessage);
-      this.chatWrapper.appendChild(chatMessage);
       if (!message.status.isReaded && !this.session.isThereUnread && !isOwn) {
         this.session.isThereUnread = true;
         this.chatWrapper.appendChild(this.divider);
+      }
+      this.chatWrapper.appendChild(chatMessage);
+      if (this.session.isThereUnread) {
         this.scrollToDivider();
       } else {
         this.scrollToEnd();
@@ -369,14 +372,22 @@ export default class ChatPage extends Component {
   };
 
   scrollToEnd() {
+    this.session.setScrollModeToAuto();
     this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
+    setTimeout(() => {
+      this.session.setScrollModeToManual();
+    }, 500); // wait smooth scroll end
   }
 
   scrollToDivider() {
+    this.session.setScrollModeToAuto();
     const wrapperRect = this.chatWrapper.node.getBoundingClientRect();
     const dividerRect = this.divider.node.getBoundingClientRect();
     const distanceToScroll = dividerRect.top - wrapperRect.top;
     this.chatWrapper.node.scrollTop += distanceToScroll;
+    setTimeout(() => {
+      this.session.setScrollModeToManual();
+    }, 500); // wait smooth scroll end
   }
 
   getState() {
