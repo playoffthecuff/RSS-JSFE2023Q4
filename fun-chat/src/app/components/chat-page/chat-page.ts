@@ -209,11 +209,14 @@ export default class ChatPage extends Component {
     });
     this.chatWrapper.addListener('scroll', () => {
       this.session.iterateMessages((message: ChatMessage) => {
-        if (this.session.getScrollMode() === 'manual')
+        if (this.session.getScrollMode() === 'manual') {
           message.handleVisible(this.chatWrapper);
+          this.divider.removeNode();
+        }
       });
     });
     this.chatWrapper.addListener('click', (event) => {
+      this.divider.removeNode();
       const target = event.target as Element;
       if (target.closest('.edit-message')) {
         const editedMessageButton = target.closest('.edit-message');
@@ -229,6 +232,9 @@ export default class ChatPage extends Component {
     });
     this.cancelEditButton.node.onclick = this.finishEditMessage;
     this.sendMessageButton.node.onclick = this.sendMessage;
+    this.sendMessageButton.addListener('click', () => {
+      this.divider.removeNode();
+    });
 
     this.sendMessageButton.setAttribute('disabled');
     this.sendMessageInput.setAttribute('disabled');
@@ -376,7 +382,7 @@ export default class ChatPage extends Component {
     this.chatWrapper.node.scrollTop = this.chatWrapper.node.scrollHeight;
     setTimeout(() => {
       this.session.setScrollModeToManual();
-    }, 500); // wait smooth scroll end
+    }, 800); // wait smooth scroll end
   }
 
   scrollToDivider() {
@@ -387,7 +393,7 @@ export default class ChatPage extends Component {
     this.chatWrapper.node.scrollTop += distanceToScroll;
     setTimeout(() => {
       this.session.setScrollModeToManual();
-    }, 500); // wait smooth scroll end
+    }, 800); // wait smooth scroll end
   }
 
   getState() {
