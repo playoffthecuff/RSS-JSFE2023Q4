@@ -248,6 +248,7 @@ export default class ChatPage extends Component {
       this.userList!.filter(this.searchInput.value);
     });
     this.userList.addListener('click', (event) => {
+      this.sideBar.removeClass(styles.visible);
       this.sendMessageButton.removeAttribute('disabled');
       this.sendMessageInput.removeAttribute('disabled');
       this.session.clearMessages();
