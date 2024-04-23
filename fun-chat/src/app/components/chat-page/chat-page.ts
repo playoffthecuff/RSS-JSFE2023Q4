@@ -193,15 +193,19 @@ export default class ChatPage extends Component {
         message?.setEdited();
       }
     };
-    this.sendMessageForm.addListener('submit', (event) => {
-      event.preventDefault();
-    });
+
+    this.session.clearUnredMessagesNumber();
+
     const dividerText = new Component(
       styles.dividerText,
       'span',
       'new messages',
     );
     this.divider.appendChild(dividerText);
+
+    this.sendMessageForm.addListener('submit', (event) => {
+      event.preventDefault();
+    });
     this.chatWrapper.addListener('scroll', () => {
       this.session.iterateMessages((message: ChatMessage) =>
         message.handleVisible(this.chatWrapper),
@@ -221,11 +225,12 @@ export default class ChatPage extends Component {
         this.editMessage(id);
       }
     });
+    this.cancelEditButton.node.onclick = this.finishEditMessage;
+    this.sendMessageButton.node.onclick = this.sendMessage;
+
     this.sendMessageButton.setAttribute('disabled');
     this.sendMessageInput.setAttribute('disabled');
     this.cancelEditButton.addClass(styles.hidden);
-    this.cancelEditButton.node.onclick = this.finishEditMessage;
-    this.sendMessageButton.node.onclick = this.sendMessage;
     this.sendMessageForm.appendChild(this.cancelEditButton);
   }
 

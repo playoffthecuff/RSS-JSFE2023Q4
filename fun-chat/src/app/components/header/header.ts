@@ -17,7 +17,6 @@ export default class Header extends Component {
 
   private infoButton = new Button(
     () => {
-      console.log('меняю хэш при клике на инфо кнопку');
       window.location.hash = '/about';
     },
     'button',
@@ -26,7 +25,6 @@ export default class Header extends Component {
 
   private logoutButton = new Button(
     () => {
-      console.log('run logout button click handler');
       this.ws.send(
         JSON.stringify({
           id: String(counter()),
