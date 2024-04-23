@@ -148,9 +148,10 @@ export default class ChatPage extends Component {
       if (data.type === 'MSG_FROM_USER') {
         if (data.payload.messages.length && this.state === 'startChat') {
           this.createCorrespondence(data.payload.messages);
-          this.state = '';
+          this.state = 'chat';
         } else if (this.state === 'startChat') {
           this.hintMessage.textContent = START_CHAT;
+          this.hintMessage.removeClass(styles.hidden);
           this.chatWrapper.appendChild(this.hintMessage);
         } else {
           this.updateUnreadMessagesNumber(data.payload.messages);
@@ -244,6 +245,7 @@ export default class ChatPage extends Component {
       this.sendMessageInput.removeAttribute('disabled');
       this.session.clearMessages();
       this.chatWrapper.removeChildren();
+      this.chatWrapper.appendChild(this.hintMessage);
       const target = event.target as Element;
       this.chattererName = target.closest('li')?.firstChild!.textContent || '';
       this.nickNameBlock.textContent = this.chattererName;
@@ -291,12 +293,8 @@ export default class ChatPage extends Component {
   }
 
   private createCorrespondence(messages: Message[]) {
-    if (messages.length) {
+    if (messages.length)
       messages.forEach((message) => this.createMessage(message));
-    } else {
-      this.hintMessage.removeClass(styles.hidden);
-      this.hintMessage.textContent = START_CHAT;
-    }
   }
 
   private sendMessage = () => {
