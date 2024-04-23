@@ -305,7 +305,8 @@ export default class ChatPage extends Component {
   }
 
   private sendMessage = () => {
-    if (this.sendMessageInput.value.length && this.chattererName.length) {
+    const text = this.sendMessageInput.value.trim();
+    if (text.length && this.chattererName.length) {
       this.ws.send(
         JSON.stringify({
           id: String(counter()),
