@@ -71,4 +71,8 @@ export default class Header extends Component {
     controlPanel.appendChildren(this.infoButton, this.logoutButton);
     this.appendChild(controlPanel);
   }
+
+  setWS(ws: WebSocket) {
+    this.ws = ws;
+  }
 }

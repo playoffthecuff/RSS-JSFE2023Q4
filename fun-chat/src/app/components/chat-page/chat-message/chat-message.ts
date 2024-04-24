@@ -15,6 +15,8 @@ import Button from '../../button/button';
 export default class ChatMessage extends Component {
   private from: string;
 
+  private isReaded: boolean;
+
   private messageBlock = new Component(styles.messageBlock);
 
   private textBlock = new Component(styles.textBlock, 'span');
@@ -36,6 +38,7 @@ export default class ChatMessage extends Component {
   constructor(message: Message, isOwn: boolean = false) {
     super(styles.messageWrapper);
     this.from = message.from;
+    this.isReaded = message.status.isReaded;
     this.addClass(isOwn ? styles.own : styles.chatterer);
     this.id = message.id;
     const title = new Component(styles.title);
@@ -164,5 +167,9 @@ export default class ChatMessage extends Component {
 
   getFrom() {
     return this.from;
+  }
+
+  isRead() {
+    return this.isReaded;
   }
 }

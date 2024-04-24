@@ -15,6 +15,7 @@ import WS from '../../utils/ws';
 import counter from '../../utils/counter';
 import { Message, ServerResponse } from '../../../types';
 import ModalWindow from '../modal-window/modal-window';
+import PopupWindow from '../popup-window/popup-window';
 
 const HINT_SELECT_USER = 'Select a user in the side bar to send a message...';
 const START_CHAT = 'Write and send your first message using the form below...';
@@ -26,9 +27,15 @@ export default class ChatPage extends Component {
 
   private state = '';
 
+  private reconnectIntervalId: NodeJS.Timeout | null = null;
+
   private user = this.session.user;
 
   private userList: UList | null = null;
+
+  private popupWindow = new PopupWindow(
+    'Connection lost! Trying to restore it...',
+  );
 
   private sideBar = new Component(styles.sideBar, 'aside');
 
@@ -71,6 +78,8 @@ export default class ChatPage extends Component {
 
   private divider = new Component(styles.divider);
 
+  private header: Header | null = null;
+
   constructor() {
     super(styles.ChatPage);
     this.init();
@@ -78,7 +87,7 @@ export default class ChatPage extends Component {
   }
 
   private render(username: string) {
-    const header = new Header(username);
+    this.header = new Header(username);
     const main = new Component(styles.chat, 'main');
     const chatSection = new Component(styles.chatSection, 'section');
 
@@ -111,7 +120,7 @@ export default class ChatPage extends Component {
     main.appendChildren(this.sideBar, chatSection);
 
     const footer = new Footer();
-    this.appendChildren(header, main, footer);
+    this.appendChildren(this.header, main, footer);
   }
 
   private init() {
@@ -122,80 +131,14 @@ export default class ChatPage extends Component {
         payload: null,
       }),
     );
-    this.ws.onmessage = (event) => {
-      const data: ServerResponse = JSON.parse(event.data);
-      if (data.type === 'USER_LOGIN') {
-        this.user.login = data.payload.user.login;
-        if (data.payload.user.isLogined) {
-          window.location.hash = '/main';
-          this.user.isLogined = true;
-        }
-      }
-      if (data.type === 'ERROR') {
-        this.appendChild(new ModalWindow(`Error: ${data.payload.error}`, true));
-      }
-      if (data.type === 'USER_LOGOUT') {
-        this.user.isLogined = false;
-        this.state = 'logout';
-        window.location.hash = '/login';
-      }
-      if (data.type === 'USER_ACTIVE')
-        this.createUsersList(data.payload.users.map((user) => user.login));
-      if (data.type === 'USER_INACTIVE')
-        this.userList!.addOfflineUsers(
-          data.payload.users.map((user) => user.login),
-        );
-      if (data.type === 'MSG_FROM_USER') {
-        if (data.payload.messages.length && this.state === 'startChat') {
-          this.createCorrespondence(data.payload.messages);
-          this.state = 'chat';
-        } else if (this.state === 'startChat') {
-          this.hintMessage.textContent = START_CHAT;
-          this.hintMessage.removeClass(styles.hidden);
-          this.chatWrapper.appendChild(this.hintMessage);
-        } else {
-          this.updateUnreadMessagesNumber(data.payload.messages);
-        }
-      }
-      if (data.type === 'USER_EXTERNAL_LOGIN') {
-        this.userList?.setUserOnline(data.payload.user.login);
-        if (this.nickNameBlock.textContent === data.payload.user.login)
-          this.chattererStatusBlock.textContent = 'online';
-      }
-      if (data.type === 'USER_EXTERNAL_LOGOUT') {
-        this.userList?.setUserOffline(data.payload.user.login);
-        if (this.nickNameBlock.textContent === data.payload.user.login)
-          this.chattererStatusBlock.textContent = 'offline';
-      }
-      if (data.type === 'MSG_SEND') {
-        const { message } = data.payload;
-        this.createMessage(message);
-        if (message.from !== this.user.login) {
-          this.session.incrementUnreadMessagesNumber(message.from);
-          this.userList?.updateUnreadMessagesNumber(message.from);
-        }
-      }
 
-      if (data.type === 'MSG_DELIVER')
-        this.session.getMessage(data.payload.message.id)!.setDelivered();
-      if (data.type === 'MSG_READ') {
-        const message = this.session.getMessage(data.payload.message.id);
-        message?.setReaded();
-        const from = message?.getFrom() || '';
-        this.session.decrementUnreadMessagesNumber(from);
-        this.userList?.updateUnreadMessagesNumber(from);
-      }
-      if (data.type === 'MSG_DELETE') {
-        this.session.deleteMessage(data.payload.message.id);
-      }
-      if (data.type === 'MSG_EDIT') {
-        const message = this.session.getMessage(data.payload.message.id);
-        message?.setMessage(data.payload.message.text);
-        message?.setEdited();
-      }
-    };
+    this.addOnMessageHandlers();
+
+    this.addOnCloseHandler();
 
     this.session.clearUnreadMessagesNumber();
+
+    this.session.clearSendMessages();
 
     const dividerText = new Component(
       styles.dividerText,
@@ -242,6 +185,143 @@ export default class ChatPage extends Component {
     this.sendMessageForm.appendChild(this.cancelEditButton);
   }
 
+  private addOnMessageHandlers() {
+    this.ws.onmessage = (event) => {
+      const data: ServerResponse = JSON.parse(event.data);
+      if (data.type === 'USER_LOGIN') {
+        if (this.user.isLogined) {
+          this.ws.send(
+            JSON.stringify({
+              id: String(counter()),
+              type: 'USER_ACTIVE',
+              payload: null,
+            }),
+          );
+        }
+        this.user.login = data.payload.user.login;
+        if (data.payload.user.isLogined) {
+          window.location.hash = '/main';
+          this.user.isLogined = true;
+        }
+      }
+      if (data.type === 'ERROR') {
+        const modalWindow = new ModalWindow(
+          `Error: ${data.payload.error}`,
+          true,
+        );
+        const { node } = modalWindow;
+        document.body.append(node);
+      }
+      if (data.type === 'USER_LOGOUT') {
+        this.user.isLogined = false;
+        this.state = 'logout';
+        window.location.hash = '/login';
+      }
+      if (data.type === 'USER_ACTIVE')
+        this.createUsersList(data.payload.users.map((user) => user.login));
+      if (data.type === 'USER_INACTIVE')
+        this.userList!.addOfflineUsers(
+          data.payload.users.map((user) => user.login),
+        );
+      if (data.type === 'MSG_FROM_USER') {
+        if (data.payload.messages.length && this.state === 'startChat') {
+          this.createCorrespondence(data.payload.messages);
+          this.state = 'chat';
+        } else if (this.state === 'startChat') {
+          this.hintMessage.textContent = START_CHAT;
+          this.hintMessage.removeClass(styles.hidden);
+          this.chatWrapper.appendChild(this.hintMessage);
+        } else {
+          this.updateUnreadMessagesNumber(data.payload.messages);
+        }
+      }
+      if (data.type === 'USER_EXTERNAL_LOGIN') {
+        this.userList?.setUserOnline(data.payload.user.login);
+        if (this.nickNameBlock.textContent === data.payload.user.login)
+          this.chattererStatusBlock.textContent = 'online';
+      }
+      if (data.type === 'USER_EXTERNAL_LOGOUT') {
+        this.userList?.setUserOffline(data.payload.user.login);
+        if (this.nickNameBlock.textContent === data.payload.user.login)
+          this.chattererStatusBlock.textContent = 'offline';
+      }
+      if (data.type === 'MSG_SEND') {
+        const { message } = data.payload;
+        this.createMessage(message);
+        if (message.from !== this.user.login) {
+          this.session.incrementUnreadMessagesNumber(message.from);
+          this.userList?.updateUnreadMessagesNumber(message.from);
+          this.session.putSendedMessage(message.id, message);
+        }
+      }
+
+      if (data.type === 'MSG_DELIVER')
+        this.session.getMessage(data.payload.message.id)!.setDelivered();
+      if (data.type === 'MSG_READ') {
+        const message = this.session.getMessage(data.payload.message.id);
+        message?.setReaded();
+        const from = message?.getFrom() || '';
+        this.session.decrementUnreadMessagesNumber(from);
+        this.userList?.updateUnreadMessagesNumber(from);
+      }
+      if (data.type === 'MSG_DELETE') {
+        const { id } = data.payload.message;
+        const message = this.session.getSendedMessage(id);
+        const from = message?.from || '';
+        this.session.deleteMessage(id);
+        if (!message?.status.isReaded) {
+          this.session.decrementUnreadMessagesNumber(from);
+          this.userList?.updateUnreadMessagesNumber(from);
+        }
+      }
+      if (data.type === 'MSG_EDIT') {
+        const message = this.session.getMessage(data.payload.message.id);
+        message?.setMessage(data.payload.message.text);
+        message?.setEdited();
+      }
+    };
+  }
+
+  private addOnCloseHandler() {
+    const { node } = this.popupWindow;
+    this.ws.onclose = () => {
+      this.popupWindow.open();
+      document.body.appendChild(node);
+      const restore = () => {
+        WS.getWS().repeatConnect();
+        WS.getWS().ws.onopen = () => {
+          clearInterval(this.reconnectIntervalId as NodeJS.Timeout);
+          this.popupWindow.close();
+          this.ws.close();
+          WS.getWS().repeatConnect();
+          this.ws = WS.getWS().ws;
+          this.ws.onopen = () => {
+            this.header!.setWS(this.ws);
+            this.addOnMessageHandlers();
+            this.session.clearUnreadMessagesNumber();
+            this.session.clearMessages();
+            this.session.clearSendMessages();
+            this.userList?.removeNode();
+            this.userList = null;
+            this.ws.send(
+              JSON.stringify({
+                id: String(counter()),
+                type: 'USER_LOGIN',
+                payload: {
+                  user: {
+                    login: this.user.login,
+                    password: this.user.password,
+                  },
+                },
+              }),
+            );
+          };
+        };
+      };
+      this.reconnectIntervalId = setInterval(restore, 1000);
+    };
+  }
+
   private createUsersList(users: string[]) {
     this.userList = new UList(users, styles.userList);
     this.searchInput.addListener('input', () => {
@@ -252,6 +332,7 @@ export default class ChatPage extends Component {
       this.sendMessageButton.removeAttribute('disabled');
       this.sendMessageInput.removeAttribute('disabled');
       this.session.clearMessages();
+      this.session.clearSendMessages();
       this.chatWrapper.removeChildren();
       this.chatWrapper.appendChild(this.hintMessage);
       const target = event.target as Element;

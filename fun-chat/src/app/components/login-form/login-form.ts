@@ -60,8 +60,6 @@ export default class LoginForm extends Component {
 
   private user = Session.getSession().user;
 
-  private ws = WS.getWS().ws;
-
   protected override readonly element: HTMLFormElement;
 
   constructor() {
@@ -93,7 +91,7 @@ export default class LoginForm extends Component {
     this.loginButton.disable();
     this.loginButton.addListener('click', () => {
       this.user.password = this.passwordInput.value;
-      this.ws.send(
+      WS.getWS().ws.send(
         JSON.stringify({
           id: String(counter()),
           type: 'USER_LOGIN',

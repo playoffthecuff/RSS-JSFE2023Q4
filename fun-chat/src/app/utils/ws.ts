@@ -3,8 +3,11 @@ export default class WS {
 
   private wsConnection: WebSocket;
 
+  private url: string;
+
   private constructor(url: string) {
     this.wsConnection = new WebSocket(url);
+    this.url = url;
   }
 
   static getWS(url?: string) {
@@ -14,5 +17,9 @@ export default class WS {
 
   get ws() {
     return this.wsConnection;
+  }
+
+  repeatConnect() {
+    this.wsConnection = new WebSocket(this.url);
   }
 }

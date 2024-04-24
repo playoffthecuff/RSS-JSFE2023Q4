@@ -1,4 +1,4 @@
-import { User } from '../../types';
+import { Message, User } from '../../types';
 import ChatMessage from '../components/chat-page/chat-message/chat-message';
 
 export default class Session {
@@ -9,6 +9,8 @@ export default class Session {
   private unreadMessagesNumber: Map<string, number> = new Map<string, number>();
 
   private messages: Map<string, ChatMessage> = new Map<string, ChatMessage>();
+
+  private sendMessages: Map<string, Message> = new Map<string, Message>();
 
   private isThereUnreadMessage = false;
 
@@ -39,8 +41,16 @@ export default class Session {
     return this.messages.get(id);
   }
 
+  getSendedMessage(id: string) {
+    return this.sendMessages.get(id);
+  }
+
   putMessage(id: string, message: ChatMessage) {
     this.messages.set(id, message);
+  }
+
+  putSendedMessage(id: string, message: Message) {
+    this.sendMessages.set(id, message);
   }
 
   deleteMessage(id: string) {
@@ -50,6 +60,10 @@ export default class Session {
 
   clearMessages() {
     this.messages.clear();
+  }
+
+  clearSendMessages() {
+    this.sendMessages.clear();
   }
 
   iterateMessages(
