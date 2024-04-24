@@ -302,6 +302,15 @@ export default class ChatPage extends Component {
             this.session.clearUnreadMessagesNumber();
             this.session.clearMessages();
             this.session.clearSendMessages();
+            this.chatWrapper.removeChildren();
+            this.hintMessage.textContent = HINT_SELECT_USER;
+            this.chatWrapper.appendChild(this.hintMessage);
+            this.hintMessage.removeClass(styles.hidden);
+            this.state = '';
+            this.nickNameBlock.textContent = '';
+            this.chattererStatusBlock.textContent = '';
+            this.sendMessageButton.setAttribute('disabled');
+            this.sendMessageInput.setAttribute('disabled');
             this.userList?.removeNode();
             this.userList = null;
             this.ws.send(
