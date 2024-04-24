@@ -160,6 +160,7 @@ export default class ChatPage extends Component {
     });
     this.chatWrapper.addListener('click', (event) => {
       this.divider.removeNode();
+      this.session.setAllMessagesAsRead();
       const target = event.target as Element;
       if (target.closest('.edit-message')) {
         const editedMessageButton = target.closest('.edit-message');
@@ -401,6 +402,7 @@ export default class ChatPage extends Component {
           },
         }),
       );
+      this.session.setAllMessagesAsRead();
     }
     this.sendMessageInput.value = '';
   };

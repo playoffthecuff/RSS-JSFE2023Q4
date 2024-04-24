@@ -1,5 +1,7 @@
 import { Message, User } from '../../types';
 import ChatMessage from '../components/chat-page/chat-message/chat-message';
+import counter from './counter';
+import WS from './ws';
 
 export default class Session {
   private static instance: Session;
@@ -74,6 +76,24 @@ export default class Session {
     ) => void,
   ) {
     this.messages.forEach(callback);
+  }
+
+  setAllMessagesAsRead() {
+    this.messages.forEach((message) => {
+      if (!message.isRead() && message.getFrom() !== this.user.login) {
+        WS.getWS().ws.send(
+          JSON.stringify({
+            id: String(counter()),
+            type: 'MSG_READ',
+            payload: {
+              message: {
+                id: message.id,
+              },
+            },
+          }),
+        );
+      }
+    });
   }
 
   addEntryToUnreadMessagesNumber(login: string) {
