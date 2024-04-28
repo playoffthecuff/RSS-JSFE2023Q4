@@ -12,7 +12,7 @@ const GH_LINK_SRC =
 
 export default class AboutPage extends Component {
   constructor() {
-    super(styles.main, 'main');
+    super('main', 'main');
     this.render();
   }
 
