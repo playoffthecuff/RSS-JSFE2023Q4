@@ -3,12 +3,18 @@ import ghIcon from '../../../assets/icons/github-mark.svg';
 import backIcon from '../../../assets/icons/arrow-back-ios24px.svg';
 import Component from '../base-component';
 import Heading from '../heading/heading';
-import IconLink from '../icon-link/icon-link';
+import IconLink, { Options } from '../icon-link/icon-link';
 import Button from '../button/button';
 
 const ARTICLE_TEXT = 'Have a nice chat.<br>App by ';
 const GH_LINK_SRC =
   'https://github.com/rolling-scopes-school/playoffthecuff-JSFE2023Q4/';
+
+const options: Options = {
+  href: GH_LINK_SRC,
+  iconSrc: ghIcon,
+  className: styles.inlineIcon,
+};
 
 export default class AboutPage extends Component {
   constructor() {
@@ -20,13 +26,7 @@ export default class AboutPage extends Component {
     const wrapper = new Component(styles.aboutWrapper);
     const heading = new Heading('h1', 'Fun Chat', styles.appName);
     const article = new Component(styles.article, 'article');
-    const ghLink = new IconLink(
-      GH_LINK_SRC,
-      ghIcon,
-      undefined,
-      undefined,
-      styles.inlineIcon,
-    );
+    const ghLink = new IconLink(options);
     const returnButton = new Button(
       () => {
         window.history.back();
