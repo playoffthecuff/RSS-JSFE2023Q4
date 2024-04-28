@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<img src="./assets/images/slide_1.svg" alt="mongo-db logo" height="500">
+					<p>Introduction</p>
+					<aside class="notes">
+						Hello everyone. Today, we're diving into the world of MongoDB, a powerful NoSQL database.
+						As front-end developers, you're accustomed to crafting engaging user experiences, but what happens behind the scenes is equally crucial.
+						Let's explore how MongoDB fits into the backend ecosystem and why it's worth our attention.
+					</aside>
+				</section>
+				<section>
+					<section>
+						<img src="./assets/images/slide_2_1.png" alt="what is data bases?" height="500">
+						<aside class="notes">
+							Before delving into MongoDB, let's quickly recap what databases are.
+							Think of them as organized collections of data. Traditionally, we've used relational databases like MySQL or PostgreSQL.
+							They excel at structured data but can become rigid as applications evolve.
+							Then non-relational databases can help us. What's the difference between them?
+						</aside>
+					</section>
+					<section>
+						<img src="./assets/images/slide_2_2.png" alt="relational bases?" height="340">
+						<span>Relationships in a relational DB</span>
+						<aside class="notes">
+							A relational database uses tables to store data, where each table contains records with attributes.
+							Relationships between tables are provided through keys.
+							A non-relational database can use various data models such as document-oriented, key-value, columnar or graph.
+							They do not require a strict schema and can store data in a more flexible form.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<img src="./assets/images/slide_3.webp" alt="what is mongo db?" height="328">
+					<p>What is Mongo DB?</p>
+					<aside class="notes">
+						Documents are grouped into collections - analogous to tables in relational databases,
+						but they do not have a strict schema, and documents in a collection can have different sets of fields.
+						MongoDB is a leading NoSQL database, known for its document-oriented structure.
+						Instead of tables, it stores data in flexible, JSON-like documents, making it a natural fit for JavaScript-heavy applications.
+						MongoDB is free to use and published under the AGPL.
+					</aside>
+				</section>
+				<section>
+					<section>
+						<p>Let's discuss some key concepts:</p>
+						<ul>
+							<li>Documents.</li>
+							<li>Collections.</li>
+							<li>Fields.</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>Documents</p>
+						<img src="./assets/images/slide_4_1.png" alt="document of mongo db" height="328">
+						<aside class="notes">
+							A basic unit of data in MongoDB, similar to rows in relational databases.
+							Documents are a collection of key-value pairs, where the values can be simple data types (strings, numbers, booleans),
+							arrays, or nested documents.
+						</aside>
+					</section>
+					<section>
+						<p>Collections</p>
+						<img src="./assets/images/slide_4_2.png" alt="collections of documents" height="328">
+						<aside class="notes">
+							Groups of documents, similar to tables in relational databases, but without a fixed schema,
+							and documents in a collection can have different sets of fields.
+						</aside>
+					</section>
+					<section>
+						<p>Fields</p>
+						<img src="./assets/images/slide_4_3.png" alt="field of document" height="328">
+						<aside class="notes">
+							In MongoDB, fields are the names and values that make up documents in collections, comparable to columns in relational databases.
+							Fields can have various data types such as strings, numbers, booleans, arrays, nested objects, dates, and others.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<p>As frontend developers, why should we consider MongoDB?</p>
+						<ul>
+							<li>JSON-Like Documents.</li>
+							<li>Scalability.</li>
+							<li>Performance.</li>
+							<li>Flexibility.</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>JSON-Like Documents:</p>
+						<img src="./assets/images/slide_5_1.png" alt="BSON format" height="280">
+						<aside class="notes">
+							Data stored in a format we're already familiar with, simplifying development.
+							MongoDB was designed from its inception to be a database focused on delivering great development experience.
+							JSON’s ubiquity made it the obvious choice for representing data structures in MongoDB’s document data model.
+						</aside>
+					</section>
+					<section>
+						<p>Scalability:</p>
+						<img src="./assets/images/slide_5_2.jpg" alt="scalability" height="400">
+						<aside class="notes">
+							MongoDB's distributed architecture allows us to seamlessly scale as our application grows,
+							allowing us to distribute data across multiple nodes and provide better performance as our workload grows.
+						</aside>
+					</section>
+					<section>
+						<p>Performance:</p>
+						<img src="./assets/images/slide_5_3_1.jpg" alt="NoSQL outperform" height="196">
+						<img src="./assets/images/slide_5_3_2.jpeg" alt="memory consumption" height="264">
+						<aside class="notes">
+							Its document-oriented model often results in faster query execution,
+							improving the user experience, especially if the data is stored denormalized and does not require complex joins.
+						</aside>
+					</section>
+					<section>
+						<p>Flexibility:</p>
+						<img src="./assets/images/slide_5_4.svg" alt="NoSQL outperform" height="450">
+						<aside class="notes">
+							There is no need to change the database schema when requirements change,
+							which increases flexibility since adding new attributes or changing table structures can be a complex and expensive process.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<p>Use Cases:</p>
+						<ul>
+							<li>Content Management Systems (CMS).</li>
+							<li>Mobile Applications.</li>
+							<li>Payments.</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>CMS:</p>
+						<img src="./assets/images/slide_6_1.svg" alt="CMS application" height="500">
+						<aside class="notes">
+							Easily manage diverse content types without schema migrations.
+							With MongoDB, you can store and serve any type of content, build any feature, incorporate any kind of data in a single database.
+							Faster. With less money.
+						</aside>
+					</section>
+					<section>
+						<p>Mobile Applications:</p>
+						<img src="./assets/images/slide_6_2.svg" alt="Mobile application" height="450">
+						<aside class="notes">
+							Sync data seamlessly across devices, even in occasionally connected environments.
+							As consumers demand seamless mobile experiences, choosing the right underlying technology to handle your mobile data is essential.
+						</aside>
+					</section>
+					<section>
+						<p>Payments:</p>
+						<img src="./assets/images/slide_6_3.svg" alt="Payments" height="450">
+						<aside class="notes">
+							Enrich the payments experience by consolidating and analyzing data in any format in real time, driving value-added services and features to consumers.
+							Accept and enrich any payment data type.
+							Eliminate downtime and outages with distributed fault tolerance and automated data recovery capabilities.
+							Stay competitive and lower TCO with composable payment systems that combine best-of-breed products from third parties.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<p>Integration with Web Technologies:</p>
+						<ul>
+							<li>Node.js</li>
+							<li>Express.js</li>
+							<li>React, Angular</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>Node.js:</p>
+						<img src="./assets/images/slide_7_1.png" alt="Node.js integration" height="500">
+						<aside class="notes">
+							Native drivers enable smooth interaction between MongoDB and Node.js applications.
+						</aside>
+					</section>
+					<section>
+						<p>Express.js:</p>
+						<img src="./assets/images/slide_7_2.png" alt="Express.js integration" height="450">
+						<aside class="notes">
+							Popular Node.js framework for building web applications, with robust MongoDB support.
+							For all your data storage concerns, you can easily integrate MongoDB with the native driver available to you.
+							Using this stack, you can leverage MongoDB's document model with the REST API standard payload, which uses the JSON format.
+						</aside>
+					</section>
+					<section>
+						<p>React, Angular:</p>
+						<img src="./assets/images/slide_7_3_1.jpg" alt="MERN stack" height="250">
+						<img src="./assets/images/slide_7_3_2.png" alt="MEAN stack" height="250">
+						<aside class="notes">
+							Front-end frameworks that leverage MongoDB's JSON-like data structures effortlessly.
+							React is part of the MERN stack, which includes MongoDB, ExpressJS, React, and NodeJS.
+							The advantage of this stack is a single programming language – Javascript.
+							Angular is part of the famous MEAN stack, which also consists of MongoDB, ExpressJS and NodeJS.
+							Like the MERN stack, it relies entirely on JavaScript for both the front-end and back-end.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<p>Ready to dive in? Here's how to get started with MongoDB:</p>
+						<ul>
+							<li>Installation</li>
+							<li>Documentation</li>
+							<li>Practice</li>
+						</ul>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>Installation:</p>
+						<pre><code data-trim data-noescape>
+							$ brew install mongodb-atlas
+							$ atlas setup
+								</code></pre>
+						<aside class="notes">
+							Download MongoDB Community Server or use a cloud-based service like MongoDB Atlas.
+							Give it a try with a free, highly-available 512 MB cluster. or get started from your terminal with the following two commands:
+						</aside>
+					</section>
+					<section>
+						<p>Documentation:</p>
+						<p><a href="https://www.mongodb.com/docs/atlas/getting-started/">Get Started with Atlas</a></p>
+						<p><a href="https://www.mongodb.com/docs/manual/">MongoDB Manual</a></p>
+						<p><a href="https://www.mongodb.com/docs/tools-and-connectors/">Migrators, Tools, and Connectors</a></p>
+						<aside class="notes">
+							MongoDB Atlas is a multi-cloud database service by the same people that build MongoDB.
+							Atlas simplifies deploying and managing your databases while offering the versatility
+							you need to build resilient and performant global applications on the cloud providers of your choice.
+
+							Migrators, Tools, and Connectors
+						</aside>
+					</section>
+					<section>
+						<p>Practice:</p>
+						<p><a href="https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/">How to get started with MongoDB in 10 minutes</a></p>
+						<p><a href="https://www.geeksforgeeks.org/mongodb-tutorial/">MongoDB Tutorial</a></p>
+						<aside class="notes">
+							The information in the first link will help you quickly install and start working with MongoDB.
+							By clicking on the second link you will find a comprehensive guide providing more in-depth knowledge of MongoDB.
+						</aside>
+					</section>
+				</section>
+				<section>
+					<p>Conclusion.</p>
+					<img src="./assets/images/slide_8_1.png" alt="mongo" height="500">
+					<aside class="notes">
+						In conclusion, MongoDB offers front-end developers a flexible, scalable, and performance-oriented solution for managing data.
+						By embracing MongoDB, we empower ourselves to build robust, dynamic applications that meet the demands of modern web development.
+						Thank you for joining me today, and I encourage you to explore MongoDB further to unlock its full potential.
+					</aside>
+				</section>
+			</div>
+		</div>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
