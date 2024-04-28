@@ -90,11 +90,7 @@ export default class ChatMessage extends Component {
             JSON.stringify({
               id: String(counter()),
               type: 'MSG_DELETE',
-              payload: {
-                message: {
-                  id: this.id,
-                },
-              },
+              payload: { message: { id: this.id } },
             }),
           );
         });
@@ -131,26 +127,55 @@ export default class ChatMessage extends Component {
   }
 
   handleVisible(parent: Component) {
-    const parentRect = parent.node.getBoundingClientRect();
-    const rect = this.node.getBoundingClientRect();
-    const isVisible =
-      rect.top >= parentRect.top &&
-      rect.left >= parentRect.left &&
-      rect.bottom - 4 <= parentRect.bottom &&
-      rect.right <= parentRect.right;
-    if (isVisible && this.node.classList.contains(styles.chatterer)) {
-      this.ws.send(
-        JSON.stringify({
-          id: String(counter()),
-          type: 'MSG_READ',
-          payload: {
-            message: {
-              id: this.id,
-            },
-          },
-        }),
-      );
-    }
+    const options = {
+      root: parent.node,
+      rootMargin: '1px',
+      threshold: 1.0,
+    };
+    const callback = (
+      entries: IntersectionObserverEntry[],
+      observer: IntersectionObserver,
+    ) => {
+      if (this.node.classList.contains(styles.chatterer)) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            observer.unobserve(entry.target);
+            this.ws.send(
+              JSON.stringify({
+                id: String(counter()),
+                type: 'MSG_READ',
+                payload: { message: { id: this.id } },
+              }),
+            );
+          }
+        });
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    observer.observe(this.node);
+
+    // const parentRect = parent.node.getBoundingClientRect();
+    // const rect = this.node.getBoundingClientRect();
+    // const isVisible =
+    //   rect.top >= parentRect.top &&
+    //   rect.left >= parentRect.left &&
+    //   rect.bottom - 4 <= parentRect.bottom &&
+    //   rect.right <= parentRect.right;
+    // if (isVisible && this.node.classList.contains(styles.chatterer)) {
+    //   this.ws.send(
+    //     JSON.stringify({
+    //       id: String(counter()),
+    //       type: 'MSG_READ',
+    //       payload: {
+    //         message: {
+    //           id: this.id,
+    //         },
+    //       },
+    //     }),
+    //   );
+    // }
   }
 
   getMessage() {
