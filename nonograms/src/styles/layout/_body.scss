@@ -1,8 +1,0 @@
-body {
-  transition: 2.4s;
-  color: $darkest-color;
-  &.dark-mode {
-    background-color: $darkest-color;
-    color: $warm-lightest-color;
-  }
-}
